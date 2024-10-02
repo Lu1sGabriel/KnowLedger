@@ -2,8 +2,8 @@ package com.knowledger.knowledger.infra.persistence.savedPost;
 
 import com.knowledger.knowledger.infra.persistence.post.PostEntity;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-import org.hibernate.annotations.GenericGenerator;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -12,15 +12,16 @@ import java.util.UUID;
 public class SavedPostEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(name = "post_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
     private PostEntity post;
 
     @Column(name = "created_at", nullable = false)

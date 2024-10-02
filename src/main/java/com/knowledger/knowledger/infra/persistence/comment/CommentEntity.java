@@ -11,30 +11,17 @@ import java.util.UUID;
 @Table(name = "comment")
 public class CommentEntity {
 
-    public CommentEntity() {
-    }
-
-    public CommentEntity(Boolean isSolution, LocalDateTime publishedAt, LocalDateTime deletedAt, LocalDateTime updatedAt, LocalDateTime createdAt, String content, Long commentStatusId, UUID commentId, PostEntity post, UserEntity user) {
-        this.isSolution = isSolution;
-        this.publishedAt = publishedAt;
-        this.deletedAt = deletedAt;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
-        this.content = content;
-        this.commentStatusId = commentStatusId;
-        this.commentId = commentId;
-        this.post = post;
-        this.user = user;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(name = "post_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
     private PostEntity post;
 
     @Column(name = "comment_id")
@@ -62,6 +49,22 @@ public class CommentEntity {
     @Column(name = "is_solution")
     private Boolean isSolution;
 
+
+    public CommentEntity() {
+    }
+
+    public CommentEntity(Boolean isSolution, LocalDateTime publishedAt, LocalDateTime deletedAt, LocalDateTime updatedAt, LocalDateTime createdAt, String content, Long commentStatusId, UUID commentId, PostEntity post, UserEntity user) {
+        this.isSolution = isSolution;
+        this.publishedAt = publishedAt;
+        this.deletedAt = deletedAt;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+        this.content = content;
+        this.commentStatusId = commentStatusId;
+        this.commentId = commentId;
+        this.post = post;
+        this.user = user;
+    }
 
     public UUID getId() {
         return id;

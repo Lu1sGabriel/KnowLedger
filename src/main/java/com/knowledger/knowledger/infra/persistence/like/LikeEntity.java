@@ -2,6 +2,7 @@ package com.knowledger.knowledger.infra.persistence.like;
 
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -11,9 +12,11 @@ public class LikeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @Column(name = "created_at")
@@ -26,6 +29,16 @@ public class LikeEntity {
     private Boolean isActive;
 
     // Getters and Setters
+
+    public LikeEntity() {
+    }
+
+    public LikeEntity(UserEntity user, LocalDateTime createdAt, LocalDateTime updatedAt, Boolean isActive) {
+        this.user = user;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.isActive = isActive;
+    }
 
     public UUID getId() {
         return id;
