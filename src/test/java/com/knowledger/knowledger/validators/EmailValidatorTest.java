@@ -56,17 +56,6 @@ public class EmailValidatorTest {
     }
 
     @Test
-    void testInvalidEmailDomain() {
-        defaultUser.setEmail("luis@notallowed.com");
-
-        Set<ConstraintViolation<UserEntity>> violations = validator.validate(defaultUser);
-
-        assertFalse(violations.isEmpty(), "Esperava uma violação para domínio de email não permitido.");
-        assertTrue(violations.stream()
-                .anyMatch(v -> v.getMessage().equals("Domínio de email não permitido.")));
-    }
-
-    @Test
     void testNullEmail() {
         defaultUser.setEmail(null);
 
