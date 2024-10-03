@@ -1,19 +1,30 @@
 package com.knowledger.knowledger.infra.persistence.post;
 
-import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
+import com.knowledger.knowledger.infra.persistence.user.UserEntity;
+
+import jakarta.persistence.*;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "post")
+@Getter
+@Setter
+@NoArgsConstructor
 public class PostEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
+    @Setter(value = AccessLevel.NONE)
     private UUID id;
 
     @ManyToOne
@@ -50,16 +61,13 @@ public class PostEntity {
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
-    // Construtor vazio
-    public PostEntity() {
-    }
-
-    // Construtor com todos os atributos, exceto o próprio id
-    public PostEntity(UserEntity user, Long postTypeId, Long postStatusId, String title, String content,
-                      LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt) {
+    public PostEntity(UserEntity user, Long postTypeId, Long postStatusId, List<CommentEntity> comments, String title,
+            String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
+            LocalDateTime publishedAt) {
         this.user = user;
         this.postTypeId = postTypeId;
         this.postStatusId = postStatusId;
+        this.comments = comments;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
@@ -68,85 +76,4 @@ public class PostEntity {
         this.publishedAt = publishedAt;
     }
 
-    // Getters and Setters
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public Long getPostTypeId() {
-        return postTypeId;
-    }
-
-    public void setPostTypeId(Long postTypeId) {
-        this.postTypeId = postTypeId;
-    }
-
-    public Long getPostStatusId() {
-        return postStatusId;
-    }
-
-    public void setPostStatusId(Long postStatusId) {
-        this.postStatusId = postStatusId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    public LocalDateTime getPublishedAt() {
-        return publishedAt;
-    }
-
-    public void setPublishedAt(LocalDateTime publishedAt) {
-        this.publishedAt = publishedAt;
-    }
 }
-

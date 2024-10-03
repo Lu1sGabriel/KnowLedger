@@ -1,19 +1,29 @@
 package com.knowledger.knowledger.infra.persistence.comment;
 
-import com.knowledger.knowledger.infra.persistence.post.PostEntity;
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.knowledger.knowledger.infra.persistence.post.PostEntity;
+import com.knowledger.knowledger.infra.persistence.user.UserEntity;
+
+import jakarta.persistence.*;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "comment")
+@Getter
+@Setter
+@NoArgsConstructor
 public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
+    @Setter(value = AccessLevel.NONE)
     private UUID id;
 
     @ManyToOne
@@ -49,108 +59,19 @@ public class CommentEntity {
     @Column(name = "is_solution")
     private Boolean isSolution;
 
-
-    public CommentEntity() {
-    }
-
-    public CommentEntity(Boolean isSolution, LocalDateTime publishedAt, LocalDateTime deletedAt, LocalDateTime updatedAt, LocalDateTime createdAt, String content, Long commentStatusId, UUID commentId, PostEntity post, UserEntity user) {
-        this.isSolution = isSolution;
-        this.publishedAt = publishedAt;
-        this.deletedAt = deletedAt;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
-        this.content = content;
-        this.commentStatusId = commentStatusId;
-        this.commentId = commentId;
-        this.post = post;
+    public CommentEntity(UserEntity user, PostEntity post, UUID commentId, Long commentStatusId, String content,
+            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt,
+            Boolean isSolution) {
         this.user = user;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public PostEntity getPost() {
-        return post;
-    }
-
-    public void setPost(PostEntity post) {
         this.post = post;
-    }
-
-    public UUID getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(UUID commentId) {
         this.commentId = commentId;
-    }
-
-    public Long getCommentStatusId() {
-        return commentStatusId;
-    }
-
-    public void setCommentStatusId(Long commentStatusId) {
         this.commentStatusId = commentStatusId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
         this.content = content;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
-    }
-
-    public LocalDateTime getPublishedAt() {
-        return publishedAt;
-    }
-
-    public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
-    }
-
-    public Boolean getIsSolution() {
-        return isSolution;
-    }
-
-    public void setIsSolution(Boolean isSolution) {
         this.isSolution = isSolution;
     }
+
 }

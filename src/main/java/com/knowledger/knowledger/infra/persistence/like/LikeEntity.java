@@ -1,18 +1,28 @@
 package com.knowledger.knowledger.infra.persistence.like;
 
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.knowledger.knowledger.infra.persistence.user.UserEntity;
+
+import jakarta.persistence.*;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "like")
+@Getter
+@Setter
+@NoArgsConstructor
 public class LikeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
+    @Setter(value = AccessLevel.NONE)
     private UUID id;
 
     @OneToOne
@@ -28,11 +38,6 @@ public class LikeEntity {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    // Getters and Setters
-
-    public LikeEntity() {
-    }
-
     public LikeEntity(UserEntity user, LocalDateTime createdAt, LocalDateTime updatedAt, Boolean isActive) {
         this.user = user;
         this.createdAt = createdAt;
@@ -40,43 +45,4 @@ public class LikeEntity {
         this.isActive = isActive;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
 }
