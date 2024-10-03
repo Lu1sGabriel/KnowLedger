@@ -1,6 +1,9 @@
 package com.knowledger.knowledger.infra.validations.validators;
 
+import java.util.regex.Pattern;
+
 import com.knowledger.knowledger.infra.validations.annotations.Password;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -8,72 +11,93 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final String SPECIAL_CHARACTERS = "!@#$%^&*(),.?\":{}|<>";
-    private static final String LENGTH_ERROR_MESSAGE = "A senha deve ter no mínimo 8 caracteres.";
-    private static final String SPECIAL_CHAR_ERROR_MESSAGE = "A senha deve conter pelo menos um caractere especial.";
-    private static final String UPPERCASE_ERROR_MESSAGE = "A senha deve conter pelo menos uma letra maiúscula.";
-    private static final String NUMBER_ERROR_MESSAGE = "A senha deve conter pelo menos um número.";
-    private static final String SEQUENCE_ERROR_MESSAGE = "A senha não pode conter números sequenciais ou caracteres repetidos.";
+
+    private static final String PASSWORD_NULL_ERROR_MESSAGE = "A senha não pode ser nula.";
+    private static final String PASSWORD_LENGTH_ERROR_MESSAGE = "A senha deve ter no mínimo " + MIN_PASSWORD_LENGTH
+            + " caracteres.";
+    private static final String PASSWORD_SPECIAL_CHAR_ERROR_MESSAGE = "A senha deve conter pelo menos um caractere especial.";
+    private static final String PASSWORD_UPPERCASE_ERROR_MESSAGE = "A senha deve conter pelo menos uma letra maiúscula.";
+    private static final String PASSWORD_DIGIT_ERROR_MESSAGE = "A senha deve conter pelo menos um número.";
+    private static final String PASSWORD_REPEATED_CHAR_ERROR_MESSAGE = "A senha não pode conter mais de três caracteres repetidos consecutivos.";
+    private static final String PASSWORD_INVALID_CHAR_ERROR_MESSAGE = "A senha não pode conter caracteres inválidos como 'ç'.";
+
+    private static final Pattern SPECIAL_CHARACTER_PATTERN = Pattern
+            .compile("[" + Pattern.quote(SPECIAL_CHARACTERS) + "]");
+    private static final Pattern UPPERCASE_PATTERN = Pattern.compile("[A-Z]");
+    private static final Pattern DIGIT_PATTERN = Pattern.compile("\\d");
+    private static final Pattern INVALID_CHAR_PATTERN = Pattern.compile("[çÇ]");
 
     @Override
-    public void initialize(Password password) {
+    public void initialize(Password constraintAnnotation) {
     }
 
     @Override
     public boolean isValid(String passwordField, ConstraintValidatorContext context) {
+        boolean isValid = true;
+
+        context.disableDefaultConstraintViolation();
+
         if (passwordField == null) {
-            throw new IllegalArgumentException("A senha não pode ser nula.");
+            addViolation(context, PASSWORD_NULL_ERROR_MESSAGE);
+            return false;
         }
-        validatePasswordLength(passwordField);
-        validateSpecialCharacter(passwordField);
-        validateUppercaseCharacter(passwordField);
-        validateNumber(passwordField);
-        validateNoSequentialNumbers(passwordField);
-        return true;
-    }
 
-    private void validatePasswordLength(String passwordField) {
         if (passwordField.length() < MIN_PASSWORD_LENGTH) {
-            throw new IllegalArgumentException(LENGTH_ERROR_MESSAGE);
+            addViolation(context, PASSWORD_LENGTH_ERROR_MESSAGE);
+            isValid = false;
         }
+
+        if (!SPECIAL_CHARACTER_PATTERN.matcher(passwordField).find()) {
+            addViolation(context, PASSWORD_SPECIAL_CHAR_ERROR_MESSAGE);
+            isValid = false;
+        }
+
+        if (!UPPERCASE_PATTERN.matcher(passwordField).find()) {
+            addViolation(context, PASSWORD_UPPERCASE_ERROR_MESSAGE);
+            isValid = false;
+        }
+
+        if (!DIGIT_PATTERN.matcher(passwordField).find()) {
+            addViolation(context, PASSWORD_DIGIT_ERROR_MESSAGE);
+            isValid = false;
+        }
+
+        if (containsInvalidCharacters(passwordField)) {
+            addViolation(context, PASSWORD_INVALID_CHAR_ERROR_MESSAGE);
+            isValid = false;
+        }
+
+        if (containsMoreThanThreeRepeatedCharacters(passwordField)) {
+            addViolation(context, PASSWORD_REPEATED_CHAR_ERROR_MESSAGE);
+            isValid = false;
+        }
+
+        return isValid;
     }
 
-    private void validateSpecialCharacter(String passwordField) {
-        for (char c : passwordField.toCharArray()) {
-            if (SPECIAL_CHARACTERS.indexOf(c) != -1) {
-                return;
-            }
-        }
-        throw new IllegalArgumentException(SPECIAL_CHAR_ERROR_MESSAGE);
+    private void addViolation(ConstraintValidatorContext context, String message) {
+        context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
     }
 
-    private void validateUppercaseCharacter(String passwordField) {
-        if (passwordField.chars().noneMatch(Character::isUpperCase)) {
-            throw new IllegalArgumentException(UPPERCASE_ERROR_MESSAGE);
-        }
+    private boolean containsInvalidCharacters(String password) {
+        return INVALID_CHAR_PATTERN.matcher(password).find();
     }
 
-    private void validateNumber(String passwordField) {
-        if (passwordField.chars().noneMatch(Character::isDigit)) {
-            throw new IllegalArgumentException(NUMBER_ERROR_MESSAGE);
-        }
-    }
+    private boolean containsMoreThanThreeRepeatedCharacters(String password) {
+        String normalizedPassword = password.toLowerCase();
+        int repeatCount = 1;
 
-    private void validateNoSequentialNumbers(String passwordField) {
-        char[] chars = passwordField.toCharArray();
-        for (int i = 0; i < chars.length - 2; i++) {
-            if (chars[i] == chars[i + 1] && chars[i] == chars[i + 2]) {
-                throw new IllegalArgumentException(SEQUENCE_ERROR_MESSAGE);
-            }
-            if (Character.isDigit(chars[i]) && Character.isDigit(chars[i + 1]) && Character.isDigit(chars[i + 2])) {
-                int first = Character.getNumericValue(chars[i]);
-                int second = Character.getNumericValue(chars[i + 1]);
-                int third = Character.getNumericValue(chars[i + 2]);
-
-                if ((second == first + 1 && third == second + 1) || (second == first - 1 && third == second - 1)) {
-                    throw new IllegalArgumentException(SEQUENCE_ERROR_MESSAGE);
+        for (int i = 1; i < normalizedPassword.length(); i++) {
+            if (normalizedPassword.charAt(i) == normalizedPassword.charAt(i - 1)) {
+                repeatCount++;
+                if (repeatCount > 3) {
+                    return true;
                 }
+            } else {
+                repeatCount = 1;
             }
         }
+        return false;
     }
 
 }

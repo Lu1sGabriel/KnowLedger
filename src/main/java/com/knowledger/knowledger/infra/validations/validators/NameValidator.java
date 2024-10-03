@@ -7,44 +7,84 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class NameValidator implements ConstraintValidator<Name, String> {
 
-    private static final String SPECIAL_CHARACTERS = "!@#$%&*()_+=-[]{};:/<>?|\"\\,.";
-    private static final String NAME_NULL_ERROR_MESSAGE = "O nome não pode ser nulo.";
-    private static final String NAME_FORMAT_ERROR_MESSAGE = "O nome deve conter apenas letras e espaços.";
-    private static final String NAME_LENGTH_ERROR_MESSAGE = "O nome deve ter no mínimo 2 caracteres.";
-    private static final String NAME_SPECIAL_CHAR_ERROR_MESSAGE = "O nome não pode conter caracteres especiais.";
-
     private static final int MIN_LENGTH = 2;
+    private static final String SPECIAL_CHARACTERS = "!@#$%&*()_+=-[]{};:/<>?|\"\\,.";
+
+    private static final String NAME_NULL_ERROR_MESSAGE = "O nome não pode ser nulo.";
+    private static final String INVALID_NAME_LENGTH_MESSAGE = "O nome deve ter no mínimo " + MIN_LENGTH
+            + " caracteres.";
+    private static final String NAME_WITH_INVALID_CHARACTERS_MESSAGE = "O nome deve conter apenas letras e espaços.";
+    private static final String NAME_WITH_SPECIAL_CHARACTERS_MESSAGE = "O nome não pode conter caracteres especiais.";
+    private static final String NAME_WITHOUT_SPACES_MESSAGE = "Nomes compostos devem conter espaços entre as palavras.";
 
     @Override
-    public void initialize(Name name) {
+    public void initialize(Name constraintAnnotation) {
     }
 
     @Override
-    public boolean isValid(String nameField, ConstraintValidatorContext cxt) {
-        if (nameField == null) {
-            throw new IllegalArgumentException(NAME_NULL_ERROR_MESSAGE);
-        }
-        validateNameLength(nameField);
-        validateNameCharacters(nameField);
+    public boolean isValid(String nameField, ConstraintValidatorContext context) {
+        boolean isValid = true;
 
+        context.disableDefaultConstraintViolation();
+
+        if (nameField == null) {
+            addViolation(context, NAME_NULL_ERROR_MESSAGE);
+            return false;
+        }
+
+        if (nameField.length() < MIN_LENGTH) {
+            addViolation(context, INVALID_NAME_LENGTH_MESSAGE);
+            isValid = false;
+        }
+
+        if (!containsOnlyLettersAndSpaces(nameField)) {
+            addViolation(context, NAME_WITH_INVALID_CHARACTERS_MESSAGE);
+            isValid = false;
+        }
+
+        if (containsSpecialCharacters(nameField)) {
+            addViolation(context, NAME_WITH_SPECIAL_CHARACTERS_MESSAGE);
+            isValid = false;
+        }
+
+        if (containsInnerUppercaseLetters(nameField)) {
+            addViolation(context, NAME_WITHOUT_SPACES_MESSAGE);
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    private void addViolation(ConstraintValidatorContext context, String message) {
+        context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
+    }
+
+    private boolean containsOnlyLettersAndSpaces(String name) {
+        for (char c : name.toCharArray()) {
+            if (!Character.isLetter(c) && !Character.isWhitespace(c)) {
+                return false;
+            }
+        }
         return true;
     }
 
-    private void validateNameLength(String nameField) {
-        if (nameField.length() < MIN_LENGTH) {
-            throw new IllegalArgumentException(NAME_LENGTH_ERROR_MESSAGE);
+    private boolean containsSpecialCharacters(String name) {
+        for (char c : name.toCharArray()) {
+            if (SPECIAL_CHARACTERS.indexOf(c) != -1) {
+                return true;
+            }
         }
+        return false;
     }
 
-    private void validateNameCharacters(String nameField) {
-        for (char c : nameField.toCharArray()) {
-            if (!Character.isLetter(c) && !Character.isWhitespace(c)) {
-                throw new IllegalArgumentException(NAME_FORMAT_ERROR_MESSAGE);
-            }
-            if (SPECIAL_CHARACTERS.indexOf(c) != -1) {
-                throw new IllegalArgumentException(NAME_SPECIAL_CHAR_ERROR_MESSAGE);
+    private boolean containsInnerUppercaseLetters(String name) {
+        for (int i = 1; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (Character.isUpperCase(c) && !Character.isWhitespace(name.charAt(i - 1))) {
+                return true;
             }
         }
+        return false;
     }
 
 }
