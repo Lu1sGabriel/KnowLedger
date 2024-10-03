@@ -3,6 +3,10 @@ package com.knowledger.knowledger.infra.persistence.user;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.knowledger.knowledger.infra.validations.annotations.Email;
+import com.knowledger.knowledger.infra.validations.annotations.Name;
+import com.knowledger.knowledger.infra.validations.annotations.Password;
+
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
@@ -27,12 +31,15 @@ public class UserEntity {
     private Long roleId;
 
     @Column(name = "name", nullable = false)
+    @Name
     private String name;
 
     @Column(name = "email", nullable = false, unique = true)
+    @Email
     private String email;
 
     @Column(name = "password", nullable = false)
+    @Password
     private String password;
 
     @Column(name = "created_at", nullable = false)
