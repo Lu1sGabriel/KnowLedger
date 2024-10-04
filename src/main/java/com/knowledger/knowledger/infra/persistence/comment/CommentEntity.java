@@ -22,8 +22,6 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
-    @Setter(value = AccessLevel.NONE)
     private UUID id;
 
     @ManyToOne
@@ -38,7 +36,6 @@ public class CommentEntity {
     private UUID commentId;
 
     @Column(name = "comment_status_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long commentStatusId;
 
     @Column(columnDefinition = "TEXT")

@@ -16,8 +16,6 @@ public class TagEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    @Setter(value = AccessLevel.NONE)
     private Long id;
 
     @Column(name = "name", nullable = false)

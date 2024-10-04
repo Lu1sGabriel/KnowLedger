@@ -23,8 +23,6 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
-    @Setter(value = AccessLevel.NONE)
     private UUID id;
 
     @Column(name = "role_id", nullable = false)

@@ -23,8 +23,6 @@ public class PostEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
-    @Setter(value = AccessLevel.NONE)
     private UUID id;
 
     @ManyToOne
@@ -32,11 +30,9 @@ public class PostEntity {
     private UserEntity user;
 
     @Column(name = "post_type_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long postTypeId;
 
     @Column(name = "post_status_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long postStatusId;
 
     @OneToMany(mappedBy = "post")
