@@ -1,4 +1,4 @@
 package com.knowledger.knowledger.config;
 
-public class Config {
+public class ApplicationConfiguration {
 }
