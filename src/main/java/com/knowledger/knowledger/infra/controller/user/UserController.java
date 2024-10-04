@@ -1,5 +1,7 @@
 package com.knowledger.knowledger.infra.controller.user;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,12 +22,12 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@RequestBody UserCreateCommand command) {
+    public CompletableFuture<ResponseEntity<Object>> createUser(@RequestBody UserCreateCommand command) {
         return commandHandler.handle(command);
     }
 
     @GetMapping("/users")
-    public ResponseEntity<Object> listUsers() {
+    public CompletableFuture<ResponseEntity<Object>> listUsers() {
         return commandHandler.handle(new UserListCommand());
     }
 

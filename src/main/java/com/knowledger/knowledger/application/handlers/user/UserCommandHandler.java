@@ -1,9 +1,5 @@
 package com.knowledger.knowledger.application.handlers.user;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -11,33 +7,54 @@ import com.knowledger.knowledger.application.commands.ICommand;
 import com.knowledger.knowledger.application.commands.user.UserCreateCommand;
 import com.knowledger.knowledger.application.commands.user.UserListCommand;
 
+import java.lang.reflect.Method;
+import java.util.concurrent.CompletableFuture;
+
 @Component
 public class UserCommandHandler {
 
-    private final Map<Class<? extends ICommand>, Function<ICommand, ResponseEntity<Object>>> commandHandlers = new HashMap<>();
+    @SuppressWarnings("unchecked")
+    public CompletableFuture<ResponseEntity<Object>> handle(ICommand command) {
+        try {
+            // Cria o nome do método com base no tipo do comando (ex.: UserCreateCommand -> handleUserCreate)
+            String methodName = "handle" + command.getClass().getSimpleName().replace("Command", "");
 
-    public UserCommandHandler() {
-        commandHandlers.put(UserCreateCommand.class, command -> handleCreateUser((UserCreateCommand) command));
-        commandHandlers.put(UserListCommand.class, command -> handleListUsers());
-    }
+            // Procura o método no próprio UserCommandHandler
+            Method method = this.getClass().getDeclaredMethod(methodName, command.getClass());
 
-    public ResponseEntity<Object> handle(ICommand command) {
-        Function<ICommand, ResponseEntity<Object>> handler = commandHandlers.get(command.getClass());
+            // Invoca o método e obtém o resultado
+            Object result = method.invoke(this, command);
 
-        if (handler == null) {
-            return ResponseEntity.badRequest().body("Comando desconhecido: " + command.getClass().getSimpleName());
+            // Verifica se o resultado é do tipo esperado
+            if (result instanceof CompletableFuture) {
+                return (CompletableFuture<ResponseEntity<Object>>) result;
+            } else {
+                return CompletableFuture.completedFuture(
+                        ResponseEntity.status(500).body("Erro interno: tipo de retorno inválido do manipulador."));
+            }
+        } catch (NoSuchMethodException e) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest().body("Comando desconhecido: " + command.getClass().getSimpleName()));
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.status(500).body("Erro ao processar comando: " + e.getMessage()));
         }
-
-        return handler.apply(command);
     }
 
-    private ResponseEntity<Object> handleCreateUser(UserCreateCommand command) {
-        return null;
-
+    // Método para criar usuário
+    @SuppressWarnings("unused")
+    private CompletableFuture<ResponseEntity<Object>> handleUserCreate(UserCreateCommand command) {
+        return CompletableFuture.supplyAsync(() -> {
+            return null;
+        });
     }
 
-    private ResponseEntity<Object> handleListUsers() {
-        return null;
+    // Método para listar usuários
+    @SuppressWarnings("unused")
+    private CompletableFuture<ResponseEntity<Object>> handleUserList(UserListCommand command) {
+        return CompletableFuture.supplyAsync(() -> {
+            return null;
+        });
     }
 
 }
