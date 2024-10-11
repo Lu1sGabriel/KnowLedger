@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.application.gateways.user;
+package com.knowledger.knowledger.infra.gateways.user;
 
 import com.knowledger.knowledger.domain.entities.user.User;
 

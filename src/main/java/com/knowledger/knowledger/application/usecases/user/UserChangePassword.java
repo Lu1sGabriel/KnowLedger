@@ -1,6 +1,6 @@
 package com.knowledger.knowledger.application.usecases.user;
 
-import com.knowledger.knowledger.application.gateways.user.IUserGateway;
+import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import com.knowledger.knowledger.commom.mapper.IMapper;
 import com.knowledger.knowledger.domain.entities.user.User;
 import com.knowledger.knowledger.infra.controller.user.UserChangePasswordDTO;
