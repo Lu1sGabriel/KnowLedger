@@ -1,8 +1,8 @@
-package com.knowledger.knowledger.infra.validations.annotations;
+package com.knowledger.knowledger.commom.annotations;
 
 import java.lang.annotation.*;
 
-import com.knowledger.knowledger.infra.validations.validators.NameValidator;
+import com.knowledger.knowledger.commom.validators.NameValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

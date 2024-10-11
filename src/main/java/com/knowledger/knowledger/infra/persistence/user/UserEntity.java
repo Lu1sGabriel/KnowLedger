@@ -3,13 +3,12 @@ package com.knowledger.knowledger.infra.persistence.user;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.knowledger.knowledger.infra.validations.annotations.Email;
-import com.knowledger.knowledger.infra.validations.annotations.Name;
-import com.knowledger.knowledger.infra.validations.annotations.Password;
+import com.knowledger.knowledger.commom.annotations.Email;
+import com.knowledger.knowledger.commom.annotations.Name;
+import com.knowledger.knowledger.commom.annotations.Password;
 
 import jakarta.persistence.*;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

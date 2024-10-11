@@ -1,6 +1,6 @@
-package com.knowledger.knowledger.infra.validations.validators;
+package com.knowledger.knowledger.commom.validators;
 
-import com.knowledger.knowledger.infra.validations.annotations.Name;
+import com.knowledger.knowledger.commom.annotations.Name;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

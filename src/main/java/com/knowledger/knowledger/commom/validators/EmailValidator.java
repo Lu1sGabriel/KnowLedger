@@ -1,8 +1,8 @@
-package com.knowledger.knowledger.infra.validations.validators;
+package com.knowledger.knowledger.commom.validators;
 
 import java.util.regex.Pattern;
 
-import com.knowledger.knowledger.infra.validations.annotations.Email;
+import com.knowledger.knowledger.commom.annotations.Email;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
