@@ -1,7 +1,7 @@
-package com.knowledger.knowledger.domain.entities.user.services;
+package com.knowledger.knowledger.domain.user.services;
 
 import com.knowledger.knowledger.commom.annotations.Password;
-import com.knowledger.knowledger.domain.entities.user.User;
+import com.knowledger.knowledger.domain.user.User;
 
 public class UserChangePasswordService implements IUserChangePasswordService{
 

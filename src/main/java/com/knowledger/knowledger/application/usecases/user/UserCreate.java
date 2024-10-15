@@ -2,7 +2,7 @@ package com.knowledger.knowledger.application.usecases.user;
 
 import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import com.knowledger.knowledger.commom.mapper.IMapper;
-import com.knowledger.knowledger.domain.entities.user.User;
+import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.infra.controller.user.UserCreateDTO;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;

@@ -1,6 +1,6 @@
-package com.knowledger.knowledger.domain.entities.user.factories;
+package com.knowledger.knowledger.domain.user.factories;
 
-import com.knowledger.knowledger.domain.entities.user.User;
+import com.knowledger.knowledger.domain.user.User;
 
 public class UserFactory implements IUserFactory{
 

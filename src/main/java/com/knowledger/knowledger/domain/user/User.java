@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.domain.entities.user;
+package com.knowledger.knowledger.domain.user;
 
 public class User {
 

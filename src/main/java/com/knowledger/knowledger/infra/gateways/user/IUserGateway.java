@@ -1,6 +1,6 @@
 package com.knowledger.knowledger.infra.gateways.user;
 
-import com.knowledger.knowledger.domain.entities.user.User;
+import com.knowledger.knowledger.domain.user.User;
 
 import java.util.UUID;
 

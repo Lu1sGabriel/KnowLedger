@@ -2,9 +2,9 @@ package com.knowledger.knowledger.application.gateways.user;
 
 import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import com.knowledger.knowledger.commom.mapper.IMapper;
-import com.knowledger.knowledger.domain.entities.user.User;
-import com.knowledger.knowledger.domain.entities.user.factories.IUserFactory;
-import com.knowledger.knowledger.domain.entities.user.services.IUserChangePasswordService;
+import com.knowledger.knowledger.domain.user.User;
+import com.knowledger.knowledger.domain.user.factories.IUserFactory;
+import com.knowledger.knowledger.domain.user.services.IUserChangePasswordService;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
