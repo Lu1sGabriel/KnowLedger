@@ -51,13 +51,14 @@ public class UserEntity {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
-    public UserEntity(Long roleId, String name, String email, String password, LocalDateTime createdAt,
+    public UserEntity(Long roleId, String name, String email, String password,
             boolean isActive) {
         this.roleId = roleId;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
         this.isActive = isActive;
     }
 
