@@ -1,20 +1,21 @@
 package com.knowledger.knowledger.application.usecases.user;
 
+import com.knowledger.knowledger.commom.mapper.IMapperDTO;
 import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
-import com.knowledger.knowledger.commom.mapper.IMapper;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.infra.controller.user.UserChangePasswordDTO;
 import com.knowledger.knowledger.infra.controller.user.UserCreateDTO;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Component
 public class UserChangePassword {
 
     private final IUserGateway iUserGateway;
-    private final IMapper<UserDetailDTO, UserEntity, User> iMapper;
+    private final IMapperDTO<UserDetailDTO, User> iMapper;
 
-
-    public UserChangePassword(IUserGateway iUserGateway, IMapper iMapper) {
+    public UserChangePassword(IUserGateway iUserGateway, IMapperDTO<UserDetailDTO, User> iMapper) {
         this.iUserGateway = iUserGateway;
         this.iMapper = iMapper;
     }
