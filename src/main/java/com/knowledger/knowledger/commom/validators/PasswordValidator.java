@@ -1,11 +1,10 @@
 package com.knowledger.knowledger.commom.validators;
 
-import java.util.regex.Pattern;
-
 import com.knowledger.knowledger.commom.annotations.Password;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import java.util.regex.Pattern;
 
 public class PasswordValidator implements ConstraintValidator<Password, String> {
 
@@ -33,8 +32,6 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 
     @Override
     public boolean isValid(String passwordField, ConstraintValidatorContext context) {
-        boolean isValid = true;
-
         context.disableDefaultConstraintViolation();
 
         if (passwordField == null) {
@@ -44,35 +41,35 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 
         if (passwordField.length() < MIN_PASSWORD_LENGTH) {
             addViolation(context, PASSWORD_LENGTH_ERROR_MESSAGE);
-            isValid = false;
+            return false;
         }
 
         if (!SPECIAL_CHARACTER_PATTERN.matcher(passwordField).find()) {
             addViolation(context, PASSWORD_SPECIAL_CHAR_ERROR_MESSAGE);
-            isValid = false;
+            return false;
         }
 
         if (!UPPERCASE_PATTERN.matcher(passwordField).find()) {
             addViolation(context, PASSWORD_UPPERCASE_ERROR_MESSAGE);
-            isValid = false;
+            return false;
         }
 
         if (!DIGIT_PATTERN.matcher(passwordField).find()) {
             addViolation(context, PASSWORD_DIGIT_ERROR_MESSAGE);
-            isValid = false;
+            return false;
         }
 
         if (containsInvalidCharacters(passwordField)) {
             addViolation(context, PASSWORD_INVALID_CHAR_ERROR_MESSAGE);
-            isValid = false;
+            return false;
         }
 
         if (containsMoreThanThreeRepeatedCharacters(passwordField)) {
             addViolation(context, PASSWORD_REPEATED_CHAR_ERROR_MESSAGE);
-            isValid = false;
+            return false;
         }
 
-        return isValid;
+        return true;
     }
 
     private void addViolation(ConstraintValidatorContext context, String message) {

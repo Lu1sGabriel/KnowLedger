@@ -1,29 +1,28 @@
 package com.knowledger.knowledger.validators;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.time.LocalDateTime;
-import java.util.Set;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NameValidatorTest {
 
+    private ValidatorFactory factory;
     private Validator validator;
     private UserEntity defaultUser;
 
     @BeforeEach
     void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
 
         defaultUser = new UserEntity(
@@ -31,8 +30,14 @@ public class NameValidatorTest {
                 "Luis Gabriel",
                 "luis.gabriel@gmail.com",
                 "SenhaForte1!",
-                LocalDateTime.now(),
                 true);
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (factory != null) {
+            factory.close();
+        }
     }
 
     @Test

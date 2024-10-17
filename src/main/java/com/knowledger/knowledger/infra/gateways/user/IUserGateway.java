@@ -6,7 +6,8 @@ import java.util.UUID;
 
 public interface IUserGateway {
 
-    public User create(String name, String email, String password);
-    public User changePassword(UUID userId, String token, String oldPassword, String newPassword, String confirmedNewPassword) throws Exception;
+    User create(String name, String email, String password);
+
+    User changePassword(UUID userId, String token, String oldPassword, String newPassword, String confirmedNewPassword) throws Exception;
 
 }
