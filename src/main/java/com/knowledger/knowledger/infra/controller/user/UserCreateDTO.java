@@ -8,5 +8,7 @@ public record UserCreateDTO(
         @NotBlank
         String email,
         @NotBlank
-        String password) {
+        String password,
+        @NotBlank
+        String confirmedPassword) {
 }

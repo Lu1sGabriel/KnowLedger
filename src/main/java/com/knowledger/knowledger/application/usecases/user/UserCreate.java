@@ -18,9 +18,9 @@ public class UserCreate {
         this.iMapper = iMapper;
     }
 
-    public UserDetailDTO apply(UserCreateDTO userCreateDTO) {
+    public UserDetailDTO apply(UserCreateDTO dto) throws Exception {
 
-        var user = iUserGateway.create(userCreateDTO.name(), userCreateDTO.email(), userCreateDTO.password());
+        var user = iUserGateway.create(dto.name(), dto.email(), dto.password(), dto.confirmedPassword());
         return iMapper.toDto(user);
 
     }

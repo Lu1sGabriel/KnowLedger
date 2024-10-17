@@ -27,8 +27,8 @@ public class UserHandler implements IUserGateway {
     }
 
     @Override
-    public User create(String name, String email, String password) {
-        var user = iUserFactory.create(name, email, password);
+    public User create(String name, String email, String password, String confirmedPassword) throws Exception {
+        var user = iUserFactory.create(name, email, password, confirmedPassword);
         iUserRepository.save(iMapper.toEntity(user));
         return user;
     }
