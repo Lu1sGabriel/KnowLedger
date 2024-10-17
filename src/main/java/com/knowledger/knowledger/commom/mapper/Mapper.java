@@ -1,10 +1,9 @@
 package com.knowledger.knowledger.commom.mapper;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
 
-@Component
-public class Mapper<D, E, T> implements IMapper<D, E, T> {
+public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
+
     private static final ModelMapper modelMapper = new ModelMapper();
 
     private final Class<D> dtoClass;
@@ -31,5 +30,4 @@ public class Mapper<D, E, T> implements IMapper<D, E, T> {
     public E toEntity(T domain) {
         return modelMapper.map(domain, entityClass);
     }
-
 }
