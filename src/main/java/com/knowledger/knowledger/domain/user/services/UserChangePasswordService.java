@@ -2,7 +2,9 @@ package com.knowledger.knowledger.domain.user.services;
 
 import com.knowledger.knowledger.commom.annotations.Password;
 import com.knowledger.knowledger.domain.user.User;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserChangePasswordService implements IUserChangePasswordService{
 
     @Override
