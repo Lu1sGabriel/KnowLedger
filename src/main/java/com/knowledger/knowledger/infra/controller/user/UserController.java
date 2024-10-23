@@ -5,11 +5,6 @@ import com.knowledger.knowledger.application.usecases.user.UserCreate;
 import com.knowledger.knowledger.application.usecases.user.UserGetById;
 import com.knowledger.knowledger.application.usecases.user.UserLogin;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -24,14 +19,11 @@ public class UserController {
     private final UserGetById _userGetById;
     private final UserLogin _userLogin;
 
-    private final AuthenticationManager _authenticationManager;
-
-    public UserController(UserCreate userCreate, UserChangePassword userChangePassword, UserGetById userGetById, UserLogin userLogin, AuthenticationManager authenticationManager) {
+    public UserController(UserCreate userCreate, UserChangePassword userChangePassword, UserGetById userGetById, UserLogin userLogin) {
         _userCreate = userCreate;
         _userChangePassword = userChangePassword;
         _userGetById = userGetById;
         _userLogin = userLogin;
-        _authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
@@ -54,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserTokenAuthenticationDTO> login(@RequestBody UserLoginDTO dto) throws Exception {
+    public ResponseEntity<UserTokenAuthenticationDTO> login(@RequestBody UserLoginDTO dto) {
         var token = _userLogin.apply(dto.getEmail(), dto.getPassword());
         return ResponseEntity.ok(token);
     }

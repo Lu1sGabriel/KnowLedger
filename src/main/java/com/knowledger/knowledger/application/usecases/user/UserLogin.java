@@ -1,8 +1,6 @@
 package com.knowledger.knowledger.application.usecases.user;
 
 import com.knowledger.knowledger.commom.mapper.IMapperDTO;
-import com.knowledger.knowledger.domain.user.User;
-import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import com.knowledger.knowledger.infra.controller.user.UserTokenAuthenticationDTO;
 import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import org.springframework.stereotype.Component;
@@ -19,7 +17,7 @@ public class UserLogin {
         _iMapper = iMapper;
     }
 
-    public UserTokenAuthenticationDTO apply(String email, String password) throws Exception {
+    public UserTokenAuthenticationDTO apply(String email, String password) {
 
         var result = _iUserGateway.login(email, password);
         return _iMapper.toDto(result);

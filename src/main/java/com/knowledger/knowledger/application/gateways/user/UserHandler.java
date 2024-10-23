@@ -71,7 +71,7 @@ public class UserHandler implements IUserGateway {
                 .orElseThrow(() -> new Exception("Usuário inexistente"));    }
 
     @Override
-    public Object login(String email, String password) {
+    public Map<String, String> login(String email, String password) {
 
         var token = _iUserAuthenticationService.authenticate(email, password);
 
