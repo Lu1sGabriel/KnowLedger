@@ -7,6 +7,7 @@ import com.knowledger.knowledger.commom.annotations.Email;
 import com.knowledger.knowledger.commom.annotations.Name;
 import com.knowledger.knowledger.commom.annotations.Password;
 
+import com.knowledger.knowledger.infra.persistence.user.role.RoleEntity;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -14,18 +15,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "role_id", nullable = false)
-    private Long roleId;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private RoleEntity role;
 
     @Column(name = "name", nullable = false)
     @Name
@@ -51,9 +52,9 @@ public class UserEntity {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
-    public UserEntity(Long roleId, String name, String email, String password,
+    public UserEntity(RoleEntity role, String name, String email, String password,
             boolean isActive) {
-        this.roleId = roleId;
+        this.role = role;
         this.name = name;
         this.email = email;
         this.password = password;
