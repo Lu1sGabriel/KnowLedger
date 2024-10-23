@@ -3,6 +3,7 @@ package com.knowledger.knowledger.infra.controller.user;
 import com.knowledger.knowledger.application.usecases.user.UserChangePassword;
 import com.knowledger.knowledger.application.usecases.user.UserCreate;
 import com.knowledger.knowledger.application.usecases.user.UserGetById;
+import com.knowledger.knowledger.application.usecases.user.UserLogin;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,13 +22,15 @@ public class UserController {
     private final UserCreate _userCreate;
     private final UserChangePassword _userChangePassword;
     private final UserGetById _userGetById;
+    private final UserLogin _userLogin;
 
     private final AuthenticationManager _authenticationManager;
 
-    public UserController(UserCreate userCreate, UserChangePassword userChangePassword, UserGetById userGetById, AuthenticationManager authenticationManager) {
+    public UserController(UserCreate userCreate, UserChangePassword userChangePassword, UserGetById userGetById, UserLogin userLogin, AuthenticationManager authenticationManager) {
         _userCreate = userCreate;
         _userChangePassword = userChangePassword;
         _userGetById = userGetById;
+        _userLogin = userLogin;
         _authenticationManager = authenticationManager;
     }
 
@@ -51,16 +54,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserLoginDTO dto) {
-        try {
-            Authentication authentication = _authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return "Login efetuado com sucesso!";
-        } catch (AuthenticationException e) {
-            return "Login failed: " + e.getMessage();
-        }
+    public ResponseEntity login(@RequestBody UserLoginDTO dto) throws Exception {
+        _userLogin.apply(dto.getEmail(), dto.getPassword());
+        return ResponseEntity.ok("Login efetuado com sucesso!");
     }
 
 }

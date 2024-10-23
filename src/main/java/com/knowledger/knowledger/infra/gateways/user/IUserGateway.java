@@ -11,4 +11,6 @@ public interface IUserGateway {
     User changePassword(UUID userId, String token, String oldPassword, String newPassword, String confirmedNewPassword) throws Exception;
 
     User getById(UUID id) throws Exception;
+
+    void login(String email, String password);
 }

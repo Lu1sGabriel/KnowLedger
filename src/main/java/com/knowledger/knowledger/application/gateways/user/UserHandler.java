@@ -2,6 +2,7 @@ package com.knowledger.knowledger.application.gateways.user;
 
 import com.knowledger.knowledger.commom.Constants.UserRole;
 import com.knowledger.knowledger.domain.user.role.Role;
+import com.knowledger.knowledger.domain.user.services.IUserAuthenticationService;
 import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import com.knowledger.knowledger.commom.mapper.IMapper;
 import com.knowledger.knowledger.domain.user.User;
@@ -11,6 +12,9 @@ import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 import com.knowledger.knowledger.infra.persistence.user.role.IRoleRepository;
 import com.knowledger.knowledger.infra.persistence.user.role.RoleEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -24,15 +28,17 @@ public class UserHandler implements IUserGateway {
     private final IMapper<UserEntity, User> _iMapper;
     private final IMapper<RoleEntity, Role> _iMapperRole;
     private final IRoleRepository _iRoleRepository;
+    private final IUserAuthenticationService _iUserAuthenticationService;
 
 
-    public UserHandler(IUserFactory iUserFactory, IUserRepository iUserRepository, IUserChangePasswordService iUserChangePasswordService, IMapper<UserEntity, User> iMapper, IMapper<RoleEntity, Role> iMapperRole, IRoleRepository iRoleRepository) {
+    public UserHandler(IUserFactory iUserFactory, IUserRepository iUserRepository, IUserChangePasswordService iUserChangePasswordService, IMapper<UserEntity, User> iMapper, IMapper<RoleEntity, Role> iMapperRole, IRoleRepository iRoleRepository, IUserAuthenticationService iUserAuthenticationService) {
         _iUserFactory = iUserFactory;
         _iUserRepository = iUserRepository;
         _iUserChangePasswordService = iUserChangePasswordService;
         _iMapper = iMapper;
         _iMapperRole = iMapperRole;
         _iRoleRepository = iRoleRepository;
+        _iUserAuthenticationService = iUserAuthenticationService;
     }
 
     @Override
@@ -60,4 +66,11 @@ public class UserHandler implements IUserGateway {
                 .findById(id)
                 .map(_iMapper::toDomain)
                 .orElseThrow(() -> new Exception("Usuário inexistente"));    }
+
+    @Override
+    public void login(String email, String password) {
+
+        _iUserAuthenticationService.authenticate(email, password);
+
+    }
 }

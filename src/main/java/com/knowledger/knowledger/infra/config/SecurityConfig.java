@@ -23,12 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("users/login", "users/register").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/users/login")
-                        .defaultSuccessUrl("/home", true)
-                        .failureUrl("/login?error=true")
-                );
+                .httpBasic(httpBasic -> {});
         return http.build();
     }
 
