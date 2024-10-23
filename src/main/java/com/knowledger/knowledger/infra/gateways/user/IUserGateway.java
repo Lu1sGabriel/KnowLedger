@@ -12,5 +12,5 @@ public interface IUserGateway {
 
     User getById(UUID id) throws Exception;
 
-    void login(String email, String password);
+    Object login(String email, String password);
 }

@@ -3,21 +3,26 @@ package com.knowledger.knowledger.application.usecases.user;
 import com.knowledger.knowledger.commom.mapper.IMapperDTO;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
+import com.knowledger.knowledger.infra.controller.user.UserTokenAuthenticationDTO;
 import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserLogin {
 
-    private final IUserGateway iUserGateway;
+    private final IUserGateway _iUserGateway;
+    private final IMapperDTO<UserTokenAuthenticationDTO, Object> _iMapper;
 
-    public UserLogin(IUserGateway iUserGateway) {
-        this.iUserGateway = iUserGateway;
+
+    public UserLogin(IUserGateway iUserGateway, IMapperDTO<UserTokenAuthenticationDTO, Object> iMapper) {
+        _iUserGateway = iUserGateway;
+        _iMapper = iMapper;
     }
 
-    public void apply(String email, String password) throws Exception {
+    public UserTokenAuthenticationDTO apply(String email, String password) throws Exception {
 
-        iUserGateway.login(email, password);
+        var result = _iUserGateway.login(email, password);
+        return _iMapper.toDto(result);
 
     }
 

@@ -5,6 +5,7 @@ import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.domain.user.role.Role;
 import com.knowledger.knowledger.infra.controller.user.UserRegisterDTO;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
+import com.knowledger.knowledger.infra.controller.user.UserTokenAuthenticationDTO;
 import com.knowledger.knowledger.infra.controller.user.role.RoleDetailDTO;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 import com.knowledger.knowledger.infra.persistence.user.role.RoleEntity;
@@ -30,6 +31,11 @@ public class MapperInstaller {
     @Bean
     public Mapper<RoleDetailDTO, RoleEntity, Role> roleMapper() {
         return new Mapper<>(RoleDetailDTO.class, RoleEntity.class, Role.class);
+    }
+
+    @Bean
+    public Mapper<UserTokenAuthenticationDTO, Class, Object> TokenMapper() {
+        return new Mapper<>(UserTokenAuthenticationDTO.class, Class.class, Object.class);
     }
 
 

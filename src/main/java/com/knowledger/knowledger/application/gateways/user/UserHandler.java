@@ -1,5 +1,6 @@
 package com.knowledger.knowledger.application.gateways.user;
 
+import com.auth0.jwt.JWT;
 import com.knowledger.knowledger.commom.Constants.UserRole;
 import com.knowledger.knowledger.domain.user.role.Role;
 import com.knowledger.knowledger.domain.user.services.IUserAuthenticationService;
@@ -17,6 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -68,9 +71,13 @@ public class UserHandler implements IUserGateway {
                 .orElseThrow(() -> new Exception("Usuário inexistente"));    }
 
     @Override
-    public void login(String email, String password) {
+    public Object login(String email, String password) {
 
-        _iUserAuthenticationService.authenticate(email, password);
+        var token = _iUserAuthenticationService.authenticate(email, password);
 
+        Map<String, String> objectToken = new HashMap<>();
+        objectToken.put("token", token);
+
+        return objectToken;
     }
 }

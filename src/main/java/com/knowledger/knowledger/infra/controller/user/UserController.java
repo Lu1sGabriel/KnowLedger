@@ -54,9 +54,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody UserLoginDTO dto) throws Exception {
-        _userLogin.apply(dto.getEmail(), dto.getPassword());
-        return ResponseEntity.ok("Login efetuado com sucesso!");
+    public ResponseEntity<UserTokenAuthenticationDTO> login(@RequestBody UserLoginDTO dto) throws Exception {
+        var token = _userLogin.apply(dto.getEmail(), dto.getPassword());
+        return ResponseEntity.ok(token);
     }
 
 }
