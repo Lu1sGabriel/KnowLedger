@@ -3,7 +3,7 @@ package com.knowledger.knowledger.application.usecases.user;
 import com.knowledger.knowledger.commom.mapper.IMapperDTO;
 import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import com.knowledger.knowledger.domain.user.User;
-import com.knowledger.knowledger.infra.controller.user.UserCreateDTO;
+import com.knowledger.knowledger.infra.controller.user.UserRegisterDTO;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +18,9 @@ public class UserCreate {
         this.iMapper = iMapper;
     }
 
-    public UserDetailDTO apply(UserCreateDTO dto) throws Exception {
+    public UserDetailDTO apply(UserRegisterDTO dto) throws Exception {
 
-        var user = iUserGateway.create(dto.name(), dto.email(), dto.password(), dto.confirmedPassword());
+        var user = iUserGateway.register(dto.getName(), dto.getEmail(), dto.getPassword(), dto.getConfirmedPassword());
         return iMapper.toDto(user);
 
     }
