@@ -8,12 +8,12 @@ import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserCreate {
+public class UserRegister {
 
     private final IUserGateway iUserGateway;
     private final IMapperDTO<UserDetailDTO, User> iMapper;
 
-    public UserCreate(IUserGateway iUserGateway, IMapperDTO<UserDetailDTO, User> iMapper) {
+    public UserRegister(IUserGateway iUserGateway, IMapperDTO<UserDetailDTO, User> iMapper) {
         this.iUserGateway = iUserGateway;
         this.iMapper = iMapper;
     }

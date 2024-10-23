@@ -1,7 +1,7 @@
 package com.knowledger.knowledger.infra.controller.user;
 
 import com.knowledger.knowledger.application.usecases.user.UserChangePassword;
-import com.knowledger.knowledger.application.usecases.user.UserCreate;
+import com.knowledger.knowledger.application.usecases.user.UserRegister;
 import com.knowledger.knowledger.application.usecases.user.UserGetById;
 import com.knowledger.knowledger.application.usecases.user.UserLogin;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +14,13 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserCreate _userCreate;
+    private final UserRegister _userRegister;
     private final UserChangePassword _userChangePassword;
     private final UserGetById _userGetById;
     private final UserLogin _userLogin;
 
-    public UserController(UserCreate userCreate, UserChangePassword userChangePassword, UserGetById userGetById, UserLogin userLogin) {
-        _userCreate = userCreate;
+    public UserController(UserRegister userRegister, UserChangePassword userChangePassword, UserGetById userGetById, UserLogin userLogin) {
+        _userRegister = userRegister;
         _userChangePassword = userChangePassword;
         _userGetById = userGetById;
         _userLogin = userLogin;
@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDetailDTO> create(@RequestBody UserRegisterDTO dto, UriComponentsBuilder uriBuilder) throws Exception {
-        var userDetailDto = _userCreate.apply(dto);
+        var userDetailDto = _userRegister.apply(dto);
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDetailDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDetailDto);
     }

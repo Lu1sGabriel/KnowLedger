@@ -1,12 +1,8 @@
 package com.knowledger.knowledger.domain.user.factories;
 
-import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.commom.Util;
-import com.knowledger.knowledger.commom.mapper.IMapper;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.domain.user.role.Role;
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-import com.knowledger.knowledger.infra.persistence.user.role.IRoleRepository;
 import org.springframework.stereotype.Service;
 
 @Service
