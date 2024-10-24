@@ -7,6 +7,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.List;
 
 public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
 
@@ -46,6 +47,27 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
         return modelMapper.map(domain, entityClass);
     }
 
+    @Override
+    public List<T> toDomainList(List<E> entities) {
+        return entities.stream()
+                .map(this::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<E> toEntityList(List<T> domains) {
+        return domains.stream()
+                .map(this::toEntity)
+                .toList();
+    }
+
+    @Override
+    public List<D> toDtoList(List<T> domains) {
+        return domains.stream()
+                .map(this::toDto)
+                .toList();
+    }
+
     private void configureRecordMapping(Class<D> recordClass) {
         modelMapper.typeMap(domainClass, recordClass).setProvider(request -> {
             try {
@@ -71,4 +93,5 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
             throw new RuntimeException("Erro ao obter o valor do campo: " + parameter.getName(), e);
         }
     }
+
 }
