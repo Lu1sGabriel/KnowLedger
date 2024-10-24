@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class MapperInstaller {
 
-    //User
+    //  User
     @Bean
     @Primary
     public Mapper<UserDetailDTO, UserEntity, User> userDetailMapper() {
@@ -47,7 +47,12 @@ public class MapperInstaller {
     }
 
 
-    //Post
+    //  Post
+
+    //  Department
+    @Bean
+    public Mapper<DepartmentDetailDTO, DepartmentEntity, Department> departmentMapper() {
+        return new Mapper<>(DepartmentDetailDTO.class, DepartmentEntity.class, Department.class);
+    }
 
 }
-
