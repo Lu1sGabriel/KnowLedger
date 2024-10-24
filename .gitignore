@@ -181,3 +181,6 @@ target/
 
 # Miscellaneous
 HELP.md
+
+# Ignore profiles directory
+/src/main/resources/profiles/
