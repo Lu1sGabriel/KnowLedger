@@ -41,6 +41,11 @@ public class MapperInstaller {
         return new Mapper<>(UserTokenAuthenticationDTO.class, Class.class, Object.class);
     }
 
+    @Bean
+    public Mapper<DepartmentDetailDTO, DepartmentEntity, Department> departmentMapper() {
+        return new Mapper<>(DepartmentDetailDTO.class, DepartmentEntity.class, Department.class);
+    }
+
 
     //  Post
 

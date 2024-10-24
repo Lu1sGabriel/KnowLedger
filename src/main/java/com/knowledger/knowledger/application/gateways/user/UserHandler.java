@@ -13,9 +13,6 @@ import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 import com.knowledger.knowledger.infra.persistence.user.role.IRoleRepository;
 import com.knowledger.knowledger.infra.persistence.user.role.RoleEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

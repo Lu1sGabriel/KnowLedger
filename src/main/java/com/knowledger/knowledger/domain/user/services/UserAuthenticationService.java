@@ -1,6 +1,8 @@
 package com.knowledger.knowledger.domain.user.services;
 
 import com.knowledger.knowledger.infra.config.JwtTokenUtil;
+import com.knowledger.knowledger.infra.exceptions.BusinessException;
+import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,11 +14,13 @@ import org.springframework.stereotype.Service;
 public class UserAuthenticationService implements IUserAuthenticationService {
 
     private final AuthenticationManager _authenticationManager;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil _jwtTokenUtil;
+    private final IUserRepository _iUserRepository;
 
-    public UserAuthenticationService(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
-        this._authenticationManager = authenticationManager;
-        this.jwtTokenUtil = jwtTokenUtil;
+    public UserAuthenticationService(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, IUserRepository iUserRepository) {
+        _authenticationManager = authenticationManager;
+        _jwtTokenUtil = jwtTokenUtil;
+        _iUserRepository = iUserRepository;
     }
 
     @Override
@@ -26,6 +30,8 @@ public class UserAuthenticationService implements IUserAuthenticationService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return jwtTokenUtil.generateToken(email);
+        var user = _iUserRepository.findByEmail(email).orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+
+        return _jwtTokenUtil.generateToken(user.getEmail(), user.getRole().getName());
     }
 }
