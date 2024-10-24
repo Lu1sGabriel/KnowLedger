@@ -2,8 +2,8 @@
 -- Insert initial departments
 
 INSERT INTO department (name, description) VALUES
-                                               ('Human Resources', 'Department responsible for personnel management, recruitment, and selection.'),
-                                               ('Information Technology', 'Department responsible for IT infrastructure and technical support.'),
-                                               ('Finance', 'Department responsible for financial management, payments, and collections.'),
-                                               ('Marketing', 'Department responsible for promoting the company and its market strategies.'),
-                                               ('Sales', 'Department responsible for negotiating and selling products or services.');
+                                               ('Recursos Humanos', 'Departamento responsável pela gestão de pessoal, recrutamento e seleção.'),
+                                               ('Tecnologia da Informação', 'Departamento responsável pela infraestrutura de TI e suporte técnico.'),
+                                               ('Financeiro', 'Departamento responsável pela gestão financeira, pagamentos e cobranças.'),
+                                               ('Marketing', 'Departamento responsável pela promoção da empresa e suas estratégias de mercado.'),
+                                               ('Vendas', 'Departamento responsável pela negociação e venda de produtos ou serviços.');

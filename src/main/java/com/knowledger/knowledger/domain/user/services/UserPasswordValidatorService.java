@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.commom.services;
+package com.knowledger.knowledger.domain.user.services;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-public final class PasswordService {
+public final class UserPasswordValidatorService implements IUserPasswordValidatorService {
 
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final String SPECIAL_CHARACTERS = "!@#$%^&*(),.?\":{}|<>";
@@ -40,10 +40,12 @@ public final class PasswordService {
 
     final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Override
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
 
+    @Override
     public boolean arePasswordsEqual(String password, String confirmPassword) {
         if (password == null || confirmPassword == null) {
             return false;
@@ -51,7 +53,7 @@ public final class PasswordService {
         return password.equals(confirmPassword);
     }
 
-
+    @Override
     public String validatePassword(String password) {
         if (password == null) {
             return PasswordError.PASSWORD_NULL.getMessage();
