@@ -5,6 +5,7 @@ import com.knowledger.knowledger.application.usecases.user.UserRegister;
 import com.knowledger.knowledger.application.usecases.user.UserGetById;
 import com.knowledger.knowledger.application.usecases.user.UserLogin;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,6 +34,7 @@ public class UserController {
         return ResponseEntity.created(uri).body(userDetailDto);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public ResponseEntity<UserDetailDTO> getById(@PathVariable UUID id) throws Exception {
         var userDetailDto = _userGetById.apply(id);

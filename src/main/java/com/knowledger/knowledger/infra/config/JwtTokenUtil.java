@@ -19,9 +19,10 @@ public class JwtTokenUtil {
     public JwtTokenUtil() {
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         return JWT.create()
                 .withClaim("email", email)
+                .withClaim("role", role)
                 .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
                 .sign(Algorithm.HMAC512(jwtSecret.getBytes()));
     }
@@ -31,7 +32,18 @@ public class JwtTokenUtil {
             return JWT.require(Algorithm.HMAC512(jwtSecret.getBytes()))
                     .build()
                     .verify(token)
-                    .getSubject();
+                    .getClaim("email").asString();
+        } catch (JWTVerificationException exception) {
+            return null;
+        }
+    }
+
+    public String getRole(String token) {
+        try {
+            return JWT.require(Algorithm.HMAC512(jwtSecret.getBytes()))
+                    .build()
+                    .verify(token)
+                    .getClaim("role").asString();
         } catch (JWTVerificationException exception) {
             return null;
         }
