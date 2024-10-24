@@ -1,9 +1,7 @@
 package com.knowledger.knowledger.domain.user.services;
 
-import com.knowledger.knowledger.commom.Util;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,8 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserSecurityService implements UserDetailsService, IUserSecurityService {
 
-    @Autowired
-    private IUserRepository userRepository;
+    private final IUserRepository userRepository;
+
+    public UserSecurityService(IUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -27,4 +28,5 @@ public class UserSecurityService implements UserDetailsService, IUserSecuritySer
                 .roles("USER")
                 .build();
     }
+
 }

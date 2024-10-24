@@ -1,13 +1,17 @@
 package com.knowledger.knowledger.domain.user.services;
 
+import com.knowledger.knowledger.infra.exceptions.BusinessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@Component
-public final class UserPasswordValidatorService implements IUserPasswordValidatorService {
+@Service
+public final class UserPasswordService implements IUserPasswordService {
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final String SPECIAL_CHARACTERS = "!@#$%^&*(),.?\":{}|<>";
@@ -19,13 +23,15 @@ public final class UserPasswordValidatorService implements IUserPasswordValidato
     private static final Pattern INVALID_CHAR_PATTERN = Pattern.compile("[çÇ]");
 
     private enum PasswordError {
-        PASSWORD_NULL("A senha não pode ser nula."),
+        PASSWORD_NULL("Ambas as senhas devem ser preenchidas."),
         PASSWORD_LENGTH("A senha deve ter no mínimo " + MIN_PASSWORD_LENGTH + " caracteres."),
         PASSWORD_SPECIAL_CHAR("A senha deve conter pelo menos um caractere especial."),
         PASSWORD_UPPERCASE("A senha deve conter pelo menos uma letra maiúscula."),
         PASSWORD_DIGIT("A senha deve conter pelo menos um número."),
         PASSWORD_REPEATED_CHAR("A senha não pode conter mais de três caracteres repetidos consecutivos."),
-        PASSWORD_INVALID_CHAR("A senha não pode conter caracteres inválidos como 'ç'.");
+        PASSWORD_INVALID_CHAR("A senha não pode conter caracteres inválidos como 'ç'."),
+        PASSWORD_NOT_EQUAL("As senhas não são iguais."),
+        ENCODE_ERROR("Erro inesperado. Por favor, entre em contato com o suporte de TI.");
 
         private final String message;
 
@@ -38,52 +44,52 @@ public final class UserPasswordValidatorService implements IUserPasswordValidato
         }
     }
 
-    final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     @Override
-    public String encodePassword(String password) {
-        return passwordEncoder.encode(password);
-    }
-
-    @Override
-    public boolean arePasswordsEqual(String password, String confirmPassword) {
-        if (password == null || confirmPassword == null) {
-            return false;
+    public String encode(String password) throws BusinessException {
+        try {
+            return passwordEncoder.encode(password);
+        } catch (Exception exception) {
+            throw new BusinessException(PasswordError.ENCODE_ERROR.getMessage(), exception);
         }
-        return password.equals(confirmPassword);
     }
 
     @Override
-    public String validatePassword(String password) {
-        if (password == null) {
-            return PasswordError.PASSWORD_NULL.getMessage();
+    public void validate(String password, String confirmPassword) throws BusinessException {
+        if (Objects.isNull(password) || Objects.isNull(confirmPassword)) {
+            throw new BusinessException(PasswordError.PASSWORD_NULL.getMessage());
+        }
+
+        if (!arePasswordsEqual(password, confirmPassword)) {
+            throw new BusinessException(PasswordError.PASSWORD_NOT_EQUAL.getMessage());
         }
 
         if (isShorterThanMinimumLength(password)) {
-            return PasswordError.PASSWORD_LENGTH.getMessage();
+            throw new BusinessException(PasswordError.PASSWORD_LENGTH.getMessage());
         }
 
         if (!containsSpecialCharacter(password)) {
-            return PasswordError.PASSWORD_SPECIAL_CHAR.getMessage();
+            throw new BusinessException(PasswordError.PASSWORD_SPECIAL_CHAR.getMessage());
         }
 
         if (!containsUppercase(password)) {
-            return PasswordError.PASSWORD_UPPERCASE.getMessage();
+            throw new BusinessException(PasswordError.PASSWORD_UPPERCASE.getMessage());
         }
 
         if (!containsDigit(password)) {
-            return PasswordError.PASSWORD_DIGIT.getMessage();
+            throw new BusinessException(PasswordError.PASSWORD_DIGIT.getMessage());
         }
 
         if (containsInvalidCharacter(password)) {
-            return PasswordError.PASSWORD_INVALID_CHAR.getMessage();
+            throw new BusinessException(PasswordError.PASSWORD_INVALID_CHAR.getMessage());
         }
 
         if (hasMoreThanThreeConsecutiveRepeatedChars(password)) {
-            return PasswordError.PASSWORD_REPEATED_CHAR.getMessage();
+            throw new BusinessException(PasswordError.PASSWORD_REPEATED_CHAR.getMessage());
         }
+    }
 
-        return null;
+    private boolean arePasswordsEqual(String password, String confirmPassword) {
+        return password != null && password.equals(confirmPassword);
     }
 
     private boolean isShorterThanMinimumLength(String password) {
