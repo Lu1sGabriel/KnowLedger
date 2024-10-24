@@ -1,7 +1,6 @@
 package com.knowledger.knowledger.commom.validators;
 
 import com.knowledger.knowledger.commom.annotations.Name;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -23,8 +22,6 @@ public class NameValidator implements ConstraintValidator<Name, String> {
 
     @Override
     public boolean isValid(String nameField, ConstraintValidatorContext context) {
-        boolean isValid = true;
-
         context.disableDefaultConstraintViolation();
 
         if (nameField == null) {
@@ -34,25 +31,25 @@ public class NameValidator implements ConstraintValidator<Name, String> {
 
         if (nameField.length() < MIN_LENGTH) {
             addViolation(context, INVALID_NAME_LENGTH_MESSAGE);
-            isValid = false;
+            return false;
         }
 
         if (!containsOnlyLettersAndSpaces(nameField)) {
             addViolation(context, NAME_WITH_INVALID_CHARACTERS_MESSAGE);
-            isValid = false;
+            return false;
         }
 
         if (containsSpecialCharacters(nameField)) {
             addViolation(context, NAME_WITH_SPECIAL_CHARACTERS_MESSAGE);
-            isValid = false;
+            return false;
         }
 
         if (containsInnerUppercaseLetters(nameField)) {
             addViolation(context, NAME_WITHOUT_SPACES_MESSAGE);
-            isValid = false;
+            return false;
         }
 
-        return isValid;
+        return true;
     }
 
     private void addViolation(ConstraintValidatorContext context, String message) {
