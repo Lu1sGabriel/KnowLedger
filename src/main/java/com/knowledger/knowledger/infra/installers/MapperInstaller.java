@@ -5,8 +5,8 @@ import com.knowledger.knowledger.domain.department.Department;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.domain.user.role.Role;
 import com.knowledger.knowledger.infra.controller.department.DepartmentDetailDTO;
-import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import com.knowledger.knowledger.infra.controller.user.UserRegisterDTO;
+import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import com.knowledger.knowledger.infra.controller.user.UserTokenAuthenticationDTO;
 import com.knowledger.knowledger.infra.controller.user.role.RoleDetailDTO;
 import com.knowledger.knowledger.infra.persistence.department.DepartmentEntity;
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class MapperInstaller {
 
-    //User
+    //  User
     @Bean
     @Primary
     public Mapper<UserDetailDTO, UserEntity, User> userDetailMapper() {
@@ -41,7 +41,8 @@ public class MapperInstaller {
         return new Mapper<>(UserTokenAuthenticationDTO.class, Class.class, Object.class);
     }
 
-    //Post
+
+    //  Post
 
     //  Department
     @Bean
