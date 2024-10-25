@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -69,16 +68,18 @@ public class UserHandler implements IUserGateway {
                 .orElseThrow(() -> new BusinessException("Usuário não encontrado. Por favor, entre em contato com o setor de TI.", HttpStatus.NOT_FOUND));
     }
 
-    @Override
-    public Map<String, String> login(String email, String password) {
-        var token = _iUserAuthenticationService.authenticate(email, password);
 
-        if (Objects.isNull(token) || token.isEmpty()) {
-            throw new BusinessException("Falha na autenticação. Verifique suas credenciais e tente novamente.", HttpStatus.UNAUTHORIZED);
-        }
+    @Override
+    public Map<String, String> login(String email, String payloadPassword) {
+
+        var user = _iUserRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado. Por favor, entre em contato com o setor de TI.", HttpStatus.NOT_FOUND));
+
+        var token = _iUserAuthenticationService.login(email, payloadPassword, user.getPassword(), user.getRole().getName());
 
         Map<String, String> objectToken = new HashMap<>();
         objectToken.put("token", token);
+
         return objectToken;
     }
 
