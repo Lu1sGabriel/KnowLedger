@@ -51,7 +51,6 @@ public final class UserPasswordService implements IUserPasswordService {
         try {
             return passwordEncoder.encode(password);
         } catch (Exception exception) {
-            // Erro inesperado ao codificar a senha - erro interno no servidor (500)
             throw new BusinessException(PasswordError.ENCODE_ERROR.getMessage(), exception, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

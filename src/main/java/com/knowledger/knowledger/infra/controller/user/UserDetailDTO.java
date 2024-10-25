@@ -95,5 +95,4 @@ public class UserDetailDTO {
         isActive = active;
     }
 
-
 }
