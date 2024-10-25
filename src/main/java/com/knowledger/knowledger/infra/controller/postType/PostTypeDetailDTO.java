@@ -1,14 +1,14 @@
-package com.knowledger.knowledger.infra.controller.department;
+package com.knowledger.knowledger.infra.controller.postType;
 
-public class DepartmentDetailDTO {
+public class PostTypeDetailDTO {
     Long id;
     String name;
     String description;
 
-    public DepartmentDetailDTO() {
+    public PostTypeDetailDTO() {
     }
 
-    public DepartmentDetailDTO(Long id, String name, String description) {
+    public PostTypeDetailDTO(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
