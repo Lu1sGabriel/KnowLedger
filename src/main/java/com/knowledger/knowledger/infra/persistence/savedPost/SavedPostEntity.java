@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "saved_post")
@@ -38,7 +39,7 @@ public class SavedPostEntity {
     public SavedPostEntity(UserEntity user, PostEntity post, LocalDateTime createdAt) {
         this.user = user;
         this.post = post;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
     }
 
 }

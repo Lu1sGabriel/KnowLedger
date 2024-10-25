@@ -11,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "like")
@@ -28,9 +30,11 @@ public class LikeEntity {
     private UserEntity user;
 
     @Column(name = "created_at")
+    @CreatedDate
     private LocalDateTime createdAt;
 
     @Column(name = "update_at")
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @Column(name = "is_active")
@@ -40,7 +44,7 @@ public class LikeEntity {
         this.user = user;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.isActive = isActive;
+        this.isActive = true;
     }
 
 }
