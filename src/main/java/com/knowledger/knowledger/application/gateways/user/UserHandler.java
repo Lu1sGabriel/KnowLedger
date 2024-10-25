@@ -1,6 +1,5 @@
 package com.knowledger.knowledger.application.gateways.user;
 
-import com.auth0.jwt.JWT;
 import com.knowledger.knowledger.commom.Constants.UserRole;
 import com.knowledger.knowledger.domain.user.role.Role;
 import com.knowledger.knowledger.domain.user.services.IUserAuthenticationService;
@@ -68,9 +67,12 @@ public class UserHandler implements IUserGateway {
                 .orElseThrow(() -> new Exception("Usuário inexistente"));    }
 
     @Override
-    public Map<String, String> login(String email, String password) {
+    public Map<String, String> login(String email, String payloadPassword) {
 
-        var token = _iUserAuthenticationService.authenticate(email, password);
+        var user = _iUserRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        var token = _iUserAuthenticationService.login(email, payloadPassword, user.getPassword(), user.getRole().getName());
 
         Map<String, String> objectToken = new HashMap<>();
         objectToken.put("token", token);
