@@ -4,6 +4,6 @@ import org.springframework.security.core.AuthenticationException;
 
 public interface IUserAuthenticationService {
 
-    String authenticate(String email, String password) throws AuthenticationException;
+    String login(String email, String payloadPassword, String userPassword, String role) throws AuthenticationException;
 
 }

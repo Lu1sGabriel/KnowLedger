@@ -1,19 +1,21 @@
-package com.knowledger.knowledger.domain.user.services;
+package com.knowledger.knowledger.infra.config.security;
 
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @Service
-public class UserSecurityService implements UserDetailsService, IUserSecurityService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private final IUserRepository userRepository;
 
-    public UserSecurityService(IUserRepository userRepository) {
+    public CustomUserDetailsService(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -22,11 +24,9 @@ public class UserSecurityService implements UserDetailsService, IUserSecuritySer
         UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o email: " + email));
 
-        return User.builder()
-                .username(userEntity.getEmail())
-                .password(userEntity.getPassword())
-                .roles("USER")
-                .build();
+        var userRole = Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRole().getName()));
+
+        return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getPassword(), userRole);
     }
 
 }

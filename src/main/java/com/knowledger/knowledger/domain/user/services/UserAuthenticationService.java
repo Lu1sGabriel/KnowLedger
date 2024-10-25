@@ -1,41 +1,31 @@
 package com.knowledger.knowledger.domain.user.services;
 
-import com.knowledger.knowledger.infra.config.JwtTokenUtil;
-import com.knowledger.knowledger.infra.exceptions.BusinessException;
+import com.knowledger.knowledger.infra.config.security.TokenService;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserAuthenticationService implements IUserAuthenticationService {
 
-    private final AuthenticationManager _authenticationManager;
-    private final JwtTokenUtil _jwtTokenUtil;
-    private final IUserRepository _iUserRepository;
+    private final TokenService _tokenService;
+    private final PasswordEncoder _passwordEncoder;
 
-    public UserAuthenticationService(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, IUserRepository iUserRepository) {
-        _authenticationManager = authenticationManager;
-        _jwtTokenUtil = jwtTokenUtil;
-        _iUserRepository = iUserRepository;
+    public UserAuthenticationService(TokenService tokenService, PasswordEncoder passwordEncoder) {
+        _tokenService = tokenService;
+        _passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public String authenticate(String email, String password) throws AuthenticationException {
-        Authentication authentication = _authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password));
+    public String login(String email, String payloadPassword, String userPassword, String role) throws AuthenticationException {
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (_passwordEncoder.matches(payloadPassword, userPassword)){
+            return _tokenService.generateToken(email, role);
+        }
 
-        var user = _iUserRepository.findByEmail(email).
-                orElseThrow(() -> new BusinessException("Usuário não encontrado", HttpStatus.NOT_FOUND));
+        return null;
 
-        return _jwtTokenUtil.generateToken(user.getEmail(), user.getRole().getName());
     }
-
 }
