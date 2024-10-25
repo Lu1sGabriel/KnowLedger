@@ -3,6 +3,7 @@ package com.knowledger.knowledger.application.gateways.user;
 import com.knowledger.knowledger.commom.Constants.UserRole;
 import com.knowledger.knowledger.domain.user.role.Role;
 import com.knowledger.knowledger.domain.user.services.IUserAuthenticationService;
+import com.knowledger.knowledger.infra.exceptions.BusinessException;
 import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import com.knowledger.knowledger.commom.mapper.IMapper;
 import com.knowledger.knowledger.domain.user.User;
@@ -70,7 +71,7 @@ public class UserHandler implements IUserGateway {
     public Map<String, String> login(String email, String payloadPassword) {
 
         var user = _iUserRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado"));
 
         var token = _iUserAuthenticationService.login(email, payloadPassword, user.getPassword(), user.getRole().getName());
 

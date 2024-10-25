@@ -25,7 +25,7 @@ public class UserFactory implements IUserFactory {
         return new User(name, email, encodedPassword, role);
     }
 
-    private void validate(String password, String confirmedPassword, String email, String name) throws BusinessException {
+    private void validate(String password, String confirmedPassword, String email, String name) {
 
         var user = _iUserRepository.findByEmail(email);
 
