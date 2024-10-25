@@ -12,18 +12,18 @@ import java.util.List;
 @Service
 public class DepartmentHandler implements IDepartmentGateway {
 
-    private final IDepartmentRepository departmentRepository;
-    private final IMapper<DepartmentEntity, Department> iMapper;
+    private final IDepartmentRepository _departmentRepository;
+    private final IMapper<DepartmentEntity, Department> _iMapper;
 
     public DepartmentHandler(IDepartmentRepository departmentRepository, IMapper<DepartmentEntity, Department> iMapper) {
-        this.departmentRepository = departmentRepository;
-        this.iMapper = iMapper;
+        _departmentRepository = departmentRepository;
+        _iMapper = iMapper;
     }
 
     @Override
     public List<Department> getAll() {
-        var departmentEntities = departmentRepository.findAll();
-        return iMapper.toDomainList(departmentEntities);
+        var departmentEntities = _departmentRepository.findAll();
+        return _iMapper.toDomainList(departmentEntities);
     }
 
 }

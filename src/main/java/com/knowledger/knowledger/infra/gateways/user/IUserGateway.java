@@ -7,11 +7,11 @@ import java.util.UUID;
 
 public interface IUserGateway {
 
-    User register(String name, String email, String password, String confirmedPassword) throws Exception;
+    User register(String name, String email, String password, String confirmedPassword) ;
 
-    User changePassword(UUID userId, String token, String oldPassword, String newPassword, String confirmedNewPassword) throws Exception;
+    User changePassword(UUID userId, String token, String oldPassword, String newPassword, String confirmedNewPassword) ;
 
-    User getById(UUID id) throws Exception;
+    User getById(UUID id) ;
 
     Map<String, String> login(String email, String password);
 }

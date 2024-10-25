@@ -1,10 +1,10 @@
 package com.knowledger.knowledger.application.usecases.user;
 
 import com.knowledger.knowledger.commom.mapper.IMapperDTO;
-import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.infra.controller.user.UserChangePasswordDTO;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
+import com.knowledger.knowledger.infra.gateways.user.IUserGateway;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,10 +18,9 @@ public class UserChangePassword {
         this.iMapper = iMapper;
     }
 
-    public UserDetailDTO apply(UserChangePasswordDTO dto) throws Exception {
-
+    public UserDetailDTO apply(UserChangePasswordDTO dto) {
         var user = iUserGateway.changePassword(dto.getUserId(), dto.getToken(), dto.getOldPassword(), dto.getNewPassword(), dto.getConfirmedNewPassword());
         return iMapper.toDto(user);
-
     }
+
 }

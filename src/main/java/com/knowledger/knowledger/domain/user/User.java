@@ -104,7 +104,8 @@ public class User {
         isActive = active;
     }
 
-    public void resetPassword(String token, String newPassword){
+    public void resetPassword(String token, String newPassword) {
         this.password = newPassword;
     }
+
 }

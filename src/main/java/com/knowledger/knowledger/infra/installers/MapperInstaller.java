@@ -5,8 +5,8 @@ import com.knowledger.knowledger.domain.department.Department;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.domain.user.role.Role;
 import com.knowledger.knowledger.infra.controller.department.DepartmentDetailDTO;
-import com.knowledger.knowledger.infra.controller.user.UserRegisterDTO;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
+import com.knowledger.knowledger.infra.controller.user.UserRegisterDTO;
 import com.knowledger.knowledger.infra.controller.user.UserTokenAuthenticationDTO;
 import com.knowledger.knowledger.infra.controller.user.role.RoleDetailDTO;
 import com.knowledger.knowledger.infra.persistence.department.DepartmentEntity;
@@ -31,14 +31,16 @@ public class MapperInstaller {
         return new Mapper<>(UserRegisterDTO.class, UserEntity.class, User.class);
     }
 
-    @Bean
-    public Mapper<RoleDetailDTO, RoleEntity, Role> roleMapper() {
-        return new Mapper<>(RoleDetailDTO.class, RoleEntity.class, Role.class);
-    }
-
+    @SuppressWarnings("rawtypes")
     @Bean
     public Mapper<UserTokenAuthenticationDTO, Class, Object> TokenMapper() {
         return new Mapper<>(UserTokenAuthenticationDTO.class, Class.class, Object.class);
+    }
+
+    //  Role
+    @Bean
+    public Mapper<RoleDetailDTO, RoleEntity, Role> roleMapper() {
+        return new Mapper<>(RoleDetailDTO.class, RoleEntity.class, Role.class);
     }
 
     //  Post

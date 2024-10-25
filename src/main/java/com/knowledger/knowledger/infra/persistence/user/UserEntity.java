@@ -1,18 +1,13 @@
 package com.knowledger.knowledger.infra.persistence.user;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import com.knowledger.knowledger.commom.annotations.Email;
-import com.knowledger.knowledger.commom.annotations.Name;
-import com.knowledger.knowledger.commom.annotations.Password;
-
 import com.knowledger.knowledger.infra.persistence.user.role.RoleEntity;
 import jakarta.persistence.*;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -29,15 +24,12 @@ public class UserEntity {
     private RoleEntity role;
 
     @Column(name = "name", nullable = false)
-    @Name
     private String name;
 
     @Column(name = "email", nullable = false, unique = true)
-    @Email
     private String email;
 
     @Column(name = "password", nullable = false)
-    @Password
     private String password;
 
     @Column(name = "created_at", nullable = false)

@@ -19,11 +19,9 @@ public class UserGetById {
         this.iMapper = iMapper;
     }
 
-    public UserDetailDTO apply(UUID id) throws Exception {
-
+    public UserDetailDTO apply(UUID id) {
         var user = iUserGateway.getById(id);
         return iMapper.toDto(user);
-
     }
 
 }

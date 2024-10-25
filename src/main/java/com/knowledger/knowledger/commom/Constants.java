@@ -2,8 +2,11 @@ package com.knowledger.knowledger.commom;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Constants {
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static class UserRole {
         public static final Long ADMIN = 1L;
@@ -11,10 +14,9 @@ public class Constants {
     }
 
     public static String toDateString(LocalDateTime dateTime) {
-        if (dateTime == null) {
+        if (Objects.isNull(dateTime)) {
             return null;
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return dateTime.format(formatter);
     }
 
