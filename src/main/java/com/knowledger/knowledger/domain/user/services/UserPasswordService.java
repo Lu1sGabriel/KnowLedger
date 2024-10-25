@@ -1,6 +1,8 @@
 package com.knowledger.knowledger.domain.user.services;
 
 import com.knowledger.knowledger.infra.exceptions.BusinessException;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,46 +47,47 @@ public final class UserPasswordService implements IUserPasswordService {
     }
 
     @Override
-    public String encode(String password) throws BusinessException {
+    public String encode(String password) {
         try {
             return passwordEncoder.encode(password);
         } catch (Exception exception) {
-            throw new BusinessException(PasswordError.ENCODE_ERROR.getMessage(), exception);
+            // Erro inesperado ao codificar a senha - erro interno no servidor (500)
+            throw new BusinessException(PasswordError.ENCODE_ERROR.getMessage(), exception, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public void validate(String password, String confirmPassword) throws BusinessException {
+    public void validate(String password, String confirmPassword) {
         if (Objects.isNull(password) || Objects.isNull(confirmPassword)) {
-            throw new BusinessException(PasswordError.PASSWORD_NULL.getMessage());
+            throw new BusinessException(PasswordError.PASSWORD_NULL.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (!arePasswordsEqual(password, confirmPassword)) {
-            throw new BusinessException(PasswordError.PASSWORD_NOT_EQUAL.getMessage());
+            throw new BusinessException(PasswordError.PASSWORD_NOT_EQUAL.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (isShorterThanMinimumLength(password)) {
-            throw new BusinessException(PasswordError.PASSWORD_LENGTH.getMessage());
+            throw new BusinessException(PasswordError.PASSWORD_LENGTH.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (!containsSpecialCharacter(password)) {
-            throw new BusinessException(PasswordError.PASSWORD_SPECIAL_CHAR.getMessage());
+            throw new BusinessException(PasswordError.PASSWORD_SPECIAL_CHAR.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (!containsUppercase(password)) {
-            throw new BusinessException(PasswordError.PASSWORD_UPPERCASE.getMessage());
+            throw new BusinessException(PasswordError.PASSWORD_UPPERCASE.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (!containsDigit(password)) {
-            throw new BusinessException(PasswordError.PASSWORD_DIGIT.getMessage());
+            throw new BusinessException(PasswordError.PASSWORD_DIGIT.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (containsInvalidCharacter(password)) {
-            throw new BusinessException(PasswordError.PASSWORD_INVALID_CHAR.getMessage());
+            throw new BusinessException(PasswordError.PASSWORD_INVALID_CHAR.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
         if (hasMoreThanThreeConsecutiveRepeatedChars(password)) {
-            throw new BusinessException(PasswordError.PASSWORD_REPEATED_CHAR.getMessage());
+            throw new BusinessException(PasswordError.PASSWORD_REPEATED_CHAR.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -11,17 +11,17 @@ import java.util.List;
 @Component
 public class DepartmentGetAll {
 
-    private final IDepartmentGateway iDepartmentGateway;
-    private final IMapperDTO<DepartmentDetailDTO, Department> iMapper;
+    private final IDepartmentGateway _iDepartmentGateway;
+    private final IMapperDTO<DepartmentDetailDTO, Department> _iMapper;
 
     public DepartmentGetAll(IDepartmentGateway iDepartmentGateway, IMapperDTO<DepartmentDetailDTO, Department> iMapper) {
-        this.iDepartmentGateway = iDepartmentGateway;
-        this.iMapper = iMapper;
+        _iDepartmentGateway = iDepartmentGateway;
+        _iMapper = iMapper;
     }
 
     public List<DepartmentDetailDTO> getAll() {
-        var departments = iDepartmentGateway.getAll();
-        return iMapper.toDtoList(departments);
+        var departments = _iDepartmentGateway.getAll();
+        return _iMapper.toDtoList(departments);
     }
 
 }

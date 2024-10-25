@@ -3,6 +3,8 @@ package com.knowledger.knowledger.domain.user.services;
 import com.knowledger.knowledger.infra.config.JwtTokenUtil;
 import com.knowledger.knowledger.infra.exceptions.BusinessException;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,8 +32,10 @@ public class UserAuthenticationService implements IUserAuthenticationService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        var user = _iUserRepository.findByEmail(email).orElseThrow(() -> new BusinessException("Usuário não encontrado"));
+        var user = _iUserRepository.findByEmail(email).
+                orElseThrow(() -> new BusinessException("Usuário não encontrado", HttpStatus.NOT_FOUND));
 
         return _jwtTokenUtil.generateToken(user.getEmail(), user.getRole().getName());
     }
+
 }

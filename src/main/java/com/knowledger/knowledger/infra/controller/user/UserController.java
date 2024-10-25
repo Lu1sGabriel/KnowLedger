@@ -1,9 +1,10 @@
 package com.knowledger.knowledger.infra.controller.user;
 
 import com.knowledger.knowledger.application.usecases.user.UserChangePassword;
-import com.knowledger.knowledger.application.usecases.user.UserRegister;
 import com.knowledger.knowledger.application.usecases.user.UserGetById;
 import com.knowledger.knowledger.application.usecases.user.UserLogin;
+import com.knowledger.knowledger.application.usecases.user.UserRegister;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDetailDTO> create(@RequestBody UserRegisterDTO dto, UriComponentsBuilder uriBuilder) throws Exception {
+    public ResponseEntity<UserDetailDTO> create(@RequestBody UserRegisterDTO dto, UriComponentsBuilder uriBuilder) {
         var userDetailDto = _userRegister.apply(dto);
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDetailDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDetailDto);
@@ -36,13 +37,13 @@ public class UserController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
-    public ResponseEntity<UserDetailDTO> getById(@PathVariable UUID id) throws Exception {
+    public ResponseEntity<UserDetailDTO> getById(@PathVariable UUID id) {
         var userDetailDto = _userGetById.apply(id);
         return ResponseEntity.ok(userDetailDto);
     }
 
     @PostMapping("/changePassword")
-    public ResponseEntity<UserDetailDTO> changePassword(@RequestBody UserChangePasswordDTO dto) throws Exception {
+    public ResponseEntity<UserDetailDTO> changePassword(@RequestBody UserChangePasswordDTO dto) {
         var userDetailDto = _userChangePassword.apply(dto);
         return ResponseEntity.ok(userDetailDto);
     }
