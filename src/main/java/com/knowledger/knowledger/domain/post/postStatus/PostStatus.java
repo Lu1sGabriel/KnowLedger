@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.domain.postStatus;
+package com.knowledger.knowledger.domain.post.postStatus;
 
 public class PostStatus {
     private Long id;
