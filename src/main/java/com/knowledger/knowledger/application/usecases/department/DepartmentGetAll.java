@@ -1,7 +1,7 @@
 package com.knowledger.knowledger.application.usecases.department;
 
 import com.knowledger.knowledger.commom.mapper.IMapperDTO;
-import com.knowledger.knowledger.domain.department.Department;
+import com.knowledger.knowledger.domain.post.department.Department;
 import com.knowledger.knowledger.infra.controller.department.DepartmentDetailDTO;
 import com.knowledger.knowledger.infra.gateways.department.IDepartmentGateway;
 import org.springframework.stereotype.Component;

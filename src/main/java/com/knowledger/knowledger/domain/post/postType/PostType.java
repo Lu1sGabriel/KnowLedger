@@ -1,14 +1,14 @@
-package com.knowledger.knowledger.domain.postStatus;
+package com.knowledger.knowledger.domain.post.postType;
 
-public class PostStatus {
+public class PostType {
     private Long id;
     private String name;
     private String description;
 
-    public PostStatus() {
+    public PostType() {
     }
 
-    public PostStatus(String name, String description) {
+    public PostType(String name, String description) {
         this.name = name;
         this.description = description;
     }

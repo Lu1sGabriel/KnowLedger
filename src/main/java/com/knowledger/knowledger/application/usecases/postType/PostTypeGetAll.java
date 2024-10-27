@@ -1,7 +1,7 @@
 package com.knowledger.knowledger.application.usecases.postType;
 
 import com.knowledger.knowledger.commom.mapper.IMapperDTO;
-import com.knowledger.knowledger.domain.postType.PostType;
+import com.knowledger.knowledger.domain.post.postType.PostType;
 import com.knowledger.knowledger.infra.controller.postType.PostTypeDetailDTO;
 import com.knowledger.knowledger.infra.gateways.postType.IPostTypeGateway;
 

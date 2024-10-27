@@ -1,8 +1,8 @@
 package com.knowledger.knowledger.infra.installers;
 
 import com.knowledger.knowledger.commom.mapper.Mapper;
-import com.knowledger.knowledger.domain.department.Department;
-import com.knowledger.knowledger.domain.postType.PostType;
+import com.knowledger.knowledger.domain.post.department.Department;
+import com.knowledger.knowledger.domain.post.postType.PostType;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.domain.user.role.Role;
 import com.knowledger.knowledger.infra.controller.department.DepartmentDetailDTO;

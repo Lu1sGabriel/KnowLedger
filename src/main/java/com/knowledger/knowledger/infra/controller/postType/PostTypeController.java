@@ -12,17 +12,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/post-types")
 public class PostTypeController {
+
     private final PostTypeGetAll _postTypeGetAll;
 
-    public PostTypeController(PostTypeGetAll poPostTypeGetAll) {
-        _postTypeGetAll = poPostTypeGetAll;
+    public PostTypeController(PostTypeGetAll postTypeGetAll) {
+        _postTypeGetAll = postTypeGetAll;
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/getAll")
     public ResponseEntity<List<PostTypeDetailDTO>> getAll() {
         var postTypes = _postTypeGetAll.getAll();
-        return ResponseEntity.ok().body(postTypes);
+        return ResponseEntity.ok(postTypes);
     }
 
 }
