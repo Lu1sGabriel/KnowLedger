@@ -1,13 +1,12 @@
 package com.knowledger.knowledger.infra.config.security;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.knowledger.knowledger.infra.exceptions.BusinessException;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,47 +16,59 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    private final TokenService tokenService;
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+
+    private final TokenService _tokenService;
     private final IUserRepository _iUserRepository;
 
-    public SecurityFilter(TokenService tokenService, IUserRepository iUserRepository) {
-        this.tokenService = tokenService;
-        _iUserRepository = iUserRepository;
+    public SecurityFilter(TokenService tokenService, IUserRepository userRepository) {
+        _tokenService = tokenService;
+        _iUserRepository = userRepository;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws IOException, ServletException {
+            throws ServletException, IOException {
 
-        String path = request.getRequestURI();
+        Optional.ofNullable(recoverToken(request))
+                .ifPresent(this::authenticateToken);
 
-        if (path.equals("/users/login") || path.equals("/users/register")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        var token = this.recoverToken(request);
-        var login = tokenService.validateToken(token);
-
-        if (login != null) {
-            var user = _iUserRepository.findByEmail(login)
-                    .orElseThrow(() -> new BusinessException("Usuário não encontrado. Por favor, entre em contato com o setor de TI.", HttpStatus.NOT_FOUND));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
         filterChain.doFilter(request, response);
-
     }
 
     private String recoverToken(HttpServletRequest request) {
-        var authHeader = request.getHeader("Authorization");
-        if (authHeader == null) return null;
-        return authHeader.replace("Bearer ", "");
+        var authHeader = request.getHeader(AUTHORIZATION_HEADER);
+        if (authHeader != null ) {
+            return authHeader.replace(BEARER_PREFIX, "");
+        }
+        return null;
+    }
+
+    private void authenticateToken(String token) {
+        try {
+            var email = _tokenService.validateToken(token);
+            var role = _tokenService.getRole(token);
+            authenticateUser(email, role);
+        } catch (JWTVerificationException exception) {
+            //  Conectar erro, token inválido ou usuário não encontrado
+        }
+    }
+
+    private void authenticateUser(String email, String role) {
+        var user = _iUserRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException("Usuário não encontrado.", HttpStatus.NOT_FOUND));
+
+        var authority = new SimpleGrantedAuthority(role);
+        var authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(authority));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 }
