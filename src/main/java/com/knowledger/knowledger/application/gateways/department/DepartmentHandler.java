@@ -1,7 +1,7 @@
 package com.knowledger.knowledger.application.gateways.department;
 
 import com.knowledger.knowledger.commom.mapper.IMapper;
-import com.knowledger.knowledger.domain.department.Department;
+import com.knowledger.knowledger.domain.post.department.Department;
 import com.knowledger.knowledger.infra.gateways.department.IDepartmentGateway;
 import com.knowledger.knowledger.infra.persistence.department.DepartmentEntity;
 import com.knowledger.knowledger.infra.persistence.department.IDepartmentRepository;

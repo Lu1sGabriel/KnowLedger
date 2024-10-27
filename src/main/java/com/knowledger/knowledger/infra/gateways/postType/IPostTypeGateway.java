@@ -1,6 +1,6 @@
 package com.knowledger.knowledger.infra.gateways.postType;
 
-import com.knowledger.knowledger.domain.postType.PostType;
+import com.knowledger.knowledger.domain.post.postType.PostType;
 
 import java.util.List;
 

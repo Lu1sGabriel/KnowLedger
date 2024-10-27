@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.domain.postType;
+package com.knowledger.knowledger.domain.post.postType;
 
 public class PostType {
     private Long id;

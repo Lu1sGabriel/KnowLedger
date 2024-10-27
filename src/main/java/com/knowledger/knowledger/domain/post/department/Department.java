@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.domain.department;
+package com.knowledger.knowledger.domain.post.department;
 
 public class Department {
     private Long id;
