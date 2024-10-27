@@ -73,7 +73,7 @@ public class UserHandler implements IUserGateway {
     public Map<String, String> login(String email, String payloadPassword) {
 
         var user = _iUserRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException("Usuário não encontrado. Por favor, entre em contato com o setor de TI.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException("Registro com o email informado não encontrado. ", HttpStatus.NOT_FOUND));
 
         var token = _iUserAuthenticationService.login(email, payloadPassword, user.getPassword(), user.getRole().getName());
 
