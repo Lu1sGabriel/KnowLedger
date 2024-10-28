@@ -1,6 +1,7 @@
 package com.knowledger.knowledger.infra.config.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.infra.exceptions.BusinessException;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 import jakarta.servlet.FilterChain;
@@ -16,13 +17,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
-
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER_PREFIX = "Bearer ";
 
     private final TokenService _tokenService;
     private final IUserRepository _iUserRepository;
@@ -36,17 +33,17 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
-        Optional.ofNullable(recoverToken(request))
-                .ifPresent(this::authenticateToken);
-
+        var token = recoverToken(request);
+        if (token != null) {
+            authenticateToken(token);
+        }
         filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request) {
-        var authHeader = request.getHeader(AUTHORIZATION_HEADER);
-        if (authHeader != null ) {
-            return authHeader.replace(BEARER_PREFIX, "");
+        var authHeader = request.getHeader(Constants.Security.AUTHORIZATION_HEADER);
+        if (authHeader != null && authHeader.startsWith(Constants.Security.BEARER_PREFIX)) {
+            return authHeader.replace(Constants.Security.BEARER_PREFIX, "");
         }
         return null;
     }
@@ -56,8 +53,8 @@ public class SecurityFilter extends OncePerRequestFilter {
             var email = _tokenService.validateToken(token);
             var role = _tokenService.getRole(token);
             authenticateUser(email, role);
-        } catch (JWTVerificationException exception) {
-            //  Conectar erro, token inválido ou usuário não encontrado
+        } catch (JWTVerificationException | BusinessException exception) {
+            throw new BusinessException("Token inválido.", HttpStatus.BAD_REQUEST);
         }
     }
 

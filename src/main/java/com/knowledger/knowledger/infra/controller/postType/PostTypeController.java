@@ -19,7 +19,7 @@ public class PostTypeController {
         _postTypeGetAll = postTypeGetAll;
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/getAll")
     public ResponseEntity<List<PostTypeDetailDTO>> getAll() {
         var postTypes = _postTypeGetAll.getAll();
