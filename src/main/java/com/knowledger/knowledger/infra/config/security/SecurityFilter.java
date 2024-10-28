@@ -1,6 +1,7 @@
 package com.knowledger.knowledger.infra.config.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.infra.exceptions.BusinessException;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 import jakarta.servlet.FilterChain;
@@ -19,9 +20,6 @@ import java.util.Collections;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
-
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER_PREFIX = "Bearer ";
 
     private final TokenService _tokenService;
     private final IUserRepository _iUserRepository;
@@ -43,9 +41,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private String recoverToken(HttpServletRequest request) {
-        var authHeader = request.getHeader(AUTHORIZATION_HEADER);
-        if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
-            return authHeader.replace(BEARER_PREFIX, "");
+        var authHeader = request.getHeader(Constants.Security.AUTHORIZATION_HEADER);
+        if (authHeader != null && authHeader.startsWith(Constants.Security.BEARER_PREFIX)) {
+            return authHeader.replace(Constants.Security.BEARER_PREFIX, "");
         }
         return null;
     }

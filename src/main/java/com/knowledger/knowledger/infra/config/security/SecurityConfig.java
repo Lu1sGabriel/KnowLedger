@@ -1,5 +1,6 @@
 package com.knowledger.knowledger.infra.config.security;
 
+import com.knowledger.knowledger.commom.Constants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -34,7 +35,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/users/login", "/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, Constants.NoRequiredAuthorizedPath.USER_LOGIN,
+                                Constants.NoRequiredAuthorizedPath.USER_REGISTER).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(handler -> handler.authenticationEntryPoint(_authenticationEntryPoint))
