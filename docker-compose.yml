@@ -3,11 +3,11 @@ version: '3.8'
 services:
   db:
     image: postgres:15
-    container_name: postgres_db
+    container_name: postgres_d"
     environment:
       POSTGRES_DB: knowledger
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: @Banco1234
+      POSTGRES_PASSWORD: "@Banco123"
     ports:
       - "5432:5432"
     volumes:
@@ -24,7 +24,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/knowledger
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: @Banco1234
+      SPRING_DATASOURCE_PASSWORD: "@Banco123"
       SPRING_JPA_SHOW_SQL: "true"
     depends_on:
       - db

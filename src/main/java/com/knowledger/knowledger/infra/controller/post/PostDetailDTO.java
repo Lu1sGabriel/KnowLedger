@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.domain.post;
+package com.knowledger.knowledger.infra.controller.post;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,8 +7,7 @@ import java.util.UUID;
 import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
-public class Post {
-
+public class PostDetailDTO {
     private UUID id;
     private UserEntity user;
     private Long postTypeId;
@@ -21,10 +20,10 @@ public class Post {
     private LocalDateTime deletedAt;
     private LocalDateTime publishedAt;
 
-    public Post() {
+    public PostDetailDTO() {
     }
 
-    public Post(UUID id, UserEntity user, Long postTypeId, Long postStatusId, List<CommentEntity> comments,
+    public PostDetailDTO(UUID id, UserEntity user, Long postTypeId, Long postStatusId, List<CommentEntity> comments,
             String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
             LocalDateTime publishedAt) {
         this.id = id;
