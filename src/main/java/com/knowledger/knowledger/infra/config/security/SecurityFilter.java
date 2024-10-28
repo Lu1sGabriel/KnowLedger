@@ -30,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityFilter.class);
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String BEARER_PREFIX = "Bearer";
 
     private final TokenService _tokenService;
     private final IUserRepository _iUserRepository;
@@ -79,7 +79,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private String recoverToken(HttpServletRequest request) {
         var authHeader = request.getHeader(AUTHORIZATION_HEADER);
         if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
-            return authHeader.substring(BEARER_PREFIX.length());
+            return authHeader.substring(BEARER_PREFIX.length() + 1);
         }
         return null;
     }
