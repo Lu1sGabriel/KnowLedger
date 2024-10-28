@@ -7,8 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -23,13 +21,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         var userEntity = _iUserRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o email: " + email));
 
-        var authorities = Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRole().getName()));
+        var authority = new SimpleGrantedAuthority(userEntity.getRole().getName());
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(userEntity.getEmail())
                 .password(userEntity.getPassword())
-                .authorities(authorities)
+                .authorities(authority)
                 .build();
     }
-
 }
