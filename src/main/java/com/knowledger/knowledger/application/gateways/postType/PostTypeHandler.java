@@ -3,8 +3,8 @@ package com.knowledger.knowledger.application.gateways.postType;
 import com.knowledger.knowledger.commom.mapper.IMapper;
 import com.knowledger.knowledger.domain.post.postType.PostType;
 import com.knowledger.knowledger.infra.gateways.postType.IPostTypeGateway;
-import com.knowledger.knowledger.infra.persistence.postType.IPostTypeRepository;
-import com.knowledger.knowledger.infra.persistence.postType.PostTypeEntity;
+import com.knowledger.knowledger.infra.persistence.post.postType.IPostTypeRepository;
+import com.knowledger.knowledger.infra.persistence.post.postType.PostTypeEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
