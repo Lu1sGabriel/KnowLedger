@@ -1,20 +1,25 @@
-package com.knowledger.knowledger.domain.postStatus;
+package com.knowledger.knowledger.infra.controller.postType;
 
-public class PostStatus {
-    private Long id;
-    private String name;
-    private String description;
+public class PostTypeDetailDTO {
+    Long id;
+    String name;
+    String description;
 
-    public PostStatus() {
+    public PostTypeDetailDTO() {
     }
 
-    public PostStatus(String name, String description) {
+    public PostTypeDetailDTO(Long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

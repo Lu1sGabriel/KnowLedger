@@ -2,69 +2,47 @@ package com.knowledger.knowledger.infra.config.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.knowledger.knowledger.commom.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Date;
 
 @Component
 public class TokenService {
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
-    @Value("${jwt.expiration}")
-    private long expirationTime;
+    private final Algorithm _algorithm;
+    private final long _expirationTime;
 
-    public TokenService() {
+    public TokenService(@Value("${jwt.secret}") String jwtSecret, @Value("${jwt.expiration}") long expirationTime) {
+        _algorithm = Algorithm.HMAC512(jwtSecret);
+        _expirationTime = expirationTime;
     }
 
     public String generateToken(String email, String role) {
         return JWT.create()
-                .withIssuer("knowledger")
+                .withIssuer(Constants.JWT.ISSUER)
                 .withSubject(email)
-                .withClaim("email", email)
-                .withClaim("role", role)
-                .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
-                .sign(Algorithm.HMAC512(jwtSecret));
+                .withClaim(Constants.JWT.EMAIL_CLAIM, email)
+                .withClaim(Constants.JWT.ROLE_CLAIM, role)
+                .withExpiresAt(new Date(System.currentTimeMillis() + _expirationTime))
+                .sign(_algorithm);
+    }
+
+    private DecodedJWT verifyToken(String token) {
+        return JWT.require(_algorithm)
+                .withIssuer(Constants.Security.AUTHORIZATION_HEADER)
+                .build()
+                .verify(token);
     }
 
     public String validateToken(String token) {
-        try {
-            return JWT.require(Algorithm.HMAC512(jwtSecret))
-                    .withIssuer("knowledger")
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        } catch (JWTVerificationException exception) {
-            return null;
-        }
+        return verifyToken(token).getSubject();
     }
 
     public String getRole(String token) {
-        try {
-            return JWT.require(Algorithm.HMAC512(jwtSecret.getBytes()))
-                    .build()
-                    .verify(token)
-                    .getClaim("role").asString();
-        } catch (JWTVerificationException exception) {
-            return null;
-        }
-    }
-
-    private Instant generateExpirationDate() {
-        return LocalDateTime.now().plusHours(3).toInstant(ZoneOffset.of("-03:00"));
-    }
-
-    public boolean isTokenExpired(String token) {
-        Date expiration = JWT.require(Algorithm.HMAC512(jwtSecret.getBytes()))
-                .build()
-                .verify(token)
-                .getExpiresAt();
-        return expiration.before(new Date());
+        return verifyToken(token).getClaim(Constants.JWT.ROLE_CLAIM).asString();
     }
 
 }

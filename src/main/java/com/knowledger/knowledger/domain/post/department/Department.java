@@ -1,25 +1,20 @@
-package com.knowledger.knowledger.infra.controller.department;
+package com.knowledger.knowledger.domain.post.department;
 
-public class DepartmentDetailDTO {
-    Long id;
-    String name;
-    String description;
+public class Department {
+    private Long id;
+    private String name;
+    private String description;
 
-    public DepartmentDetailDTO() {
+    public Department() {
     }
 
-    public DepartmentDetailDTO(Long id, String name, String description) {
-        this.id = id;
+    public Department(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

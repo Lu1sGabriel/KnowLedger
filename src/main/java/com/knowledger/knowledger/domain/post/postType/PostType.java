@@ -1,14 +1,14 @@
-package com.knowledger.knowledger.domain.department;
+package com.knowledger.knowledger.domain.post.postType;
 
-public class Department {
+public class PostType {
     private Long id;
     private String name;
     private String description;
 
-    public Department() {
+    public PostType() {
     }
 
-    public Department(String name, String description) {
+    public PostType(String name, String description) {
         this.name = name;
         this.description = description;
     }
