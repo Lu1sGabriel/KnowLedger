@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
+import com.knowledger.knowledger.infra.controller.comment.CommentDetailDTO;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
 public class PostDetailDTO {
@@ -12,7 +12,7 @@ public class PostDetailDTO {
     private UserEntity user;
     private Long postTypeId;
     private Long postStatusId;
-    private List<CommentEntity> comments;
+    private List<CommentDetailDTO> comments;
     private String title;
     private String content;
     private LocalDateTime createdAt;
@@ -23,7 +23,7 @@ public class PostDetailDTO {
     public PostDetailDTO() {
     }
 
-    public PostDetailDTO(UUID id, UserEntity user, Long postTypeId, Long postStatusId, List<CommentEntity> comments,
+    public PostDetailDTO(UUID id, UserEntity user, Long postTypeId, Long postStatusId, List<CommentDetailDTO> comments,
             String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
             LocalDateTime publishedAt) {
         this.id = id;
@@ -71,11 +71,11 @@ public class PostDetailDTO {
         this.postStatusId = postStatusId;
     }
 
-    public List<CommentEntity> getComments() {
+    public List<CommentDetailDTO> getComments() {
         return comments;
     }
 
-    public void setComments(List<CommentEntity> comments) {
+    public void setComments(List<CommentDetailDTO> comments) {
         this.comments = comments;
     }
 
