@@ -14,8 +14,8 @@ public class PostRegister {
     private final IPostGateway _IPostGateway;
     private final IMapperDTO<PostDetailDTO, Post> _MapperDTO;
 
-    public PostRegister(IPostGateway iUserGateway, IMapperDTO<PostDetailDTO, Post> iMapper) {
-        _IPostGateway = iUserGateway;
+    public PostRegister(IPostGateway iPostGateway, IMapperDTO<PostDetailDTO, Post> iMapper) {
+        _IPostGateway = iPostGateway;
         _MapperDTO = iMapper;
     }
 

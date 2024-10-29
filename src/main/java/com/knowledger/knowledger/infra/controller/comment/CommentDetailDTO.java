@@ -1,14 +1,12 @@
-package com.knowledger.knowledger.domain.comment;
+package com.knowledger.knowledger.infra.controller.comment;
 
-import org.hibernate.validator.constraints.UUID;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.knowledger.knowledger.infra.persistence.post.PostEntity;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
-import java.time.LocalDateTime;
-
-public class Comment {
-
+public class CommentDetailDTO {
     private UUID id;
     private UserEntity user;
     private PostEntity post;
@@ -21,12 +19,9 @@ public class Comment {
     private LocalDateTime publishedAt;
     private Boolean isSolution;
 
-    public Comment() {
-    }
-
-    public Comment(UUID id, UserEntity user, PostEntity post, UUID commentId, Long commentStatusId, String content,
-            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt,
-            Boolean isSolution) {
+    public CommentDetailDTO(UUID id, UserEntity user, PostEntity post, UUID commentId, Long commentStatusId,
+            String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
+            LocalDateTime publishedAt, Boolean isSolution) {
         this.id = id;
         this.user = user;
         this.post = post;
@@ -38,6 +33,9 @@ public class Comment {
         this.deletedAt = deletedAt;
         this.publishedAt = publishedAt;
         this.isSolution = isSolution;
+    }
+
+    public CommentDetailDTO() {
     }
 
     public UUID getId() {
@@ -127,4 +125,5 @@ public class Comment {
     public void setIsSolution(Boolean isSolution) {
         this.isSolution = isSolution;
     }
+
 }

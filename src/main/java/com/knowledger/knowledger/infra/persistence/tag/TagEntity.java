@@ -2,7 +2,6 @@ package com.knowledger.knowledger.infra.persistence.tag;
 
 import jakarta.persistence.*;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

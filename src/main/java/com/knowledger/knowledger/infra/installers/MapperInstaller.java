@@ -6,6 +6,8 @@ import com.knowledger.knowledger.domain.post.department.Department;
 import com.knowledger.knowledger.domain.post.postType.PostType;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.domain.user.role.Role;
+import com.knowledger.knowledger.infra.controller.comment.CommentDetailDTO;
+import com.knowledger.knowledger.infra.controller.comment.CommentRegisterDTO;
 import com.knowledger.knowledger.infra.controller.department.DepartmentDetailDTO;
 import com.knowledger.knowledger.infra.controller.post.PostDetailDTO;
 import com.knowledger.knowledger.infra.controller.post.PostRegisterDTO;
@@ -61,6 +63,17 @@ public class MapperInstaller {
     @Bean
     public Mapper<PostRegisterDTO, PostEntity, Post> postRegisterMapper() {
         return new Mapper<>(PostRegisterDTO.class, PostEntity.class, Post.class);
+    }
+
+    // Comment
+    @Bean
+    public Mapper<CommentDetailDTO, PostEntity, Post> commentDetailMapper() {
+        return new Mapper<>(CommentDetailDTO.class, PostEntity.class, Post.class);
+    }
+
+    @Bean
+    public Mapper<CommentRegisterDTO, PostEntity, Post> commentRegisterMapper() {
+        return new Mapper<>(CommentRegisterDTO.class, PostEntity.class, Post.class);
     }
 
     // Department
