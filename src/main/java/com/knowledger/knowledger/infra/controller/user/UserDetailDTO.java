@@ -1,6 +1,7 @@
 package com.knowledger.knowledger.infra.controller.user;
 
 import com.knowledger.knowledger.commom.Constants;
+import com.knowledger.knowledger.commom.Util;
 import com.knowledger.knowledger.infra.controller.user.role.RoleDetailDTO;
 
 import java.time.LocalDateTime;
@@ -25,9 +26,9 @@ public class UserDetailDTO {
         this.name = name;
         this.email = email;
         this.role = role;
-        this.createdAt = Constants.toDateString(createdAt);
-        this.updatedAt = Constants.toDateString(updatedAt);
-        this.deletedAt = Constants.toDateString(deletedAt);
+        this.createdAt = Util.toDateString(createdAt);
+        this.updatedAt = Util.toDateString(updatedAt);
+        this.deletedAt = Util.toDateString(deletedAt);
         this.isActive = isActive;
     }
 
