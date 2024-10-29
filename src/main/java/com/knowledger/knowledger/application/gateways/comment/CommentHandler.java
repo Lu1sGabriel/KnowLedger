@@ -1,5 +1,6 @@
 package com.knowledger.knowledger.application.gateways.comment;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,18 @@ public class CommentHandler implements ICommentGateway {
         _ICommentRepository.save(_iMapper.toEntity(comment));
 
         return comment;
+    }
+
+    @Override
+    public List<Comment> getAllByPostId(UUID postId) {
+        _iPostRepository.findById(postId)
+                .orElseThrow(() -> new BusinessException("Post não encontrado!", HttpStatus.NOT_FOUND));
+
+        var commentEntities = _ICommentRepository.findAllByPostId(postId);
+
+        return commentEntities.stream()
+                .map(_iMapper::toDomain)
+                .toList();
     }
 
 }
