@@ -33,17 +33,14 @@ public class PostImageHandler implements IPostImageGateway {
 
     @Override
     public File getImage(UUID postId) {
-        var postImageEntity = _iPostImageRepository.findByPostId(postId)
-                .orElseThrow(() -> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
-
-        return _iFileUploadService.getFile(postImageEntity.getPath());
+        return _iFileUploadService.getFile(postId.toString());
     }
 
     @Override
-    public void saveImage(UUID postId, String path, InputStream file) {
+    public void saveImage(UUID postId, String fileName, InputStream file) {
         var postImageDomain = new PostImage(postId);
 
-        var savedPath = _iFileUploadService.upload(postId.toString(), file, path, postImageDomain.getCreatedAt());
+        var savedPath = _iFileUploadService.upload(postId.toString(), file, fileName, postImageDomain.getCreatedAt());
 
         postImageDomain.updatePath(savedPath);
         var postImageEntity = _iMapper.toEntity(postImageDomain);
@@ -52,12 +49,12 @@ public class PostImageHandler implements IPostImageGateway {
     }
 
     @Override
-    public void updateImage(UUID postId, String path, InputStream file) {
+    public void updateImage(UUID postId, String fileName, InputStream file) {
         var postImageEntity = _iPostImageRepository.findByPostId(postId)
                 .orElseThrow(() -> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
 
         postImageEntity.markAsUpdated();
-        var savedPath = _iFileUploadService.upload(postId.toString(), file, path, postImageEntity.getUpdatedAt());
+        var savedPath = _iFileUploadService.upload(postId.toString(), file, fileName, postImageEntity.getUpdatedAt());
 
         postImageEntity.updatePath(savedPath);
         _iPostImageRepository.save(postImageEntity);
