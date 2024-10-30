@@ -12,12 +12,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // ERRO PADRAO
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BusinessExceptionDTO> handleException(Exception exception) {
+        var businessExceptionDTO = new BusinessExceptionDTO(exception.getMessage());
+        return new ResponseEntity<>(businessExceptionDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    // ERRO DE REGRA DE NEGOCIO
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<BusinessExceptionDTO> handleBusinessException(BusinessException exception) {
         var businessExceptionDTO = new BusinessExceptionDTO(exception.getMessage());
         return new ResponseEntity<>(businessExceptionDTO, exception.getStatus());
     }
 
+    // ERRO DE ARGUMENTOS INVALIDOS
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -25,5 +34,4 @@ public class GlobalExceptionHandler {
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
-    // Outros handlers para outras exceções podem ser adicionados aqui
 }
