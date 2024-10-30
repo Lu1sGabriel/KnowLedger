@@ -32,7 +32,7 @@ public class TokenService {
 
     private DecodedJWT verifyToken(String token) {
         return JWT.require(_algorithm)
-                .withIssuer(Constants.Security.AUTHORIZATION_HEADER)
+                .withIssuer(Constants.JWT.ISSUER)
                 .build()
                 .verify(token);
     }
