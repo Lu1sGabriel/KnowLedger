@@ -1,6 +1,7 @@
 package com.knowledger.knowledger.infra.controller.post;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.knowledger.knowledger.application.usecases.post.PostRegister;
 
 @RestController
-@RequestMapping("api/posts")
+@RequestMapping("/api/posts")
 public class PostController {
 
     private final PostRegister _postRegister;
@@ -19,6 +20,7 @@ public class PostController {
         _postRegister = postRegister;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/register")
     public ResponseEntity<PostDetailDTO> create(@RequestBody PostRegisterDTO dto, UriComponentsBuilder uriBuilder) {
         var postDetailDto = _postRegister.apply(dto);

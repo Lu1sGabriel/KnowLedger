@@ -16,7 +16,7 @@ import com.knowledger.knowledger.application.usecases.comment.CommentGetAllByPos
 import com.knowledger.knowledger.application.usecases.comment.CommentRegister;
 
 @RestController
-@RequestMapping("api/comments")
+@RequestMapping("/api/comments")
 public class CommentController {
 
     private final CommentRegister _CommentRegister;
