@@ -16,7 +16,7 @@ import com.knowledger.knowledger.application.usecases.comment.CommentGetAllByPos
 import com.knowledger.knowledger.application.usecases.comment.CommentRegister;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("api/comments")
 public class CommentController {
 
     private final CommentRegister _CommentRegister;
@@ -35,7 +35,7 @@ public class CommentController {
         return ResponseEntity.created(uri).body(commentDetailDto);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/post/{postId}")
     public ResponseEntity<List<CommentDetailDTO>> getAllByPostId(
             @PathVariable UUID postId,
             UriComponentsBuilder uriBuilder) {

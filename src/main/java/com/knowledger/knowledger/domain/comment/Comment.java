@@ -1,11 +1,10 @@
 package com.knowledger.knowledger.domain.comment;
 
-import org.hibernate.validator.constraints.UUID;
-
 import com.knowledger.knowledger.infra.persistence.post.PostEntity;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Comment {
 
@@ -22,22 +21,19 @@ public class Comment {
     private Boolean isSolution;
 
     public Comment() {
+        this.id = UUID.randomUUID();
     }
 
-    public Comment(UUID id, UserEntity user, PostEntity post, UUID commentId, Long commentStatusId, String content,
-            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt,
-            Boolean isSolution) {
-        this.id = id;
+    public Comment(UserEntity user, PostEntity post, UUID commentId, Long commentStatusId, String content) {
+        this();
         this.user = user;
         this.post = post;
         this.commentId = commentId;
         this.commentStatusId = commentStatusId;
         this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
-        this.publishedAt = publishedAt;
-        this.isSolution = isSolution;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        this.publishedAt = LocalDateTime.now();
     }
 
     public UUID getId() {

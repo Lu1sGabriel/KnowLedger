@@ -1,11 +1,14 @@
 package com.knowledger.knowledger.application.usecases.comment;
 
+import org.springframework.stereotype.Component;
+
 import com.knowledger.knowledger.commom.mapper.IMapperDTO;
 import com.knowledger.knowledger.domain.comment.Comment;
 import com.knowledger.knowledger.infra.controller.comment.CommentDetailDTO;
 import com.knowledger.knowledger.infra.controller.comment.CommentRegisterDTO;
 import com.knowledger.knowledger.infra.gateways.comment.ICommentGateway;
 
+@Component
 public class CommentRegister {
 
     private final ICommentGateway _ICommentGateway;

@@ -1,5 +1,5 @@
 CREATE TABLE comment (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     post_id UUID NOT NULL,
     comment_id UUID,
@@ -10,6 +10,6 @@ CREATE TABLE comment (
     deleted_at TIMESTAMP,
     published_at TIMESTAMP,
     is_solution BOOLEAN,
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "users"(id) ON DELETE CASCADE,
     CONSTRAINT fk_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
 );

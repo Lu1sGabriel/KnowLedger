@@ -10,7 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.knowledger.knowledger.application.usecases.post.PostRegister;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("api/posts")
 public class PostController {
 
     private final PostRegister _postRegister;

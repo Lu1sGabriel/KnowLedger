@@ -1,6 +1,7 @@
 package com.knowledger.knowledger.infra.installers;
 
 import com.knowledger.knowledger.commom.mapper.Mapper;
+import com.knowledger.knowledger.domain.comment.Comment;
 import com.knowledger.knowledger.domain.post.Post;
 import com.knowledger.knowledger.domain.post.department.Department;
 import com.knowledger.knowledger.domain.post.postType.PostType;
@@ -16,6 +17,7 @@ import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import com.knowledger.knowledger.infra.controller.user.UserRegisterDTO;
 import com.knowledger.knowledger.infra.controller.user.UserTokenAuthenticationDTO;
 import com.knowledger.knowledger.infra.controller.user.role.RoleDetailDTO;
+import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
 import com.knowledger.knowledger.infra.persistence.department.DepartmentEntity;
 import com.knowledger.knowledger.infra.persistence.post.PostEntity;
 import com.knowledger.knowledger.infra.persistence.postType.PostTypeEntity;
@@ -56,6 +58,7 @@ public class MapperInstaller {
     // Post
 
     @Bean
+    @Primary
     public Mapper<PostDetailDTO, PostEntity, Post> postDetailMapper() {
         return new Mapper<>(PostDetailDTO.class, PostEntity.class, Post.class);
     }
@@ -67,13 +70,14 @@ public class MapperInstaller {
 
     // Comment
     @Bean
-    public Mapper<CommentDetailDTO, PostEntity, Post> commentDetailMapper() {
-        return new Mapper<>(CommentDetailDTO.class, PostEntity.class, Post.class);
+    @Primary
+    public Mapper<CommentDetailDTO, CommentEntity, Comment> commentDetailMapper() {
+        return new Mapper<>(CommentDetailDTO.class, CommentEntity.class, Comment.class);
     }
 
     @Bean
-    public Mapper<CommentRegisterDTO, PostEntity, Post> commentRegisterMapper() {
-        return new Mapper<>(CommentRegisterDTO.class, PostEntity.class, Post.class);
+    public Mapper<CommentRegisterDTO, CommentEntity, Comment> commentRegisterMapper() {
+        return new Mapper<>(CommentRegisterDTO.class, CommentEntity.class, Comment.class);
     }
 
     // Department

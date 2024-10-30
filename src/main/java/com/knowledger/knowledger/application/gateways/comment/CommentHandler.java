@@ -18,45 +18,46 @@ import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 @Service
 public class CommentHandler implements ICommentGateway {
 
-    private final IMapper<CommentEntity, Comment> _iMapper;
-    private final IPostRepository _iPostRepository;
-    private final IUserRepository _IUserRepository;
-    private final ICommentRepository _ICommentRepository;
+        private final IMapper<CommentEntity, Comment> _iMapper;
+        private final IPostRepository _iPostRepository;
+        private final IUserRepository _IUserRepository;
+        private final ICommentRepository _ICommentRepository;
 
-    public CommentHandler(IMapper<CommentEntity, Comment> iMapper, IPostRepository iPostRepository,
-            IUserRepository iUserRepository, ICommentRepository iCommentRepository) {
-        _iMapper = iMapper;
-        _iPostRepository = iPostRepository;
-        _IUserRepository = iUserRepository;
-        _ICommentRepository = iCommentRepository;
-    }
+        public CommentHandler(IMapper<CommentEntity, Comment> iMapper, IPostRepository iPostRepository,
+                        IUserRepository iUserRepository, ICommentRepository iCommentRepository) {
+                _iMapper = iMapper;
+                _iPostRepository = iPostRepository;
+                _IUserRepository = iUserRepository;
+                _ICommentRepository = iCommentRepository;
+        }
 
-    @Override
-    public Comment register(UUID userId, UUID postId, String content, UUID commentId, Long commentStatusId) {
+        @Override
+        public Comment register(UUID userId, UUID postId, String content, UUID commentId, Long commentStatusId) {
 
-        _IUserRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException("Usúario não encontrado!", HttpStatus.NOT_FOUND));
+                var user = _IUserRepository.findById(userId)
+                                .orElseThrow(() -> new BusinessException("Usúario não encontrado!",
+                                                HttpStatus.NOT_FOUND));
 
-        _iPostRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException("Post não encontrado!", HttpStatus.NOT_FOUND));
+                var post = _iPostRepository.findById(postId)
+                                .orElseThrow(() -> new BusinessException("Post não encontrado!", HttpStatus.NOT_FOUND));
 
-        var comment = new Comment();
+                var comment = new Comment(user, post, commentId, commentStatusId, content);
 
-        _ICommentRepository.save(_iMapper.toEntity(comment));
+                _ICommentRepository.save(_iMapper.toEntity(comment));
 
-        return comment;
-    }
+                return comment;
+        }
 
-    @Override
-    public List<Comment> getAllByPostId(UUID postId) {
-        _iPostRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException("Post não encontrado!", HttpStatus.NOT_FOUND));
+        @Override
+        public List<Comment> getAllByPostId(UUID postId) {
+                _iPostRepository.findById(postId)
+                                .orElseThrow(() -> new BusinessException("Post não encontrado!", HttpStatus.NOT_FOUND));
 
-        var commentEntities = _ICommentRepository.findAllByPostId(postId);
+                var commentEntities = _ICommentRepository.findAllByPostId(postId);
 
-        return commentEntities.stream()
-                .map(_iMapper::toDomain)
-                .toList();
-    }
+                return commentEntities.stream()
+                                .map(_iMapper::toDomain)
+                                .toList();
+        }
 
 }
