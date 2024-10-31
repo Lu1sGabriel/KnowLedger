@@ -37,6 +37,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(Constants.NoRequiredAuthorizedPath.USER_LOGIN).permitAll()
                         .requestMatchers(Constants.NoRequiredAuthorizedPath.USER_REGISTER).permitAll()
+                        .requestMatchers(Constants.NoRequiredAuthorizedPath.ASSETS_PUBLIC).permitAll()
+                        .requestMatchers(Constants.NoRequiredAuthorizedPath.SERVICES_PUBLIC).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(handler -> handler.authenticationEntryPoint(_authenticationEntryPoint))

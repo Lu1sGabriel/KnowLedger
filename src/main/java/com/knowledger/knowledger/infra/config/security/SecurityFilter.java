@@ -27,7 +27,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private final List<String> openEndpoints = List.of(
             Constants.NoRequiredAuthorizedPath.USER_LOGIN,
-            Constants.NoRequiredAuthorizedPath.USER_REGISTER
+            Constants.NoRequiredAuthorizedPath.USER_REGISTER,
+            Constants.NoRequiredAuthorizedPath.ASSETS_PUBLIC,
+            Constants.NoRequiredAuthorizedPath.SERVICES_PUBLIC
     );
 
     public SecurityFilter(TokenService tokenService, IUserRepository userRepository) {

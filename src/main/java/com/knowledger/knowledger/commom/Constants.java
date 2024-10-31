@@ -34,6 +34,8 @@ public class Constants {
     public static class NoRequiredAuthorizedPath {
         public static final String USER_LOGIN = "/users/login/**";
         public static final String USER_REGISTER = "/users/register/**";
+        public static final String ASSETS_PUBLIC = "/assets/public/**";
+        public static final String SERVICES_PUBLIC = "/services/public/**";
     }
 
 }
