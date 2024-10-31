@@ -11,5 +11,6 @@ CREATE TABLE comment (
     published_at TIMESTAMP,
     is_solution BOOLEAN,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "users"(id) ON DELETE CASCADE,
-    CONSTRAINT fk_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
+    CONSTRAINT fk_post FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
+    CONSTRAINT fk_comment_status FOREIGN KEY (comment_status_id) REFERENCES comment_status(id) ON DELETE CASCADE
 );
