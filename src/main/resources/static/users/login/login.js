@@ -1,4 +1,5 @@
 import httpService from '../../services/public/httpService.js';
+import toastService from '../../services/public/toastService.js';
 
 async function loginUser() {
 
@@ -13,11 +14,10 @@ async function loginUser() {
     try {
         const url = '/users/login';
         const response = await httpService.post(url, loginData);
-        console.log(response);
+        toastService.success('Login efetuado com sucesso!');
     } catch (error) {
-        console.error(error.message);
+        toastService.error(error.message);
     }
 }
 
-// Define o evento diretamente no botão
 document.getElementById("loginButton").addEventListener("click", loginUser);

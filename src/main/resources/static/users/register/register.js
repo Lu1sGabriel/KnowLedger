@@ -1,4 +1,5 @@
 import httpService from '../../services/public/httpService.js';
+import toastService from '../../services/public/toastService.js';
 
 async function registerUser() {
 
@@ -17,11 +18,10 @@ async function registerUser() {
     try {
         const url = '/users/register';
         const response = await httpService.post(url, registerData);
-        console.log(response);
+        toastService.success('Cadastrado com sucesso!');
     } catch (error) {
-        console.error(error.message);
+        toastService.error(error.message);
     }
 }
 
-// Define o evento diretamente no botão
 document.getElementById("registerButton").addEventListener("click", registerUser);
