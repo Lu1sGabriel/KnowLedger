@@ -1,19 +1,18 @@
-package com.knowledger.knowledger.domain.post;
+package com.knowledger.knowledger.infra.controller.post;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
+import com.knowledger.knowledger.infra.controller.comment.CommentDetailDTO;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
-public class Post {
-
+public class PostDetailDTO {
     private UUID id;
     private UserEntity user;
     private Long postTypeId;
     private Long postStatusId;
-    private List<CommentEntity> comments;
+    private List<CommentDetailDTO> comments;
     private String title;
     private String content;
     private LocalDateTime createdAt;
@@ -21,20 +20,23 @@ public class Post {
     private LocalDateTime deletedAt;
     private LocalDateTime publishedAt;
 
-    public Post() {
-        this.id = UUID.randomUUID();
+    public PostDetailDTO() {
     }
 
-    public Post(UserEntity user, Long postTypeId, Long postStatusId, String title, String content) {
-        this();
+    public PostDetailDTO(UUID id, UserEntity user, Long postTypeId, Long postStatusId, List<CommentDetailDTO> comments,
+            String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
+            LocalDateTime publishedAt) {
+        this.id = id;
         this.user = user;
         this.postTypeId = postTypeId;
         this.postStatusId = postStatusId;
+        this.comments = comments;
         this.title = title;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        this.publishedAt = LocalDateTime.now();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.publishedAt = publishedAt;
     }
 
     public UUID getId() {
@@ -69,11 +71,11 @@ public class Post {
         this.postStatusId = postStatusId;
     }
 
-    public List<CommentEntity> getComments() {
+    public List<CommentDetailDTO> getComments() {
         return comments;
     }
 
-    public void setComments(List<CommentEntity> comments) {
+    public void setComments(List<CommentDetailDTO> comments) {
         this.comments = comments;
     }
 

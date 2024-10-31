@@ -1,16 +1,12 @@
-package com.knowledger.knowledger.domain.comment;
-
-import com.knowledger.knowledger.infra.persistence.post.PostEntity;
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
+package com.knowledger.knowledger.infra.controller.comment;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Comment {
-
+public class CommentDetailDTO {
     private UUID id;
-    private UserEntity user;
-    private PostEntity post;
+    private UUID userId;
+    private UUID postId;
     private UUID commentId;
     private Long commentStatusId;
     private String content;
@@ -20,20 +16,23 @@ public class Comment {
     private LocalDateTime publishedAt;
     private Boolean isSolution;
 
-    public Comment() {
-        this.id = UUID.randomUUID();
-    }
-
-    public Comment(UserEntity user, PostEntity post, UUID commentId, Long commentStatusId, String content) {
-        this();
-        this.user = user;
-        this.post = post;
+    public CommentDetailDTO(UUID id, UUID userId, UUID postId, UUID commentId, Long commentStatusId,
+            String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
+            LocalDateTime publishedAt, Boolean isSolution) {
+        this.id = id;
+        this.userId = userId;
+        this.postId = postId;
         this.commentId = commentId;
         this.commentStatusId = commentStatusId;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        this.publishedAt = LocalDateTime.now();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.publishedAt = publishedAt;
+        this.isSolution = isSolution;
+    }
+
+    public CommentDetailDTO() {
     }
 
     public UUID getId() {
@@ -42,22 +41,6 @@ public class Comment {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public PostEntity getPost() {
-        return post;
-    }
-
-    public void setPost(PostEntity post) {
-        this.post = post;
     }
 
     public UUID getCommentId() {
@@ -123,4 +106,21 @@ public class Comment {
     public void setIsSolution(Boolean isSolution) {
         this.isSolution = isSolution;
     }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public UUID getPostId() {
+        return postId;
+    }
+
+    public void setPostId(UUID postId) {
+        this.postId = postId;
+    }
+
 }
