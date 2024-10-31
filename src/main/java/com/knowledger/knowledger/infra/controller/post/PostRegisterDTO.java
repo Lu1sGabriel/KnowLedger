@@ -2,12 +2,18 @@ package com.knowledger.knowledger.infra.controller.post;
 
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class PostRegisterDTO {
 
+    @NotNull
     private UUID userId;
     private Long postTypeId;
     private Long postStatusId;
+    @NotNull
     private String title;
+    @NotBlank
     private String content;
 
     public PostRegisterDTO() {

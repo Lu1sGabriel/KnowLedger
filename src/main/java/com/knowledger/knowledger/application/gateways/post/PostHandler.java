@@ -1,5 +1,6 @@
 package com.knowledger.knowledger.application.gateways.post;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -41,5 +42,24 @@ public class PostHandler implements IPostGateway {
         _iPostRepository.save(_iMapper.toEntity(post));
 
         return post;
+    }
+
+    @Override
+    public List<Post> getAll() {
+
+        var posts = _iPostRepository.findAll();
+
+        return _iMapper.toDomainList(posts);
+    }
+
+    @Override
+    public List<Post> getAllByUserId(UUID userId) {
+        
+        _IUserRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException("Usúario não encontrado!", HttpStatus.NOT_FOUND));
+
+        var posts = _iPostRepository.findAllByUserId(userId);
+
+        return _iMapper.toDomainList(posts);
     }
 }

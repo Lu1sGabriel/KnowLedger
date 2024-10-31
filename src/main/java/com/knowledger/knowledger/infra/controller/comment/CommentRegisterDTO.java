@@ -2,12 +2,18 @@ package com.knowledger.knowledger.infra.controller.comment;
 
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class CommentRegisterDTO {
 
+    @NotNull
     private UUID userId;
+    @NotNull
     private UUID postId;
     private UUID commentId;
     private Long commentStatusId;
+    @NotBlank
     private String content;
 
     public UUID getUserId() {
