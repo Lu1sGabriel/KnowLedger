@@ -8,5 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface ICommentRepository extends JpaRepository<CommentEntity, UUID> {
-    List<CommentEntity> findAllByPostId(UUID postId);
+    List<CommentEntity> findAllByPostIdAndDeletedAtIsNull(UUID postId);
+
+    List<CommentEntity> findAllByDeletedAtIsNull();
 }

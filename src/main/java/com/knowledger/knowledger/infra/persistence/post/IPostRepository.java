@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface IPostRepository extends JpaRepository<PostEntity, UUID> {
 
-    List<PostEntity> findAllByUserId(UUID userId);
+    List<PostEntity> findAllByUserIdAndDeletedAtIsNull(UUID userId);
+
+    List<PostEntity> findAllByDeletedAtIsNull();
 
 }
