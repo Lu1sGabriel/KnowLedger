@@ -37,7 +37,7 @@ public class PostController {
     public ResponseEntity<PostDetailDTO> create(@Valid @RequestBody PostRegisterDTO dto,
             UriComponentsBuilder uriBuilder) {
         var postDetailDto = _postRegister.apply(dto);
-        var uri = uriBuilder.path("/posts/{id}").buildAndExpand(postDetailDto.getId()).toUri();
+        var uri = uriBuilder.path("/api/posts/{id}").buildAndExpand(postDetailDto.getId()).toUri();
         return ResponseEntity.created(uri).body(postDetailDto);
     }
 

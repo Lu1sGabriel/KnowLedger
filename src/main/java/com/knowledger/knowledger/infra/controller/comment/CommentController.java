@@ -35,14 +35,13 @@ public class CommentController {
     public ResponseEntity<CommentDetailDTO> create(@Valid @RequestBody CommentRegisterDTO dto,
             UriComponentsBuilder uriBuilder) {
         var commentDetailDto = _CommentRegister.apply(dto);
-        var uri = uriBuilder.path("/comments/{id}").buildAndExpand(commentDetailDto.getId()).toUri();
+        var uri = uriBuilder.path("/api/comments/{id}").buildAndExpand(commentDetailDto.getId()).toUri();
         return ResponseEntity.created(uri).body(commentDetailDto);
     }
 
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<CommentDetailDTO>> getAllByPostId(
-            @PathVariable UUID postId,
-            UriComponentsBuilder uriBuilder) {
+            @PathVariable UUID postId) {
         var commentDetailDto = _CommentGetAllByPostId.apply(postId);
         return ResponseEntity.ok(commentDetailDto);
     }

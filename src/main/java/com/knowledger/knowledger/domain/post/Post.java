@@ -5,16 +5,15 @@ import java.util.List;
 import java.util.UUID;
 
 import com.knowledger.knowledger.commom.Constants;
-import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
+import com.knowledger.knowledger.domain.comment.Comment;
 
 public class Post {
 
     private UUID id;
-    private UserEntity user;
+    private UUID userId;
     private Long postTypeId;
     private Long postStatusId;
-    private List<CommentEntity> comments;
+    private List<Comment> comments;
     private String title;
     private String content;
     private LocalDateTime createdAt;
@@ -26,9 +25,9 @@ public class Post {
         this.id = UUID.randomUUID();
     }
 
-    public Post(UserEntity user, Long postTypeId, String title, String content) {
+    public Post(UUID userId, Long postTypeId, String title, String content) {
         this();
-        this.user = user;
+        this.userId = userId;
         this.postTypeId = postTypeId;
         // TODO:: Criar serviço de validaçaão de POST com IA
         this.postStatusId = Constants.PostStatus.APPROVED;
@@ -47,12 +46,12 @@ public class Post {
         this.id = id;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public UUID getUserId() {
+        return userId;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public Long getPostTypeId() {
@@ -69,14 +68,6 @@ public class Post {
 
     public void setPostStatusId(Long postStatusId) {
         this.postStatusId = postStatusId;
-    }
-
-    public List<CommentEntity> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentEntity> comments) {
-        this.comments = comments;
     }
 
     public String getTitle() {
@@ -125,6 +116,14 @@ public class Post {
 
     public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
 }
