@@ -11,6 +11,7 @@ public class Post {
 
     private UUID id;
     private UUID userId;
+    private String userName;
     private Long postTypeId;
     private Long postStatusId;
     private List<Comment> comments;
@@ -124,6 +125,14 @@ public class Post {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

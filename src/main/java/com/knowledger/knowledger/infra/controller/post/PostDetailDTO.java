@@ -7,6 +7,7 @@ import java.util.UUID;
 public class PostDetailDTO {
     private UUID id;
     private UUID userId;
+    private String userName;
     private Long postTypeId;
     private Long postStatusId;
     private List<CommentSummaryDTO> comments;
@@ -20,11 +21,13 @@ public class PostDetailDTO {
     public PostDetailDTO() {
     }
 
-    public PostDetailDTO(UUID id, UUID userId, Long postTypeId, Long postStatusId, List<CommentSummaryDTO> comments,
+    public PostDetailDTO(UUID id, UUID userId, String userName, Long postTypeId, Long postStatusId,
+            List<CommentSummaryDTO> comments,
             String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
             LocalDateTime publishedAt) {
         this.id = id;
         this.userId = userId;
+        this.userName = userName;
         this.postTypeId = postTypeId;
         this.postStatusId = postStatusId;
         this.comments = comments;
@@ -50,6 +53,14 @@ public class PostDetailDTO {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Long getPostTypeId() {
@@ -243,7 +254,5 @@ public class PostDetailDTO {
         public void setIsSolution(Boolean isSolution) {
             this.isSolution = isSolution;
         }
-
     }
-
 }
