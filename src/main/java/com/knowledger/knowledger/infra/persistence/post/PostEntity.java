@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
 import jakarta.persistence.*;
 
@@ -24,9 +23,8 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
 
     @Column(name = "post_type_id")
     private Long postTypeId;
@@ -34,8 +32,8 @@ public class PostEntity {
     @Column(name = "post_status_id")
     private Long postStatusId;
 
-    @OneToMany(mappedBy = "post")
-    @Column(name = "comments")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
     private List<CommentEntity> comments;
 
     @Column(name = "title", nullable = false)
@@ -56,10 +54,10 @@ public class PostEntity {
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
-    public PostEntity(UserEntity user, Long postTypeId, Long postStatusId, List<CommentEntity> comments, String title,
+    public PostEntity(UUID userId, Long postTypeId, Long postStatusId, List<CommentEntity> comments, String title,
             String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
             LocalDateTime publishedAt) {
-        this.user = user;
+        this.userId = userId;
         this.postTypeId = postTypeId;
         this.postStatusId = postStatusId;
         this.comments = comments;

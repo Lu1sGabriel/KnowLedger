@@ -3,9 +3,6 @@ package com.knowledger.knowledger.infra.persistence.comment;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.knowledger.knowledger.infra.persistence.post.PostEntity;
-import com.knowledger.knowledger.infra.persistence.user.UserEntity;
-
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -23,13 +20,11 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private PostEntity post;
+    @Column(name = "post_id", nullable = false)
+    private UUID postId;
 
     @Column(name = "comment_id")
     private UUID commentId;
@@ -55,11 +50,11 @@ public class CommentEntity {
     @Column(name = "is_solution")
     private Boolean isSolution;
 
-    public CommentEntity(UserEntity user, PostEntity post, UUID commentId, Long commentStatusId, String content,
+    public CommentEntity(UUID userId, UUID postId, UUID commentId, Long commentStatusId, String content,
             LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt,
             Boolean isSolution) {
-        this.user = user;
-        this.post = post;
+        this.userId = userId;
+        this.postId = postId;
         this.commentId = commentId;
         this.commentStatusId = commentStatusId;
         this.content = content;
