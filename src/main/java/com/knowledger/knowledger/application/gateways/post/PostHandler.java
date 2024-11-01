@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.commom.mapper.IMapper;
 import com.knowledger.knowledger.domain.post.Post;
 import com.knowledger.knowledger.domain.post.factories.IPostFactory;
@@ -50,7 +51,7 @@ public class PostHandler implements IPostGateway {
 
     @Override
     public List<Post> getAll() {
-        var posts = _iPostRepository.findAllByDeletedAtIsNull();
+        var posts = _iPostRepository.findAllByDeletedAtIsNull(Constants.PostStatus.APPROVED);
         return _iMapper.toDomainList(posts)
                 .stream()
                 .map(_IPostWithUserNameService::enrichWithUserName)
@@ -60,7 +61,7 @@ public class PostHandler implements IPostGateway {
     @Override
     public List<Post> getAllByUserId(UUID userId) {
         _IPostValidationService.validateUserExists(userId);
-        var posts = _iPostRepository.findAllByUserIdAndDeletedAtIsNull(userId);
+        var posts = _iPostRepository.findAllByUserIdAndDeletedAtIsNull(userId, Constants.PostStatus.APPROVED);
         return _iMapper.toDomainList(posts)
                 .stream()
                 .map(_IPostWithUserNameService::enrichWithUserName)

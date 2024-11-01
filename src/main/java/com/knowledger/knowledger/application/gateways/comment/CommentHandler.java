@@ -19,23 +19,23 @@ public class CommentHandler implements ICommentGateway {
 
         private final IMapper<CommentEntity, Comment> _iMapper;
         private final ICommentRepository _ICommentRepository;
-        private final ICommentValidationService _ValidationService;
+        private final ICommentValidationService _IValidationService;
 
         public CommentHandler(IMapper<CommentEntity, Comment> iMapper, IPostRepository iPostRepository,
                         IUserRepository iUserRepository, ICommentRepository iCommentRepository,
                         ICommentValidationService validationService) {
                 _iMapper = iMapper;
                 _ICommentRepository = iCommentRepository;
-                _ValidationService = validationService;
+                _IValidationService = validationService;
         }
 
         @Override
         public Comment register(UUID userId, UUID postId, String content, UUID commentId) {
 
-                _ValidationService.validateUserExists(userId);
-                _ValidationService.validatePostExists(postId);
-                _ValidationService.validateCommentExists(commentId);
-                _ValidationService.validateCommentBelongsToPost(postId, commentId);
+                _IValidationService.validateUserExists(userId);
+                _IValidationService.validatePostExists(postId);
+                _IValidationService.validateCommentExists(commentId);
+                _IValidationService.validateCommentBelongsToPost(postId, commentId);
 
                 var comment = new Comment(userId, postId, commentId, content);
 
@@ -47,7 +47,7 @@ public class CommentHandler implements ICommentGateway {
         @Override
         public List<Comment> getAllByPostId(UUID postId) {
 
-                _ValidationService.validatePostExists(postId);
+                _IValidationService.validatePostExists(postId);
 
                 var commentEntities = _ICommentRepository.findAllByPostIdAndDeletedAtIsNull(postId);
 
