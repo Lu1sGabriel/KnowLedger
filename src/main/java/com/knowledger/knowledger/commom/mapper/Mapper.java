@@ -7,6 +7,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
@@ -18,6 +19,11 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
     private final Class<T> domainClass;
 
     public Mapper(Class<D> dtoClass, Class<E> entityClass, Class<T> domainClass) {
+        this(dtoClass, entityClass, domainClass, Collections.emptyList());
+    }
+
+    public Mapper(Class<D> dtoClass, Class<E> entityClass, Class<T> domainClass,
+            List<MappingConfigurer<E, T>> configurers) {
         this.dtoClass = dtoClass;
         this.entityClass = entityClass;
         this.domainClass = domainClass;
@@ -30,6 +36,8 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
         if (dtoClass.isRecord()) {
             configureRecordMapping(dtoClass);
         }
+
+        configurers.forEach(configurer -> configurer.configure(modelMapper));
     }
 
     @Override
@@ -93,5 +101,4 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
             throw new RuntimeException("Erro ao obter o valor do campo: " + parameter.getName(), e);
         }
     }
-
 }
