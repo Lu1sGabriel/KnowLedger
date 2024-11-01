@@ -34,6 +34,7 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
         this.publishedAt = LocalDateTime.now();
+        this.isSolution = false;
     }
 
     public UUID getId() {
