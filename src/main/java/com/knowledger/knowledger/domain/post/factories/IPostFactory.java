@@ -5,6 +5,6 @@ import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
 public interface IPostFactory {
 
-    Post create(UserEntity user, Long postTypeId, Long postStatusId, String title, String content);
+    Post create(UserEntity user, Long postTypeId, String title, String content);
 
 }

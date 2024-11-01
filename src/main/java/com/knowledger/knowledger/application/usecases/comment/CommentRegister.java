@@ -20,8 +20,7 @@ public class CommentRegister {
     }
 
     public CommentDetailDTO apply(CommentRegisterDTO dto) {
-        var comment = _ICommentGateway.register(dto.getUserId(), dto.getPostId(), dto.getContent(), dto.getCommentId(),
-                dto.getCommentStatusId());
+        var comment = _ICommentGateway.register(dto.getUserId(), dto.getPostId(), dto.getContent(), dto.getCommentId());
         return _MapperDTO.toDto(comment);
     }
 }

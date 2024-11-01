@@ -1,5 +1,6 @@
 package com.knowledger.knowledger.domain.comment;
 
+import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.infra.persistence.post.PostEntity;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
@@ -24,12 +25,13 @@ public class Comment {
         this.id = UUID.randomUUID();
     }
 
-    public Comment(UserEntity user, PostEntity post, UUID commentId, Long commentStatusId, String content) {
+    public Comment(UserEntity user, PostEntity post, UUID commentId, String content) {
         this();
         this.user = user;
         this.post = post;
         this.commentId = commentId;
-        this.commentStatusId = commentStatusId;
+        // TODO:: Criar serviço de validação de COMMENT com IA
+        this.commentStatusId = Constants.CommentStatus.APPROVED;
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

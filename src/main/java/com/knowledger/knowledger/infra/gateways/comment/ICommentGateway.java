@@ -7,7 +7,7 @@ import com.knowledger.knowledger.domain.comment.Comment;
 
 public interface ICommentGateway {
 
-    Comment register(UUID userId, UUID postId, String content, UUID commentId, Long commentStatusId);
+    Comment register(UUID userId, UUID postId, String content, UUID commentId);
 
     List<Comment> getAllByPostId(UUID PostId);
 

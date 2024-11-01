@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 
@@ -25,11 +26,12 @@ public class Post {
         this.id = UUID.randomUUID();
     }
 
-    public Post(UserEntity user, Long postTypeId, Long postStatusId, String title, String content) {
+    public Post(UserEntity user, Long postTypeId, String title, String content) {
         this();
         this.user = user;
         this.postTypeId = postTypeId;
-        this.postStatusId = postStatusId;
+        // TODO:: Criar serviço de validaçaão de POST com IA
+        this.postStatusId = Constants.PostStatus.APPROVED;
         this.title = title;
         this.content = content;
         this.createdAt = LocalDateTime.now();

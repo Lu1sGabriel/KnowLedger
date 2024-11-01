@@ -12,9 +12,18 @@ public class CommentRegisterDTO {
     @NotNull
     private UUID postId;
     private UUID commentId;
-    private Long commentStatusId;
     @NotBlank
     private String content;
+
+    public CommentRegisterDTO() {
+    }
+
+    public CommentRegisterDTO(@NotNull UUID userId, @NotNull UUID postId, UUID commentId, @NotBlank String content) {
+        this.userId = userId;
+        this.postId = postId;
+        this.commentId = commentId;
+        this.content = content;
+    }
 
     public UUID getUserId() {
         return userId;
@@ -38,14 +47,6 @@ public class CommentRegisterDTO {
 
     public void setCommentId(UUID commentId) {
         this.commentId = commentId;
-    }
-
-    public Long getCommentStatusId() {
-        return commentStatusId;
-    }
-
-    public void setCommentStatusId(Long commentStatusId) {
-        this.commentStatusId = commentStatusId;
     }
 
     public String getContent() {

@@ -32,7 +32,7 @@ public class CommentHandler implements ICommentGateway {
         }
 
         @Override
-        public Comment register(UUID userId, UUID postId, String content, UUID commentId, Long commentStatusId) {
+        public Comment register(UUID userId, UUID postId, String content, UUID commentId) {
 
                 var user = _IUserRepository.findById(userId)
                                 .orElseThrow(() -> new BusinessException("Usúario não encontrado!",
@@ -41,7 +41,11 @@ public class CommentHandler implements ICommentGateway {
                 var post = _iPostRepository.findById(postId)
                                 .orElseThrow(() -> new BusinessException("Post não encontrado!", HttpStatus.NOT_FOUND));
 
-                var comment = new Comment(user, post, commentId, commentStatusId, content);
+                _ICommentRepository.findById(commentId)
+                                .orElseThrow(() -> new BusinessException("Comentário não encontrado!",
+                                                HttpStatus.NOT_FOUND));
+
+                var comment = new Comment(user, post, commentId, content);
 
                 _ICommentRepository.save(_iMapper.toEntity(comment));
 

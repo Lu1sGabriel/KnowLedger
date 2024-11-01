@@ -9,8 +9,8 @@ public class PostRegisterDTO {
 
     @NotNull
     private UUID userId;
+    @NotNull
     private Long postTypeId;
-    private Long postStatusId;
     @NotNull
     private String title;
     @NotBlank
@@ -19,10 +19,9 @@ public class PostRegisterDTO {
     public PostRegisterDTO() {
     }
 
-    public PostRegisterDTO(UUID userId, Long postTypeId, Long postStatusId, String title, String content) {
+    public PostRegisterDTO(UUID userId, Long postTypeId, String title, String content) {
         this.userId = userId;
         this.postTypeId = postTypeId;
-        this.postStatusId = postStatusId;
         this.title = title;
         this.content = content;
     }
@@ -41,14 +40,6 @@ public class PostRegisterDTO {
 
     public void setPostTypeId(Long postTypeId) {
         this.postTypeId = postTypeId;
-    }
-
-    public Long getPostStatusId() {
-        return postStatusId;
-    }
-
-    public void setPostStatusId(Long postStatusId) {
-        this.postStatusId = postStatusId;
     }
 
     public String getTitle() {
