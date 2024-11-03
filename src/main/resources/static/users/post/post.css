@@ -8,42 +8,112 @@ body {
 }
 
 header {
-    justify-content: ;
     display: flex;
+    width: 100%;
+    position: relative;
     background-color: var(--blue-bg-100);
     text-align: center;
     margin-bottom: 20px;
 }
 
 header img {
+    margin-left: 20px;
     width: 250px;
 }
 
-#save-button {
-    background-color: #FF6934;
+.house-icon {
+    display: inline-block;
+    width: auto;
+    color: white;
+    background-color: #FF4401;
+    padding: 7px;
+    border-radius: 7px;
+    font-size: 30px;
+    margin-right: 10px;
 }
 
-form {
-    width: 400px;
-    margin: 0 auto;
+.center-navbar {
+    display: flex; /* Alinha os elementos lado a lado */
+    justify-content: center; /* Alinha horizontalmente os elementos */
+    transform: translateX(-60px);
+    align-items: center; /* Alinha verticalmente os elementos */
+    width: 50%;
 }
 
-label {
-    display: block;
-    margin-bottom: 10px;
+.input-text {
+    width: 440px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
 }
 
-input {
-    width: 350px;
-    height: 2.25rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+
+
+.container {
+    width: 90%; /* Define o tamanho como 90% da largura da tela */
+    max-width: 1200px; /* Limita a largura máxima para telas maiores */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    padding: 20px; /* Adiciona um espaçamento interno */
+    box-sizing: border-box; /* Inclui padding e borda no tamanho total */
 }
 
-input .duvida {
-    color: var(--blue-bg-100);
+.container-title {
+    width: 100%;
+    max-width: 800px;
+
+    & input{
+        width: 100%;
+        max-width: 500px;
+        height: 100%;
+        max-width: 800px;
+        padding: 15px;
+        font-size: 18px;
+        border: 10px solid var(--blue-bg-100);
+    }
 }
+
+
+.dynamic-buttons input {
+    width: auto;
+    font-size: 14px;
+    background-color: #e0e0e0;
+    color: #333; /* Cor do texto */
+    border-radius: 20px;
+    padding: 10px;
+    margin: 5px;
+    display: inline-block; /* Garante que os botões fiquem lado a lado */
+    cursor: pointer; /* Adiciona um cursor de ponteiro para indicar interatividade */
+    transition: background-color 0.3s; /* Efeito suave ao passar o mouse */
+
+}
+
+.dynamic-buttons input:hover {
+    background-color: #d4d4d4; /* Cor de fundo ao passar o mouse */
+}
+
+.post-section {
+
+    & textarea {
+        width: 100%;
+        height: 200px;
+        padding: 15px;
+        font-size: 18px;
+        border: 10px solid var(--blue-bg-100);
+    }
+
+    & input {
+        margin-left: 92%;
+        font-size: 24;
+        background-color: #FF6934;
+        color: white;
+        width: 10%;
+        padding: 10px;
+        border-radius: 16px;
+    }
+
+}
+
+
 
 :root {
     --blue-bg-100: #2397FC;
