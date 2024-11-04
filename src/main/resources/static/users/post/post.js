@@ -1,5 +1,20 @@
 import httpService from "../../services/public/httpService";
 
 
+async function insertPost() {
 
-httpService.request('/api/users', 'GET')
+    const textPost = document.querySelector('.text-session').value;
+    const title = document.querySelector('.input-duvida').value;
+    
+    const post = {
+        title: title,
+        content: content
+    };
+
+    try {
+        const response = await httpService.post('', post); // backend sem url pra post
+        console.log(response);
+    } catch (error) {
+        console.error(error.message);
+    }
+}
