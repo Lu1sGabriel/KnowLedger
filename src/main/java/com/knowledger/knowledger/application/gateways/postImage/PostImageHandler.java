@@ -40,7 +40,12 @@ public class PostImageHandler implements IPostImageGateway {
     public void saveImage(UUID postId, String fileName, InputStream file) {
         var postImageDomain = new PostImage(postId);
 
-        var savedPath = _iFileUploadService.upload(postId.toString(), file, fileName, postImageDomain.getCreatedAt());
+        var savedPath = _iFileUploadService.upload(
+                file,
+                fileName,
+                postId.toString(),
+                postImageDomain.getCreatedAt()
+        );
 
         postImageDomain.updatePath(savedPath);
         var postImageEntity = _iMapper.toEntity(postImageDomain);
@@ -54,19 +59,23 @@ public class PostImageHandler implements IPostImageGateway {
                 .orElseThrow(() -> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
 
         postImageEntity.markAsUpdated();
-        var savedPath = _iFileUploadService.upload(postId.toString(), file, fileName, postImageEntity.getUpdatedAt());
+        var savedPath = _iFileUploadService.upload(
+                file,
+                fileName,
+                postId.toString(),
+                postImageEntity.getUpdatedAt()
+        );
 
         postImageEntity.updatePath(savedPath);
         _iPostImageRepository.save(postImageEntity);
     }
 
+
     @Override
     public void deleteImage(UUID postId) {
         var postImageEntity = _iPostImageRepository.findByPostId(postId)
                 .orElseThrow(() -> new BusinessException(ERROR_MESSAGE, HttpStatus.NOT_FOUND));
-
         postImageEntity.markAsDeleted();
-
         _iPostImageRepository.save(postImageEntity);
     }
 

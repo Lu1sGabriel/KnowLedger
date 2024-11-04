@@ -11,150 +11,192 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class FileUploadService implements IFileUploadService {
 
-    private final Path imagesFolderPath;
-    private static final int MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-    private static final int MAX_FILENAME_LENGTH = 50;
     private static final DateTimeFormatter FILE_TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
-    private static final List<String> ALLOWED_EXTENSIONS = List.of("png", "jpeg", "jpg");
+    private static final Set<String> IMAGE_EXTENSIONS = Set.of("png", "jpeg", "jpg");
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of("png", "jpeg", "jpg", "pdf");
 
-    public FileUploadService(@Value("${imagesFolder}") String imagesFolder) {
-        this.imagesFolderPath = Paths.get(imagesFolder);
-        if (Files.notExists(this.imagesFolderPath)) {
-            throw new IllegalArgumentException("A pasta de imagens não foi encontrada.");
+    private final Path filesFolderPath;
+
+    public FileUploadService(@Value("${postFilesFolder}") String postFilesFolder) {
+        this.filesFolderPath = Paths.get(postFilesFolder);
+        initializeFilesFolder();
+    }
+
+    @Override
+    public String upload(InputStream inputStream, String fileName, String prefix, LocalDateTime localDateTime) {
+        String folderPrefix = (prefix != null && !prefix.isBlank()) ? prefix : UUID.randomUUID().toString();
+        LocalDateTime dateTime = (localDateTime != null) ? localDateTime : LocalDateTime.now();
+        return saveFile(inputStream, fileName, folderPrefix, dateTime);
+    }
+
+    @Override
+    public File getFile(String folderPrefix) {
+        Path directoryPath = filesFolderPath.resolve(folderPrefix);
+        validateDirectoryExists(directoryPath);
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directoryPath)) {
+            for (Path entry : stream) {
+                if (Files.isRegularFile(entry)) {
+                    return entry.toFile();
+                }
+            }
+            throw new BusinessException("Nenhum arquivo encontrado na pasta especificada.", HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            throw new BusinessException("Erro ao acessar a pasta especificada.", e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @Override
-    public String upload(InputStream inputStream, String originalFileName) {
-        return saveFile(inputStream, originalFileName, UUID.randomUUID().toString(), LocalDateTime.now());
+    private void initializeFilesFolder() {
+        if (Files.notExists(filesFolderPath)) {
+            try {
+                Files.createDirectories(filesFolderPath);
+            } catch (IOException e) {
+                throw new BusinessException("Não foi possível criar a pasta de arquivos. Por favor, entre em contato com o suporte.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 
-    @Override
-    public String upload(String uuid, InputStream inputStream, String originalFileName, LocalDateTime localDateTime) {
-        return saveFile(inputStream, originalFileName, uuid == null ? UUID.randomUUID().toString() : uuid, localDateTime);
+    private String saveFile(InputStream inputStream, String fileName, String folderPrefix, LocalDateTime localDateTime) {
+        Path directoryPath = filesFolderPath.resolve(folderPrefix);
+        prepareDirectory(directoryPath);
+
+        String sanitizedFileName = generateFileName(fileName, localDateTime);
+        Path filePath = directoryPath.resolve(sanitizedFileName);
+
+        try {
+            byte[] processedFile = processFile(inputStream, fileName);
+            Files.write(filePath, processedFile, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            return filePath.toString();
+        } catch (IOException e) {
+            throw new BusinessException("Não foi possível salvar o arquivo. Por favor, tente novamente.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @Override
-    public File getFile(String uuid) {
-        Path directoryPath = imagesFolderPath.resolve(uuid);
+    private void prepareDirectory(Path directoryPath) {
+        try {
+            if (Files.notExists(directoryPath)) {
+                Files.createDirectories(directoryPath);
+            }
+            clearDirectory(directoryPath);
+        } catch (IOException e) {
+            throw new BusinessException("Erro ao preparar o diretório para salvar o arquivo.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    private void clearDirectory(Path directoryPath) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directoryPath)) {
+            for (Path file : stream) {
+                if (Files.isRegularFile(file)) {
+                    Files.deleteIfExists(file);
+                }
+            }
+        } catch (IOException e) {
+            throw new BusinessException("Não foi possível limpar o diretório antes de salvar o arquivo.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void validateDirectoryExists(Path directoryPath) {
         if (Files.notExists(directoryPath) || !Files.isDirectory(directoryPath)) {
-            throw new BusinessException("Pasta com o UUID especificado não encontrada.", HttpStatus.NOT_FOUND);
-        }
-
-        try (var files = Files.list(directoryPath)) {
-            return files.filter(Files::isRegularFile)
-                    .findFirst()
-                    .map(Path::toFile)
-                    .orElseThrow(() -> new BusinessException("Nenhum arquivo encontrado na pasta especificada.", HttpStatus.NOT_FOUND));
-        } catch (IOException e) {
-            throw new BusinessException("Erro ao acessar a pasta do UUID especificado.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BusinessException("A pasta especificada não foi encontrada.", HttpStatus.NOT_FOUND);
         }
     }
 
-    private String saveFile(InputStream inputStream, String originalFileName, String uuid, LocalDateTime localDateTime) {
-        // Validações iniciais
-        validateFileNameLength(originalFileName);
-        String fileExtension = getFileExtension(originalFileName);
-        validateImageFormat(fileExtension);
-        BufferedImage bufferedImage = readImage(inputStream);
-        byte[] imageBytes = convertToBytesAndValidateSize(bufferedImage, fileExtension);
-
-        // Criação do diretório e substituição do arquivo
-        Path directoryPath = imagesFolderPath.resolve(uuid);
-        Path filePath = directoryPath.resolve(createFileName(sanitizeFileName(originalFileName), fileExtension, localDateTime));
-
-        try {
-            Files.createDirectories(directoryPath);
-            deleteExistingFiles(directoryPath);
-            Files.write(filePath, imageBytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
-            throw new BusinessException("Erro ao salvar a nova imagem.", e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return filePath.toString();
-    }
-
-    private BufferedImage readImage(InputStream inputStream) {
-        try {
-            BufferedImage bufferedImage = ImageIO.read(inputStream);
-            if (bufferedImage == null) {
-                throw new BusinessException("O arquivo não é uma imagem válida.", HttpStatus.BAD_REQUEST);
-            }
-            return bufferedImage;
-        } catch (IOException e) {
-            throw new BusinessException("Erro ao ler a imagem do InputStream.", e, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    private byte[] convertToBytesAndValidateSize(BufferedImage bufferedImage, String fileExtension) {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            ImageIO.write(bufferedImage, fileExtension, outputStream);
-            byte[] imageBytes = outputStream.toByteArray();
-
-            if (imageBytes.length > MAX_FILE_SIZE) {
-                throw new BusinessException("Arquivo excede o limite de 5 MB.", HttpStatus.BAD_REQUEST);
-            }
-            return imageBytes;
-        } catch (IOException e) {
-            throw new BusinessException("Erro ao converter a imagem para bytes.", e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    private void deleteExistingFiles(Path directoryPath) {
-        try (var files = Files.list(directoryPath)) {
-            files.filter(Files::isRegularFile)
-                    .forEach(file -> {
-                        try {
-                            Files.delete(file);
-                        } catch (IOException e) {
-                            throw new BusinessException("Erro ao excluir a imagem existente.", e, HttpStatus.INTERNAL_SERVER_ERROR);
-                        }
-                    });
-        } catch (IOException e) {
-            throw new BusinessException("Erro ao acessar a pasta para exclusão de arquivos existentes.", e, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    private void validateFileNameLength(String fileName) {
-        if (fileName.length() > MAX_FILENAME_LENGTH) {
-            throw new BusinessException("Nome do arquivo excede o limite de 50 caracteres.", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    private void validateImageFormat(String fileExtension) {
-        if (!ALLOWED_EXTENSIONS.contains(fileExtension.toLowerCase())) {
-            throw new BusinessException("Formato de imagem não suportado. Use PNG ou JPEG.", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    private static String createFileName(String sanitizedFileName, String fileExtension, LocalDateTime localDateTime) {
-        String baseFileName = sanitizedFileName.replaceAll("\\." + fileExtension + "$", "");
-        return localDateTime.format(FILE_TIMESTAMP_FORMAT) + "_" + baseFileName + "." + fileExtension;
+    private String generateFileName(String fileName, LocalDateTime localDateTime) {
+        String timestamp = localDateTime.format(FILE_TIMESTAMP_FORMAT);
+        String sanitizedFileName = sanitizeFileName(fileName);
+        return timestamp + "_" + sanitizedFileName;
     }
 
     private static String sanitizeFileName(String fileName) {
-        return fileName.replaceAll("[^a-zA-Z0-9.-]", "_").replace(" ", "_");
+        return fileName.replaceAll("[^a-zA-Z0-9.\\-]", "_").replace(" ", "_");
     }
 
-    private static String getFileExtension(String fileName) {
-        int lastIndexOfDot = fileName.lastIndexOf('.');
-        if (lastIndexOfDot == -1 || lastIndexOfDot == fileName.length() - 1) {
-            throw new BusinessException("Nome do arquivo sem extensão válida.", HttpStatus.BAD_REQUEST);
+    private byte[] processFile(InputStream inputStream, String fileName) {
+        validateFileName(fileName);
+        String fileExtension = getFileExtension(fileName);
+
+        if (!ALLOWED_EXTENSIONS.contains(fileExtension.toLowerCase())) {
+            throw new BusinessException("O formato de arquivo '" + fileExtension + "' não é suportado. Por favor, envie um arquivo nos formatos: png, jpeg, jpg ou pdf.", HttpStatus.BAD_REQUEST);
         }
-        return fileName.substring(lastIndexOfDot + 1).toLowerCase();
+
+        if (IMAGE_EXTENSIONS.contains(fileExtension.toLowerCase())) {
+            return processImage(inputStream, fileExtension);
+        } else if ("pdf".equalsIgnoreCase(fileExtension)) {
+            return processPdf(inputStream);
+        } else {
+            throw new BusinessException("Formato de arquivo não suportado.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void validateFileName(String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            throw new BusinessException("O nome do arquivo não pode ser vazio.", HttpStatus.BAD_REQUEST);
+        }
+        if (fileName.length() >= 50) {
+            throw new BusinessException("O nome do arquivo deve ter menos de 50 caracteres.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private String getFileExtension(String fileName) {
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex == -1 || lastDotIndex == fileName.length() - 1) {
+            throw new BusinessException("O arquivo não possui uma extensão válida. Certifique-se de que o nome do arquivo inclua a extensão.", HttpStatus.BAD_REQUEST);
+        }
+        return fileName.substring(lastDotIndex + 1).toLowerCase();
+    }
+
+    private byte[] processPdf(InputStream inputStream) {
+        final int MAX_PDF_SIZE = 5 * 1024 * 1024;
+        try {
+            byte[] fileBytes = inputStream.readAllBytes();
+
+            if (fileBytes.length > MAX_PDF_SIZE) {
+                throw new BusinessException("O arquivo PDF excede o tamanho máximo permitido de 5 MB.", HttpStatus.BAD_REQUEST);
+            }
+            return fileBytes;
+        } catch (IOException e) {
+            throw new BusinessException("Não foi possível ler o arquivo PDF. Verifique se o arquivo está corrompido e tente novamente.", e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private byte[] processImage(InputStream inputStream, String fileExtension) {
+        try {
+            BufferedImage image = ImageIO.read(inputStream);
+            if (image == null) {
+                throw new BusinessException("O arquivo enviado não é uma imagem válida. Por favor, envie uma imagem nos formatos PNG ou JPEG.", HttpStatus.BAD_REQUEST);
+            }
+
+            return convertImageToBytes(image, fileExtension);
+        } catch (IOException e) {
+            throw new BusinessException("Não foi possível ler a imagem. Verifique se o arquivo está corrompido e tente novamente.", e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private byte[] convertImageToBytes(BufferedImage image, String fileExtension) {
+        final int MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            boolean success = ImageIO.write(image, fileExtension, outputStream);
+            if (!success) {
+                throw new BusinessException("Não foi possível processar a imagem no formato '" + fileExtension + "'. Por favor, envie a imagem em um formato suportado.", HttpStatus.BAD_REQUEST);
+            }
+            byte[] imageBytes = outputStream.toByteArray();
+
+            if (imageBytes.length > MAX_IMAGE_SIZE) {
+                throw new BusinessException("O arquivo de imagem excede o tamanho máximo permitido de " + (MAX_IMAGE_SIZE / (1024 * 1024)) + " MB.", HttpStatus.BAD_REQUEST);
+            }
+            return imageBytes;
+        } catch (IOException e) {
+            throw new BusinessException("Erro ao processar a imagem. Por favor, tente novamente.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

@@ -5,10 +5,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 
 public interface IFileUploadService {
-    String upload(InputStream inputStream, String filePath);
-
-    String upload(String aux, InputStream inputStream, String filePath, LocalDateTime localDateTime);
+    String upload(InputStream inputStream, String fileName, String prefix, LocalDateTime localDateTime);
 
     File getFile(String path);
-
 }
