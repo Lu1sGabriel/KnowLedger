@@ -4,11 +4,13 @@ import httpService from "../../services/public/httpService";
 async function insertPost() {
 
     const textPost = document.querySelector('.text-session').value;
+    // const typePost = document.querySelector('.type-session').value;
     const title = document.querySelector('.input-duvida').value;
     
     const post = {
         title: title,
-        content: content
+        content: content,
+        type: typePost
     };
 
     try {
