@@ -21,7 +21,6 @@ import java.util.UUID;
 public class FileUploadService implements IFileUploadService {
 
     private static final DateTimeFormatter FILE_TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
-    private static final Set<String> IMAGE_EXTENSIONS = Set.of("png", "jpeg", "jpg");
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of("png", "jpeg", "jpg", "pdf");
 
     private final Path filesFolderPath;
@@ -51,7 +50,7 @@ public class FileUploadService implements IFileUploadService {
             }
             throw new BusinessException("Nenhum arquivo encontrado na pasta especificada.", HttpStatus.NOT_FOUND);
         } catch (IOException e) {
-            throw new BusinessException("Erro ao acessar a pasta especificada.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BusinessException("Erro ao acessar a pasta especificada.", e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -60,7 +59,7 @@ public class FileUploadService implements IFileUploadService {
             try {
                 Files.createDirectories(filesFolderPath);
             } catch (IOException e) {
-                throw new BusinessException("Não foi possível criar a pasta de arquivos. Por favor, entre em contato com o suporte.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new BusinessException("Não foi possível criar a pasta de arquivos. Por favor, entre em contato com o suporte.", e, HttpStatus.BAD_REQUEST);
             }
         }
     }
@@ -77,7 +76,7 @@ public class FileUploadService implements IFileUploadService {
             Files.write(filePath, processedFile, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             return filePath.toString();
         } catch (IOException e) {
-            throw new BusinessException("Não foi possível salvar o arquivo. Por favor, tente novamente.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BusinessException("Não foi possível salvar o arquivo. Por favor, tente novamente.", e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -88,7 +87,7 @@ public class FileUploadService implements IFileUploadService {
             }
             clearDirectory(directoryPath);
         } catch (IOException e) {
-            throw new BusinessException("Erro ao preparar o diretório para salvar o arquivo.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BusinessException("Erro ao preparar o diretório para salvar o arquivo.", e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -100,7 +99,7 @@ public class FileUploadService implements IFileUploadService {
                 }
             }
         } catch (IOException e) {
-            throw new BusinessException("Não foi possível limpar o diretório antes de salvar o arquivo.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BusinessException("Não foi possível limpar o diretório antes de salvar o arquivo.", e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -122,20 +121,19 @@ public class FileUploadService implements IFileUploadService {
 
     private byte[] processFile(InputStream inputStream, String fileName) {
         validateFileName(fileName);
-        String fileExtension = getFileExtension(fileName);
+        String fileExtension = getFileExtension(fileName).toLowerCase();
 
-        if (!ALLOWED_EXTENSIONS.contains(fileExtension.toLowerCase())) {
+        if (!ALLOWED_EXTENSIONS.contains(fileExtension)) {
             throw new BusinessException("O formato de arquivo '" + fileExtension + "' não é suportado. Por favor, envie um arquivo nos formatos: png, jpeg, jpg ou pdf.", HttpStatus.BAD_REQUEST);
         }
 
-        if (IMAGE_EXTENSIONS.contains(fileExtension.toLowerCase())) {
-            return processImage(inputStream, fileExtension);
-        } else if ("pdf".equalsIgnoreCase(fileExtension)) {
-            return processPdf(inputStream);
-        } else {
-            throw new BusinessException("Formato de arquivo não suportado.", HttpStatus.BAD_REQUEST);
-        }
+        return switch (fileExtension) {
+            case "png", "jpeg", "jpg" -> convertToBytes(inputStream, fileExtension);
+            case "pdf" -> convertToBytes(inputStream);
+            default -> throw new BusinessException("Formato de arquivo não suportado.", HttpStatus.BAD_REQUEST);
+        };
     }
+
 
     private void validateFileName(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
@@ -154,48 +152,46 @@ public class FileUploadService implements IFileUploadService {
         return fileName.substring(lastDotIndex + 1).toLowerCase();
     }
 
-    private byte[] processPdf(InputStream inputStream) {
-        final int MAX_PDF_SIZE = 5 * 1024 * 1024;
-        try {
-            byte[] fileBytes = inputStream.readAllBytes();
+    private byte[] convertToBytes(InputStream inputStream, String fileExtension) {
+        final int MAX_IMAGE_SIZE = 10 * 1024 * 1024;
 
-            if (fileBytes.length > MAX_PDF_SIZE) {
-                throw new BusinessException("O arquivo PDF excede o tamanho máximo permitido de 5 MB.", HttpStatus.BAD_REQUEST);
-            }
-            return fileBytes;
-        } catch (IOException e) {
-            throw new BusinessException("Não foi possível ler o arquivo PDF. Verifique se o arquivo está corrompido e tente novamente.", e, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    private byte[] processImage(InputStream inputStream, String fileExtension) {
         try {
             BufferedImage image = ImageIO.read(inputStream);
             if (image == null) {
                 throw new BusinessException("O arquivo enviado não é uma imagem válida. Por favor, envie uma imagem nos formatos PNG ou JPEG.", HttpStatus.BAD_REQUEST);
             }
 
-            return convertImageToBytes(image, fileExtension);
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                boolean success = ImageIO.write(image, fileExtension, outputStream);
+                if (!success) {
+                    throw new BusinessException("Não foi possível processar a imagem no formato '" + fileExtension + "'. Por favor, envie a imagem em um formato suportado.", HttpStatus.BAD_REQUEST);
+                }
+                byte[] imageBytes = outputStream.toByteArray();
+
+                if (imageBytes.length > MAX_IMAGE_SIZE) {
+                    throw new BusinessException("O arquivo de imagem excede o tamanho máximo permitido de " + (MAX_IMAGE_SIZE / (1024 * 1024)) + " MB.", HttpStatus.BAD_REQUEST);
+                }
+
+                return imageBytes;
+            }
         } catch (IOException e) {
-            throw new BusinessException("Não foi possível ler a imagem. Verifique se o arquivo está corrompido e tente novamente.", e, HttpStatus.BAD_REQUEST);
+            throw new BusinessException("Erro ao processar a imagem. Por favor, tente novamente.", e, HttpStatus.BAD_REQUEST);
         }
     }
 
-    private byte[] convertImageToBytes(BufferedImage image, String fileExtension) {
-        final int MAX_IMAGE_SIZE = 10 * 1024 * 1024;
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            boolean success = ImageIO.write(image, fileExtension, outputStream);
-            if (!success) {
-                throw new BusinessException("Não foi possível processar a imagem no formato '" + fileExtension + "'. Por favor, envie a imagem em um formato suportado.", HttpStatus.BAD_REQUEST);
-            }
-            byte[] imageBytes = outputStream.toByteArray();
+    private byte[] convertToBytes(InputStream inputStream) {
+        final int MAX_PDF_SIZE = 5 * 1024 * 1024;
 
-            if (imageBytes.length > MAX_IMAGE_SIZE) {
-                throw new BusinessException("O arquivo de imagem excede o tamanho máximo permitido de " + (MAX_IMAGE_SIZE / (1024 * 1024)) + " MB.", HttpStatus.BAD_REQUEST);
+        try {
+            byte[] fileBytes = inputStream.readAllBytes();
+
+            if (fileBytes.length > MAX_PDF_SIZE) {
+                throw new BusinessException("O arquivo PDF excede o tamanho máximo permitido de 5 MB.", HttpStatus.BAD_REQUEST);
             }
-            return imageBytes;
+
+            return fileBytes;
         } catch (IOException e) {
-            throw new BusinessException("Erro ao processar a imagem. Por favor, tente novamente.", e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BusinessException("Não foi possível ler o arquivo PDF. Verifique se o arquivo está corrompido e tente novamente.", e, HttpStatus.BAD_REQUEST);
         }
     }
 
