@@ -6,8 +6,7 @@ import java.util.UUID;
 
 public class PostDetailDTO {
     private UUID id;
-    private UUID userId;
-    private String userName;
+    private UserSummaryDTO user;
     private Long postTypeId;
     private Long postStatusId;
     private List<CommentSummaryDTO> comments;
@@ -21,13 +20,11 @@ public class PostDetailDTO {
     public PostDetailDTO() {
     }
 
-    public PostDetailDTO(UUID id, UUID userId, String userName, Long postTypeId, Long postStatusId,
-            List<CommentSummaryDTO> comments,
-            String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-            LocalDateTime publishedAt) {
+    public PostDetailDTO(UUID id, UserSummaryDTO user, Long postTypeId, Long postStatusId,
+            List<CommentSummaryDTO> comments, String title, String content, LocalDateTime createdAt,
+            LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt) {
         this.id = id;
-        this.userId = userId;
-        this.userName = userName;
+        this.user = user;
         this.postTypeId = postTypeId;
         this.postStatusId = postStatusId;
         this.comments = comments;
@@ -45,22 +42,6 @@ public class PostDetailDTO {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public Long getPostTypeId() {
@@ -133,6 +114,43 @@ public class PostDetailDTO {
 
     public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    public UserSummaryDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserSummaryDTO user) {
+        this.user = user;
+    }
+
+    public static class UserSummaryDTO {
+        private UUID id;
+        private String name;
+
+        public UserSummaryDTO() {
+        }
+
+        public UserSummaryDTO(UUID id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public UUID getId() {
+            return id;
+        }
+
+        public void setId(UUID id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 
     public static class CommentSummaryDTO {

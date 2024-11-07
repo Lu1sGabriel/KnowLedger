@@ -1,7 +1,8 @@
 package com.knowledger.knowledger.application.usecases.post;
 
 import java.util.UUID;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.knowledger.knowledger.commom.mapper.IMapperDTO;
@@ -19,8 +20,8 @@ public class PostGetAllByUserId {
         _MapperDTO = iMapper;
     }
 
-    public List<PostDetailDTO> apply(UUID userId) {
-        var post = _IPostGateway.getAllByUserId(userId);
-        return _MapperDTO.toDtoList(post);
+    public Page<PostDetailDTO> apply(UUID userId, Pageable pageable) {
+        var post = _IPostGateway.getAllByUserId(userId, pageable);
+        return _MapperDTO.toDtoPage(post);
     }
 }

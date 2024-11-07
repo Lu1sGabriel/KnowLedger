@@ -1,7 +1,9 @@
 package com.knowledger.knowledger.infra.gateways.post;
 
-import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.knowledger.knowledger.domain.post.Post;
 
@@ -9,7 +11,7 @@ public interface IPostGateway {
 
     Post register(UUID userId, String title, String content, Long postTypeId);
 
-    List<Post> getAll();
+    Page<Post> getAll(Pageable pageable);
 
-    List<Post> getAllByUserId(UUID userId);
+    Page<Post> getAllByUserId(UUID userId, Pageable pageable);
 }

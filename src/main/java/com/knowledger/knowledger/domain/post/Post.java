@@ -6,12 +6,12 @@ import java.util.UUID;
 
 import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.domain.comment.Comment;
+import com.knowledger.knowledger.domain.user.User;
 
 public class Post {
 
     private UUID id;
-    private UUID userId;
-    private String userName;
+    private User user;
     private Long postTypeId;
     private Long postStatusId;
     private List<Comment> comments;
@@ -26,9 +26,13 @@ public class Post {
         this.id = UUID.randomUUID();
     }
 
+    public Post(UUID id) {
+        this.id = id;
+    }
+
     public Post(UUID userId, Long postTypeId, String title, String content) {
         this();
-        this.userId = userId;
+        this.user = new User(userId);
         this.postTypeId = postTypeId;
         // TODO:: Criar serviço de validaçaão de POST com IA
         this.postStatusId = Constants.PostStatus.APPROVED;
@@ -45,14 +49,6 @@ public class Post {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
     }
 
     public Long getPostTypeId() {
@@ -127,12 +123,12 @@ public class Post {
         this.comments = comments;
     }
 
-    public String getUserName() {
-        return userName;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

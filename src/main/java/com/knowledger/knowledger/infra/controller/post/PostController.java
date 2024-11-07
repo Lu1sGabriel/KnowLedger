@@ -1,7 +1,9 @@
 package com.knowledger.knowledger.infra.controller.post;
 
-import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,14 +44,14 @@ public class PostController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<PostDetailDTO>> getAll() {
-        var posts = _PostGetAll.apply();
+    public ResponseEntity<Page<PostDetailDTO>> getAll(Pageable pageable) {
+        var posts = _PostGetAll.apply(pageable);
         return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PostDetailDTO>> getAllByUserId(@PathVariable UUID userId) {
-        var posts = _PostGetAllByUserId.apply(userId);
+    public ResponseEntity<Page<PostDetailDTO>> getAllByUserId(@PathVariable UUID userId, Pageable pageable) {
+        var posts = _PostGetAllByUserId.apply(userId, pageable);
         return ResponseEntity.ok(posts);
     }
 }

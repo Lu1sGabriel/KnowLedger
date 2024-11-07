@@ -46,5 +46,4 @@ public class PostValidationService implements IPostValidationService {
         commentRepository.findById(commentId)
                 .orElseThrow(() -> new BusinessException("Comentário não encontrado!", HttpStatus.NOT_FOUND));
     }
-
 }
