@@ -1,6 +1,7 @@
 package com.knowledger.knowledger.infra.installers;
 
 import com.knowledger.knowledger.commom.mapper.Mapper;
+import com.knowledger.knowledger.commom.mapper.MappingConfigurer;
 import com.knowledger.knowledger.domain.comment.Comment;
 import com.knowledger.knowledger.domain.post.Post;
 import com.knowledger.knowledger.domain.post.department.Department;
@@ -11,19 +12,28 @@ import com.knowledger.knowledger.infra.controller.comment.CommentDetailDTO;
 import com.knowledger.knowledger.infra.controller.comment.CommentRegisterDTO;
 import com.knowledger.knowledger.infra.controller.department.DepartmentDetailDTO;
 import com.knowledger.knowledger.infra.controller.post.PostDetailDTO;
-import com.knowledger.knowledger.infra.controller.post.PostDetailDTO.CommentSummaryDTO;
 import com.knowledger.knowledger.infra.controller.post.PostRegisterDTO;
 import com.knowledger.knowledger.infra.controller.postType.PostTypeDetailDTO;
 import com.knowledger.knowledger.infra.controller.user.UserDetailDTO;
 import com.knowledger.knowledger.infra.controller.user.UserRegisterDTO;
 import com.knowledger.knowledger.infra.controller.user.UserTokenAuthenticationDTO;
 import com.knowledger.knowledger.infra.controller.user.role.RoleDetailDTO;
+import com.knowledger.knowledger.infra.mappers.comment.CommentProjectionToCommentMappingConfigurer;
+import com.knowledger.knowledger.infra.mappers.comment.CommentToCommentEntityMappingConfigurer;
+import com.knowledger.knowledger.infra.mappers.post.PostProjectionToPostMappingConfigurer;
+import com.knowledger.knowledger.infra.mappers.post.PostToPostDetailDTOMappingConfigurer;
+import com.knowledger.knowledger.infra.mappers.post.PostToPostEntityMappingConfigurer;
 import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
 import com.knowledger.knowledger.infra.persistence.department.DepartmentEntity;
 import com.knowledger.knowledger.infra.persistence.post.PostEntity;
+import com.knowledger.knowledger.infra.persistence.post.PostProjection;
+import com.knowledger.knowledger.infra.persistence.post.PostProjection.CommentProjection;
 import com.knowledger.knowledger.infra.persistence.postType.PostTypeEntity;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 import com.knowledger.knowledger.infra.persistence.user.role.RoleEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,7 +71,23 @@ public class MapperInstaller {
     @Bean
     @Primary
     public Mapper<PostDetailDTO, PostEntity, Post> postDetailMapper() {
-        return new Mapper<>(PostDetailDTO.class, PostEntity.class, Post.class);
+
+        List<MappingConfigurer<?, ?>> configurers = new ArrayList<>();
+        configurers.add(new PostToPostEntityMappingConfigurer());
+        configurers.add(new PostToPostDetailDTOMappingConfigurer());
+        configurers.add(new PostProjectionToPostMappingConfigurer());
+
+        return new Mapper<>(PostDetailDTO.class, PostEntity.class,
+                Post.class, configurers);
+    }
+
+    @Bean
+    public Mapper<Void, PostProjection, Post> postMapper() {
+
+        List<MappingConfigurer<?, ?>> configurers = new ArrayList<>();
+        configurers.add(new PostProjectionToPostMappingConfigurer());
+
+        return new Mapper<>(Void.class, PostProjection.class, Post.class, configurers);
     }
 
     @Bean
@@ -73,17 +99,25 @@ public class MapperInstaller {
     @Bean
     @Primary
     public Mapper<CommentDetailDTO, CommentEntity, Comment> commentDetailMapper() {
-        return new Mapper<>(CommentDetailDTO.class, CommentEntity.class, Comment.class);
+
+        List<MappingConfigurer<?, ?>> configurers = new ArrayList<>();
+        configurers.add(new CommentToCommentEntityMappingConfigurer());
+        configurers.add(new CommentProjectionToCommentMappingConfigurer());
+
+        return new Mapper<>(CommentDetailDTO.class, CommentEntity.class, Comment.class, configurers);
+    }
+
+    @Bean
+    public Mapper<Void, CommentProjection, Comment> commentMapper() {
+        List<MappingConfigurer<?, ?>> configurers = new ArrayList<>();
+        configurers.add(new CommentProjectionToCommentMappingConfigurer());
+
+        return new Mapper<>(Void.class, CommentProjection.class, Comment.class, configurers);
     }
 
     @Bean
     public Mapper<CommentRegisterDTO, CommentEntity, Comment> commentRegisterMapper() {
         return new Mapper<>(CommentRegisterDTO.class, CommentEntity.class, Comment.class);
-    }
-
-    @Bean
-    public Mapper<CommentSummaryDTO, CommentEntity, Comment> commentSummaryMapper() {
-        return new Mapper<>(CommentSummaryDTO.class, CommentEntity.class, Comment.class);
     }
 
     // Department

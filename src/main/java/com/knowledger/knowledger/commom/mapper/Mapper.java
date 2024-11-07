@@ -3,6 +3,7 @@ package com.knowledger.knowledger.commom.mapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.Page;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
@@ -23,12 +24,13 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
     }
 
     public Mapper(Class<D> dtoClass, Class<E> entityClass, Class<T> domainClass,
-            List<MappingConfigurer<E, T>> configurers) {
+            List<MappingConfigurer<?, ?>> configurers) {
         this.dtoClass = dtoClass;
         this.entityClass = entityClass;
         this.domainClass = domainClass;
 
         modelMapper.getConfiguration()
+                .setAmbiguityIgnored(true)
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
@@ -76,6 +78,11 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
                 .toList();
     }
 
+    @Override
+    public Page<D> toDtoPage(Page<T> domains) {
+        return domains.map(this::toDto);
+    }
+
     private void configureRecordMapping(Class<D> recordClass) {
         modelMapper.typeMap(domainClass, recordClass).setProvider(request -> {
             try {
@@ -101,4 +108,5 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
             throw new RuntimeException("Erro ao obter o valor do campo: " + parameter.getName(), e);
         }
     }
+
 }
