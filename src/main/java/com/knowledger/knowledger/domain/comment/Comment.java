@@ -1,6 +1,8 @@
 package com.knowledger.knowledger.domain.comment;
 
 import com.knowledger.knowledger.commom.Constants;
+import com.knowledger.knowledger.domain.post.Post;
+import com.knowledger.knowledger.domain.user.User;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -8,8 +10,8 @@ import java.util.UUID;
 public class Comment {
 
     private UUID id;
-    private UUID userId;
-    private UUID postId;
+    private Post post;
+    private User user;
     private UUID commentId;
     private Long commentStatusId;
     private String content;
@@ -25,8 +27,8 @@ public class Comment {
 
     public Comment(UUID userId, UUID postId, UUID commentId, String content) {
         this();
-        this.userId = userId;
-        this.postId = postId;
+        this.user = new User(userId);
+        this.post = new Post(postId);
         this.commentId = commentId;
         // TODO:: Criar serviço de validação de COMMENT com IA
         this.commentStatusId = Constants.CommentStatus.APPROVED;
@@ -109,19 +111,23 @@ public class Comment {
         this.isSolution = isSolution;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public UUID getPostId() {
-        return postId;
-    }
-
-    public void setPostId(UUID postId) {
-        this.postId = postId;
+        return post != null ? post.getId() : null;
     }
 }

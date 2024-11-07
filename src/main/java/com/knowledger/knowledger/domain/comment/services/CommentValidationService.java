@@ -34,11 +34,16 @@ public class CommentValidationService implements ICommentValidationService {
     }
 
     public void validateCommentExists(UUID commentId) {
-        commentRepository.findById(commentId)
-                .orElseThrow(() -> new BusinessException("Comentário não encontrado!", HttpStatus.NOT_FOUND));
+        if (commentId != null)
+            commentRepository.findById(commentId)
+                    .orElseThrow(() -> new BusinessException("Comentário não encontrado!", HttpStatus.NOT_FOUND));
     }
 
     public void validateCommentBelongsToPost(UUID postId, UUID commentId) {
+
+        if (commentId != null)
+            return;
+
         var post = postRepository.findById(postId)
                 .orElseThrow(() -> new BusinessException("Post não encontrado!", HttpStatus.NOT_FOUND));
 
