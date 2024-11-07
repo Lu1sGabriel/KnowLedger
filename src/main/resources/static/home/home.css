@@ -168,12 +168,67 @@ header img {
 
 }
 
+.section-general {
+    display: flex;
+    flex-direction: column; /* Para as divs ficarem uma embaixo da outra */
+    gap: 40px; /* Espaço entre as divs */
+    align-items: center;
+    width: 5rem; /* Largura da section */
+    height: 5rem; /* Altura fixa da section */
+    border-radius: 20px;
+    border: 2px solid black; /* Adicionando borda à section */
+}
+
+.main {
+    display: flex;
+}
+
+.top-main {
+    border: 1px solid black;
+    width: 100%;
+}
+
+.header-main {
+    display: flex;
+    flex-direction: column;
+    height: 7rem;
+    border: 1px solid black;
+    width: 100%;
+}
+
+.header-search {
+    border-radius: 10px;
+    margin: auto 0;
+    margin-left: 10rem;
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
+    border: 1px solid black;
+    width: 60%;
+    justify-content: center;
+}
+
+.header-search .input-text {
+    border: 1px solid black;
+    margin-left: 2rem;
+}
+
+.section-news,
+.section-top1,
+.section-follow {
+    border: 1px solid black; /* Borda para as divs */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .aside-left {
+    padding-top: 20px;
+    align-items: center;
     display: flex;
     flex-direction: column; 
     gap: 50px;
     display: flex;
-    height: 35rem;
     width: 20%;
     border: 1px solid black
 }
