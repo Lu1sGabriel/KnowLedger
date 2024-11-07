@@ -11,7 +11,6 @@ import com.knowledger.knowledger.domain.comment.services.ICommentValidationServi
 import com.knowledger.knowledger.infra.gateways.comment.ICommentGateway;
 import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
 import com.knowledger.knowledger.infra.persistence.comment.ICommentRepository;
-import com.knowledger.knowledger.infra.persistence.post.IPostRepository;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
 
 @Service
@@ -21,7 +20,7 @@ public class CommentHandler implements ICommentGateway {
         private final ICommentRepository _ICommentRepository;
         private final ICommentValidationService _IValidationService;
 
-        public CommentHandler(IMapper<CommentEntity, Comment> iMapper, IPostRepository iPostRepository,
+        public CommentHandler(IMapper<CommentEntity, Comment> iMapper,
                         IUserRepository iUserRepository, ICommentRepository iCommentRepository,
                         ICommentValidationService validationService) {
                 _iMapper = iMapper;
@@ -34,8 +33,10 @@ public class CommentHandler implements ICommentGateway {
 
                 _IValidationService.validateUserExists(userId);
                 _IValidationService.validatePostExists(postId);
-                _IValidationService.validateCommentExists(commentId);
-                _IValidationService.validateCommentBelongsToPost(postId, commentId);
+                if (commentId != null) {
+                        _IValidationService.validateCommentExists(commentId);
+                        _IValidationService.validateCommentBelongsToPost(postId, commentId);
+                }
 
                 var comment = new Comment(userId, postId, commentId, content);
 
