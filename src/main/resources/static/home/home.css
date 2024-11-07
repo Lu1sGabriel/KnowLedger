@@ -24,7 +24,7 @@ header img {
 .house-icon {
     display: inline-block;
     width: auto;
-    color: white;
+    color: rgb(255, 255, 255);
     background-color: #FF4401;
     padding: 7px;
     border-radius: 7px;
@@ -32,34 +32,83 @@ header img {
     margin-right: 10px;
 }
 
+.notification-icon {
+    display: inline-block;
+    width: auto;
+    color: rgb(0, 0, 0);
+    background-color: #fff;
+    padding: 7px;
+    border-radius: 7px;
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.notification-icon:hover {
+    transition: 0.7s;
+    background-color: #c5c1c1;
+}
+
+.profile-icon {
+    display: inline-block;
+    width: auto;
+    color: rgb(255, 255, 255);
+    border: 1px solid #FF4401;
+    background-color: #e5ac61;
+    padding: 7px;
+    border-radius: 7px;
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.profile-icon:hover {
+    transition: 0.7s;
+    background-color: #efac82;
+}
+
+
+
 .center-navbar {
-    display: flex; /* Alinha os elementos lado a lado */
-    gap: 20px;
-    justify-content: center; /* Alinha horizontalmente os elementos */
+    display: flex; 
+    gap: 1rem;
+    justify-content: center; 
     transform: translateX(-60px);
-    align-items: center; /* Alinha verticalmente os elementos */
-    width: 50%;
+    align-items: center; 
+    width: 60%;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 5rem;
+    transform: translateY(-50%);
+    color: #888; 
+    pointer-events: none; 
 }
 
 .center-navbar a {
-    color: inherit; /* Mantém a cor do elemento pai */
+    color: inherit; 
     text-decoration: none;
 }
 
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
 .input-text {
+    border-radius: 4px;
+    margin-right: 4.5rem;
     width: 440px;
     height: 40px;
     border-radius: 8px;
     border: none;
 }
 
-
-
 .container {
-    width: 90%; /* Define o tamanho como 90% da largura da tela */
-    max-width: 1200px; /* Limita a largura máxima para telas maiores */
-    margin: 0 auto; /* Centraliza horizontalmente */
-    padding: 20px; /* Adiciona um espaçamento interno */
+    width: 90%; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 20px; 
     box-sizing: border-box; /* Inclui padding e borda no tamanho total */
 }
 
@@ -83,18 +132,18 @@ header img {
     width: auto;
     font-size: 14px;
     background-color: #e0e0e0;
-    color: #333; /* Cor do texto */
+    color: #333; 
     border-radius: 20px;
     padding: 10px;
     margin: 5px;
-    display: inline-block; /* Garante que os botões fiquem lado a lado */
-    cursor: pointer; /* Adiciona um cursor de ponteiro para indicar interatividade */
-    transition: background-color 0.3s; /* Efeito suave ao passar o mouse */
+    display: inline-block;
+    cursor: pointer; 
+    transition: background-color 0.3s;
 
 }
 
 .dynamic-buttons input:hover {
-    background-color: #d4d4d4; /* Cor de fundo ao passar o mouse */
+    background-color: #d4d4d4; 
 }
 
 .post-section {
@@ -117,6 +166,22 @@ header img {
         border-radius: 16px;
     }
 
+}
+
+.aside-left {
+    display: flex;
+    flex-direction: column; 
+    gap: 50px;
+    display: flex;
+    height: 35rem;
+    width: 20%;
+    border: 1px solid black
+}
+
+.aside-left section {
+    margin: 0;
+    padding: 5rem;
+    border: 1px solid black;
 }
 
 
