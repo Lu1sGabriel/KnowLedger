@@ -11,9 +11,21 @@ async function loginUser() {
     };
 
     try {
+        // fazer IF caso ja tenha o token, só redirecionar direto
+
         const url = '/users/login';
         const response = await httpService.post(url, loginData);
-        console.log(response);
+
+        if (response.token) {
+            localStorage.setItem('authToken', response.token);
+            console.log('Token salvo no localStorage:', response.token);
+
+
+            window.location.href = "http://localhost:8080/home/home.html";
+        } else {
+            console.error('Token não encontrado na resposta');
+        }
+
     } catch (error) {
         console.error(error.message);
     }

@@ -13,21 +13,24 @@ const httpService = {
     },
     request: async (url, method, data) => {
         const token = localStorage.getItem('authToken');
-        console.log(token);
         const headers = {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` })
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         };
 
         const response = await fetch(url, {
-            method: method,
-            headers: headers,
-            body: data ? JSON.stringify(data) : null
+            method,
+            headers,
+            body: data ? JSON.stringify(data) : undefined
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Erro na requisição');
+            try {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erro na requisição');
+            } catch (e) {
+                throw new Error('Erro desconhecido na requisição');
+            }
         }
 
         return await response.json();
