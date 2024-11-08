@@ -17,20 +17,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenService _tokenService;
     private final IUserRepository _iUserRepository;
-
-    private final List<String> openEndpoints = List.of(
-            Constants.NoRequiredAuthorizedPath.USER_LOGIN,
-            Constants.NoRequiredAuthorizedPath.USER_REGISTER,
-            Constants.NoRequiredAuthorizedPath.ASSETS_PUBLIC,
-            Constants.NoRequiredAuthorizedPath.SERVICES_PUBLIC
-    );
 
     public SecurityFilter(TokenService tokenService, IUserRepository userRepository) {
         _tokenService = tokenService;
@@ -41,16 +33,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
-        String path = request.getRequestURI();
-
-        boolean isPublic = openEndpoints.stream().anyMatch(path::startsWith);
-
-        if (isPublic) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         var token = recoverToken(request);
         if (token != null) {
             authenticateToken(token);

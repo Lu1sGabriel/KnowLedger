@@ -15,13 +15,13 @@ const httpService = {
         const token = localStorage.getItem('authToken');
         const headers = {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` })
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         };
 
         const response = await fetch(url, {
-            method: method,
-            headers: headers,
-            body: data ? JSON.stringify(data) : null
+            method,
+            headers,
+            body: data ? JSON.stringify(data) : undefined
         });
 
         if (!response.ok) {

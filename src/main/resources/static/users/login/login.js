@@ -12,6 +12,8 @@ async function loginUser() {
     };
 
     try {
+        // fazer IF caso ja tenha o token, só redirecionar direto
+
         const url = '/users/login';
         const response = await httpService.post(url, loginData);
         toastService.success('Login efetuado com sucesso!');
