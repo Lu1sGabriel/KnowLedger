@@ -1,4 +1,5 @@
 import httpService from '../../services/public/httpService.js';
+import toastService from '../../services/public/toastService.js';
 
 async function loginUser() {
 
@@ -15,21 +16,10 @@ async function loginUser() {
 
         const url = '/users/login';
         const response = await httpService.post(url, loginData);
-
-        if (response.token) {
-            localStorage.setItem('authToken', response.token);
-            console.log('Token salvo no localStorage:', response.token);
-
-
-            window.location.href = "http://localhost:8080/home/home.html";
-        } else {
-            console.error('Token não encontrado na resposta');
-        }
-
+        toastService.success('Login efetuado com sucesso!');
     } catch (error) {
-        console.error(error.message);
+        toastService.error(error.message);
     }
 }
 
-// Define o evento diretamente no botão
 document.getElementById("loginButton").addEventListener("click", loginUser);

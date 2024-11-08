@@ -25,12 +25,8 @@ const httpService = {
         });
 
         if (!response.ok) {
-            try {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Erro na requisição');
-            } catch (e) {
-                throw new Error('Erro desconhecido na requisição');
-            }
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Erro na requisição');
         }
 
         return await response.json();
