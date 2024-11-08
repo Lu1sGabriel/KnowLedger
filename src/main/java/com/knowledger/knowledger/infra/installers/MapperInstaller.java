@@ -1,6 +1,9 @@
 package com.knowledger.knowledger.infra.installers;
 
 import com.knowledger.knowledger.commom.mapper.Mapper;
+import com.knowledger.knowledger.commom.mapper.MappingConfigurer;
+import com.knowledger.knowledger.domain.comment.Comment;
+import com.knowledger.knowledger.domain.post.Post;
 import com.knowledger.knowledger.domain.post.department.Department;
 import com.knowledger.knowledger.domain.post.postImage.PostImage;
 import com.knowledger.knowledger.domain.post.postType.PostType;
@@ -27,18 +30,16 @@ import com.knowledger.knowledger.infra.persistence.department.DepartmentEntity;
 import com.knowledger.knowledger.infra.persistence.post.PostEntity;
 import com.knowledger.knowledger.infra.persistence.post.PostProjection;
 import com.knowledger.knowledger.infra.persistence.post.PostProjection.CommentProjection;
-import com.knowledger.knowledger.infra.persistence.postType.PostTypeEntity;
 import com.knowledger.knowledger.infra.persistence.post.postImage.PostImageEntity;
 import com.knowledger.knowledger.infra.persistence.post.postType.PostTypeEntity;
 import com.knowledger.knowledger.infra.persistence.user.UserEntity;
 import com.knowledger.knowledger.infra.persistence.user.role.RoleEntity;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class MapperInstaller {

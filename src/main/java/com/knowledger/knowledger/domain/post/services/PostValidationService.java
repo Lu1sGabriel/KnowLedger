@@ -1,15 +1,14 @@
 package com.knowledger.knowledger.domain.post.services;
 
-import java.util.UUID;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
 import com.knowledger.knowledger.infra.exceptions.BusinessException;
 import com.knowledger.knowledger.infra.persistence.comment.ICommentRepository;
 import com.knowledger.knowledger.infra.persistence.post.IPostRepository;
-import com.knowledger.knowledger.infra.persistence.postType.IPostTypeRepository;
+import com.knowledger.knowledger.infra.persistence.post.postType.IPostTypeRepository;
 import com.knowledger.knowledger.infra.persistence.user.IUserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class PostValidationService implements IPostValidationService {
@@ -20,7 +19,7 @@ public class PostValidationService implements IPostValidationService {
     private final IPostTypeRepository _IPostTypeRepository;
 
     public PostValidationService(IUserRepository userRepository, IPostRepository postRepository,
-            ICommentRepository commentRepository, IPostTypeRepository postTypeRepository) {
+                                 ICommentRepository commentRepository, IPostTypeRepository postTypeRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
