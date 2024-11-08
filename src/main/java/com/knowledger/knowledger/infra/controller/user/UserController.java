@@ -5,8 +5,11 @@ import com.knowledger.knowledger.application.usecases.user.UserGetById;
 import com.knowledger.knowledger.application.usecases.user.UserLogin;
 import com.knowledger.knowledger.application.usecases.user.UserRegister;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -14,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
+@Validated
 public class UserController {
 
     private final UserRegister _userRegister;
@@ -21,7 +25,8 @@ public class UserController {
     private final UserGetById _userGetById;
     private final UserLogin _userLogin;
 
-    public UserController(UserRegister userRegister, UserChangePassword userChangePassword, UserGetById userGetById, UserLogin userLogin) {
+    public UserController(UserRegister userRegister, UserChangePassword userChangePassword, UserGetById userGetById,
+            UserLogin userLogin) {
         _userRegister = userRegister;
         _userChangePassword = userChangePassword;
         _userGetById = userGetById;
@@ -29,7 +34,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDetailDTO> create(@RequestBody UserRegisterDTO dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<UserDetailDTO> create(@Valid @RequestBody UserRegisterDTO dto,
+            UriComponentsBuilder uriBuilder) {
         var userDetailDto = _userRegister.apply(dto);
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDetailDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDetailDto);

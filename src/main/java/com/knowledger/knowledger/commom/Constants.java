@@ -23,4 +23,23 @@ public class Constants {
         public static final String USER_REGISTER = "/users/register";
     }
 
+    public static class PostStatus {
+        public static final Long PENDING = 1L;
+        public static final Long APPROVED = 2L;
+        public static final Long REJECTED = 3L;
+    }
+
+    public static class PostType {
+        public static final Long BLOG = 1L;
+        public static final Long NEWS = 2L;
+        public static final Long ANNOUNCEMENT = 3L;
+        public static final Long TUTORIAL = 4L;
+        public static final Long OPINION = 5L;
+    }
+
+    public static class CommentStatus {
+        public static final Long PENDING = 1L;
+        public static final Long APPROVED = 2L;
+        public static final Long REJECTED = 3L;
+    }
 }
