@@ -37,7 +37,7 @@ public class PostController {
 
     @PostMapping("/register")
     public ResponseEntity<PostDetailDTO> create(@Valid @RequestBody PostRegisterDTO dto,
-            UriComponentsBuilder uriBuilder) {
+                                                UriComponentsBuilder uriBuilder) {
         var postDetailDto = _postRegister.apply(dto);
         var uri = uriBuilder.path("/api/posts/{id}").buildAndExpand(postDetailDto.getId()).toUri();
         return ResponseEntity.created(uri).body(postDetailDto);
@@ -54,4 +54,5 @@ public class PostController {
         var posts = _PostGetAllByUserId.apply(userId, pageable);
         return ResponseEntity.ok(posts);
     }
+
 }
