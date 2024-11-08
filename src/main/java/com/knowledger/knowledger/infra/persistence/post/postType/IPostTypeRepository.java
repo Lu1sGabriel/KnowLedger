@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.infra.persistence.postType;
+package com.knowledger.knowledger.infra.persistence.post.postType;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

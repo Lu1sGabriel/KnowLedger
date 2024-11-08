@@ -1,4 +1,4 @@
-package com.knowledger.knowledger.infra.persistence.postStatus;
+package com.knowledger.knowledger.infra.persistence.post.postType;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "post_status")
+@Table(name = "post_type")
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostStatusEntity {
+public class PostTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +19,7 @@ public class PostStatusEntity {
     @Column(name = "description", length = 300)
     private String description;
 
-    public PostStatusEntity(String name, String description) {
+    public PostTypeEntity(String name, String description) {
         this.name = name;
         this.description = description;
     }
