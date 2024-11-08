@@ -155,7 +155,7 @@ public class PostDetailDTO {
 
     public static class CommentSummaryDTO {
         private UUID id;
-        private UUID userId;
+        private UserSummaryDTO user;
         private UUID postId;
         private UUID commentId;
         private Long commentStatusId;
@@ -169,11 +169,11 @@ public class PostDetailDTO {
         public CommentSummaryDTO() {
         }
 
-        public CommentSummaryDTO(UUID id, UUID userId, UUID postId, UUID commentId, Long commentStatusId,
+        public CommentSummaryDTO(UUID id, UserSummaryDTO user, UUID postId, UUID commentId, Long commentStatusId,
                 String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
                 LocalDateTime publishedAt, Boolean isSolution) {
             this.id = id;
-            this.userId = userId;
+            this.user = user;
             this.postId = postId;
             this.commentId = commentId;
             this.commentStatusId = commentStatusId;
@@ -191,14 +191,6 @@ public class PostDetailDTO {
 
         public void setId(UUID id) {
             this.id = id;
-        }
-
-        public UUID getUserId() {
-            return userId;
-        }
-
-        public void setUserId(UUID userId) {
-            this.userId = userId;
         }
 
         public UUID getPostId() {
@@ -272,5 +264,14 @@ public class PostDetailDTO {
         public void setIsSolution(Boolean isSolution) {
             this.isSolution = isSolution;
         }
+
+        public UserSummaryDTO getUser() {
+            return user;
+        }
+
+        public void setUser(UserSummaryDTO user) {
+            this.user = user;
+        }
+
     }
 }
