@@ -21,6 +21,15 @@ public class User {
         this.id = UUID.randomUUID();
     }
 
+    public User(UUID id) {
+        this.id = id;
+    }
+
+    public User(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public User(String name, String email, String password, Role role) {
         this();
         this.name = name;
@@ -106,6 +115,29 @@ public class User {
 
     public void resetPassword(String token, String newPassword) {
         this.password = newPassword;
+    }
+
+    public void update(String name, String email, String password, Role role, Boolean isActive,
+            LocalDateTime deletedAt) {
+        if (name != null && !name.isEmpty()) {
+            this.name = name;
+        }
+        if (email != null && !email.isEmpty()) {
+            this.email = email;
+        }
+        if (password != null && !password.isEmpty()) {
+            this.password = password;
+        }
+        if (role != null) {
+            this.role = role;
+        }
+        if (isActive != null) {
+            this.isActive = isActive;
+        }
+        if (deletedAt != null) {
+            this.deletedAt = deletedAt;
+        }
+        this.updatedAt = LocalDateTime.now();
     }
 
 }
