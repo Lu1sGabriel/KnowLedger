@@ -242,13 +242,105 @@ header img {
     background-color: #ed7c53;
 }
 
-.section-news,
-.section-top1,
-.section-follow {
-    border: 1px solid black; /* Borda para as divs */
+.post-main {
+    display: flex;
+    border-radius: 7px;
+    flex-direction: column;
+    height: 14rem;
+    border: 1px solid black;
+    width: 100%;
+    background-color: #2397FC;
+}
+
+.analytics {
+    width: 100%;
+    height: 100%;
+}
+
+.context-post {
+    display: flex;
+    border-radius: 7px;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    width: 70%;
+    height: 12rem;
+    border: 1px solid black;
+}
+
+.rest-content {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    display: flex; 
+    flex-direction: column;
+    padding: 1rem; 
+    box-sizing: border-box;
+}
+
+.title-post {
+    color: white;
+    justify-content: flex-start; 
+    font-size: 11px;
+    width: 100%;
+    height: 4rem;
+    padding: 0 1rem; /* Adds padding on the left and right */
+    box-sizing: border-box;
+}
+
+.type-post {
+    justify-content: space-around;
+    display: flex;
+    width: 100%;
+    height: 2rem;
+}
+
+.type-post div {
+    color: #2397FC;
+    font-family: 'Popins', sans-serif;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 16px;
+    display: flex;
+    width: 5rem;
+    height: 2rem;
+}
+
+.type-post div:hover {
+    transition: 0.5s;
+    background-color: #eeeeee;
+}
+
+.type-post a {
+    text-decoration: none;
+}
+
+.logo-left {
+    border-radius: 12px;
+    margin-top: 0.4rem;
+    margin-left: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 20%;
+    height: 90%;
+}
+
+.user-post {
+    margin-left: 1rem;
+    color: white;
+    font-family: 'Popins', sans-serif;
+    margin-top: 2rem;
+}
+
+.section-news,
+.section-top1,
+.section-follow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    width: 100%;
 }
 
 .aside-left {
@@ -259,13 +351,11 @@ header img {
     gap: 50px;
     display: flex;
     width: 20%;
-    border: 1px solid black
 }
 
 .aside-left section {
     margin: 0;
     padding: 5rem;
-    border: 1px solid black;
 }
 
 
