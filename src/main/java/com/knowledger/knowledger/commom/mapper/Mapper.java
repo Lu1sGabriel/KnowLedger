@@ -3,10 +3,12 @@ package com.knowledger.knowledger.commom.mapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.Page;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
@@ -18,11 +20,17 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
     private final Class<T> domainClass;
 
     public Mapper(Class<D> dtoClass, Class<E> entityClass, Class<T> domainClass) {
+        this(dtoClass, entityClass, domainClass, Collections.emptyList());
+    }
+
+    public Mapper(Class<D> dtoClass, Class<E> entityClass, Class<T> domainClass,
+            List<MappingConfigurer<?, ?>> configurers) {
         this.dtoClass = dtoClass;
         this.entityClass = entityClass;
         this.domainClass = domainClass;
 
         modelMapper.getConfiguration()
+                .setAmbiguityIgnored(true)
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
@@ -30,6 +38,8 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
         if (dtoClass.isRecord()) {
             configureRecordMapping(dtoClass);
         }
+
+        configurers.forEach(configurer -> configurer.configure(modelMapper));
     }
 
     @Override
@@ -66,6 +76,11 @@ public class Mapper<D, E, T> implements IMapper<E, T>, IMapperDTO<D, T> {
         return domains.stream()
                 .map(this::toDto)
                 .toList();
+    }
+
+    @Override
+    public Page<D> toDtoPage(Page<T> domains) {
+        return domains.map(this::toDto);
     }
 
     private void configureRecordMapping(Class<D> recordClass) {

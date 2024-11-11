@@ -63,4 +63,5 @@ public class UserChangePasswordDTO {
     public void setConfirmedNewPassword(String confirmedNewPassword) {
         this.confirmedNewPassword = confirmedNewPassword;
     }
+
 }
