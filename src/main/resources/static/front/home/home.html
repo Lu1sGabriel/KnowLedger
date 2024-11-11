@@ -1,21 +1,100 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial</title>
+    <title>Preencha o Título</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-<h1>Bem-vindo à Home</h1>
-<div id="content">
-    <p>Esta é a página inicial da aplicação.</p>
+<header>
+    <div class="logo-knowledger">
+        <img src="../assets/public/img/b085eea6-fc74-42c5-a3a5-ff0b37edde09 1 (1) (2) (1).svg" alt="Logo Knowledger">
+    </div>
 
 
-</div>
 
-<script type="module" src="home.js"></script>
+    <navbar class="center-navbar">
+        <div class="house-icon">
+            <a href="#"><i class="fa-solid fa-house" style=""></i></a>
+        </div>
+
+        <div class="input-wrapper">
+            <phosphor-search size="24"></phosphor-search>
+            <input type="text" class="input-text" placeholder="   Type here to search...">
+            <a href="#"><i class="fa fa-search search-icon"></i></a>
+        </div>
+
+        <a href="">
+            <div class="notification-icon">
+                <i class="fa-solid fa-bell" style=""></i>
+            </div>
+        </a>
+
+        <a href="">
+            <div class="profile-icon">
+                <i class="fa-solid fa-user" style=""></i>
+            </div>
+        </a>
+
+    </navbar>
+
+    <div class="icons-right">
+    </div>
+</header>
+
+<main class="main">
+    <aside class="aside-left">
+        <section class="section-general">
+            <div class="section-news"></div>
+            <div class="section-top1"></div>
+            <div class="section-follow"></div>
+        </section>
+        <section class="section-tags"></section>
+        <section class="section-categories"></section>
+    </aside>
+    <div class="top-main">
+        <div class="header-main">
+            <div class="header-search">
+                <input type="text" class="input-text" placeholder="   Let´s share what going on your mind...">
+                <a href=""><div class="redirect-post">Criar Postagem</div></a>
+            </div>
+        </div>
+            <div class="post-main">
+                <div class="context-post">
+                    <div class="logo-left">
+                        <img src="../assets/public/img/analytics.svg" class="analytics" alt="" srcset="">
+                    </div>
+                    <div class="rest-content">
+                        <div class="title-post">
+                            <h1>A estrutura de SEO de 4 etapas que levou a um aumento de 1000% no tráfego. Vamos falar sobre blogs e SEO...</h1>
+                        </div>
+                        <div class="type-post">
+                            <a href="">
+                                <div>backend</div>
+                            </a>
+                            <a href="">
+                                <div>seo</div>
+                            </a>
+                            <a href="">
+                                <div>traffic</div>
+                            </a>
+                        </div>
+                        <div class="user-post">
+                            Gabriel Cunha
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</main>
+
+<script src="home.js"></script>
 </body>
+
+
 
 </html>
