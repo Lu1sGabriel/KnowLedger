@@ -1,12 +1,9 @@
-import httpService from "../../services/public/httpService";
-
+import httpService from "../../services/public/httpService.js";
 
 async function insertPost() {
-
     const textPost = document.querySelector('.text-session').value;
-    // const typePost = document.querySelector('.type-session').value;
     const title = document.querySelector('.input-duvida').value;
-    
+
     const post = {
         title: title,
         content: content,
@@ -14,7 +11,7 @@ async function insertPost() {
     };
 
     try {
-        const response = await httpService.post('', post); // backend sem url pra post
+        const response = await httpService.post('', post);
         console.log(response);
     } catch (error) {
         console.error(error.message);
@@ -22,17 +19,25 @@ async function insertPost() {
 }
 
 async function getDepartmentTags() {
-
     try {
-        console.log("Carregar tags de posts");
         const apiUrl = 'http://localhost:8080/departments/getAll';
         const response = await httpService.get(apiUrl);
+
         console.log(response);
 
-    }catch (error) {
-        console.error(error.message);
-    }
+        // Seleciona a div onde os botões dinâmicos serão inseridos
+        const dynamicButtonsContainer = document.querySelector('.dynamic-buttons');
 
+        response.forEach(department => {
+            const button = document.createElement('input');
+            button.type = 'button';
+            button.value = department.name;
+            dynamicButtonsContainer.appendChild(button); // Adiciona o botão à div
+        });
+
+    } catch (error) {
+        console.error("Erro ao carregar tags de departamentos:", error.message);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', getDepartmentTags);
