@@ -1,6 +1,8 @@
 
+
 async function fetchPosts() {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('authToken'); 
+    console.log(token)
     try {
         const response = await fetch('http://localhost:8080/post-types/getAll', {
             method: 'GET',
@@ -21,3 +23,6 @@ async function fetchPosts() {
         console.error('erro ao buscar post ', error);
     }
 }
+
+
+window.onload = fetchPosts;
