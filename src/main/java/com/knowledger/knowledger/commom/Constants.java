@@ -19,8 +19,12 @@ public class Constants {
     }
 
     public static class NoRequiredAuthorizedPath {
-        public static final String USER_LOGIN = "/users/login";
-        public static final String USER_REGISTER = "/users/register";
+        public static final String USER_LOGIN = "/users/login/**";
+        public static final String USER_PUBLIC = "/users/public/**";
+        public static final String USER_REGISTER = "/users/register/**";
+        public static final String ASSETS_PUBLIC = "front/assets/public/**";
+        public static final String SERVICES_PUBLIC = "/services/public/**";
+        public static final String ALL_PAGES = "/front/**";
     }
 
     public static class PostStatus {

@@ -60,4 +60,9 @@ public class UserController {
         return ResponseEntity.ok(token);
     }
 
+    @GetMapping("/validate-token")
+    public ResponseEntity<Void> validateToken() {
+        return ResponseEntity.ok().build();
+    }
+
 }
