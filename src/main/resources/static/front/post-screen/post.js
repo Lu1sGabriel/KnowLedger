@@ -20,3 +20,19 @@ async function insertPost() {
         console.error(error.message);
     }
 }
+
+async function getDepartmentTags() {
+
+    try {
+        console.log("Carregar tags de posts");
+        const apiUrl = 'http://localhost:8080/departments/getAll';
+        const response = await httpService.get(apiUrl);
+        console.log(response);
+
+    }catch (error) {
+        console.error(error.message);
+    }
+
+}
+
+document.addEventListener('DOMContentLoaded', getDepartmentTags);
