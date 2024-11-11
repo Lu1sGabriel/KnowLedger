@@ -3,31 +3,30 @@ package com.knowledger.knowledger.infra.controller.postImage;
 import com.knowledger.knowledger.application.usecases.postImage.PostImageDelete;
 import com.knowledger.knowledger.application.usecases.postImage.PostImageGet;
 import com.knowledger.knowledger.application.usecases.postImage.PostImageSend;
-import com.knowledger.knowledger.application.usecases.postImage.PostImageUpdate;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/post-image")
+@RequestMapping("/api/post-images")
 public class PostImageController {
     private final PostImageSend postImageSend;
-    private final PostImageUpdate postImageUpdate;
     private final PostImageDelete postImageDelete;
     private final PostImageGet postImageGet;
 
-    public PostImageController(PostImageSend postImageSend, PostImageUpdate postImageUpdate, PostImageDelete postImageDelete, PostImageGet postImageGet) {
+    public PostImageController(PostImageSend postImageSend, PostImageDelete postImageDelete, PostImageGet postImageGet) {
         this.postImageSend = postImageSend;
-        this.postImageUpdate = postImageUpdate;
         this.postImageDelete = postImageDelete;
         this.postImageGet = postImageGet;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{postId}")
     public ResponseEntity<FileSystemResource> getImage(@PathVariable UUID postId) {
         File imageFile = postImageGet.get(postId);
@@ -40,18 +39,14 @@ public class PostImageController {
                 .body(fileResource);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Void> create(@ModelAttribute PostImageSendDTO dto) {
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/send")
+    public ResponseEntity<Void> send(@ModelAttribute PostImageSendDTO dto) {
         postImageSend.send(dto);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Void> update(@ModelAttribute PostImageSendDTO dto) {
-        postImageUpdate.update(dto);
-        return ResponseEntity.ok().build();
-    }
-
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> delete(@PathVariable UUID postId) {
         postImageDelete.delete(postId);
@@ -62,8 +57,12 @@ public class PostImageController {
         String fileName = file.getName().toLowerCase();
         if (fileName.endsWith(".png")) {
             return MediaType.IMAGE_PNG;
+        } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+            return MediaType.IMAGE_JPEG;
+        } else if (fileName.endsWith(".pdf")) {
+            return MediaType.APPLICATION_PDF;
         }
-        return MediaType.IMAGE_JPEG;
+        return MediaType.APPLICATION_OCTET_STREAM;
     }
 
 }
