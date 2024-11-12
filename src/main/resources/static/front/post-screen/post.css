@@ -113,6 +113,10 @@ header img {
 
 }
 
+.button-selected {
+    background-color: blue;
+    color: white;
+}
 
 
 :root {

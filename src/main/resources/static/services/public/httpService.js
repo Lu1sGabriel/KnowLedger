@@ -1,4 +1,5 @@
 const httpService = {
+
     get: async (url) => {
         return await httpService.request(url, 'GET');
     },
@@ -25,6 +26,13 @@ const httpService = {
         });
 
         if (!response.ok) {
+
+            if (response.status === 401) {
+                alert('Sessão expirada. Faça login novamente.');
+                window.location.href = "/front/users/public/login/login.html";
+                return;
+            }
+
             const errorData = await response.json();
             throw new Error(errorData.error || 'Erro na requisição');
         }
