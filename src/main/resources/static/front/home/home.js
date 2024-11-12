@@ -41,6 +41,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <p>${post.description}</p>
             `;
 
+            const categoryItem = document.createElement('li');
+            categoryItem.innerHTML = `
+                <i class="fa-brands fa-js"></i>
+                <a href="#" class="text-decoration-none text-dark">${post.name}</a>
+            `;
+
+            categoryList.appendChild(categoryItem);
+
             postsContainer.appendChild(postElement);
         });
     }
