@@ -26,26 +26,3 @@ async function fetchPosts() {
 }
 
 
-function renderPosts(posts) {
-    const postsContainer = document.getElementById('.section-news');
-    postsContainer.innerHTML = '';  
-
-    if (posts.length === 0) {
-        postsContainer.innerHTML = '<p>Nenhum post encontrado.</p>';
-        return;
-    }
-
-    newsSection.innerHTML = '';
-
-    posts.forEach(post => {
-        const postElement = document.createElement('div');
-        postElement.classList.add('post');
-        postElement.innerHTML = `
-            <h2>${post.title}</h2>
-            <p>${post.content}</p>
-        `;
-        postsContainer.appendChild(postElement);
-    });
-}
-
-document.addEventListener('DOMContentLoaded', fetchPosts);
