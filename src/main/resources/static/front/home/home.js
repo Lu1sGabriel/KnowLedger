@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    async function fetchPosts() {
+    async function fetchCategoriesOfPosts() {
         const token = localStorage.getItem('authToken'); 
         console.log(token);
         try {
@@ -18,40 +18,27 @@ document.addEventListener('DOMContentLoaded', async function() {
             const data = await response.json();
             console.log(data); 
 
-            renderPosts(data);
+            renderCategories(data);
+
         } catch (error) {
             console.error('Erro ao buscar posts: ', error);
         }
     }
 
-    function renderPosts(posts) {
-        const postsContainer = document.querySelector('.card-custom')
-        if (!postsContainer) {
-            console.error('Elemento card não encontrado');
-            return;
-        }
+    function renderCategories(categories) {
 
-        postsContainer.innerHTML = ''; // Limpa o container antes de inserir novos posts
-
-        posts.forEach(post => {
-            const postElement = document.createElement('div');
-            postElement.classList.add('card', 'mb-3', 'p-3');
-
-            postElement.innerHTML = `
-                <p>${post.description}</p>
-            `;
+        categories.forEach(categories => {
 
             const categoryItem = document.createElement('li');
             categoryItem.innerHTML = `
                 <i class="fa-brands fa-js"></i>
-                <a href="#" class="text-decoration-none text-dark">${post.name}</a>
+                <a href=${categories.name}.html class="text-decoration-none text-dark">${categories.name}</a>
             `;
 
             categoryList.appendChild(categoryItem);
 
-            postsContainer.appendChild(postElement);
         });
     }
 
-    fetchPosts();
+    fetchCategoriesOfPosts();
 });
