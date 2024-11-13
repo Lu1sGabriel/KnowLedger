@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class TokenService {
@@ -20,11 +21,12 @@ public class TokenService {
         _expirationTime = expirationTime;
     }
 
-    public String generateToken(String email, String role) {
+    public String generateToken(UUID userId, String email, String role) {
         return JWT.create()
                 .withIssuer(Constants.JWT.ISSUER)
                 .withSubject(email)
                 .withClaim(Constants.JWT.EMAIL_CLAIM, email)
+                .withClaim(Constants.JWT.USER_ID_CLAIM, userId.toString())
                 .withClaim(Constants.JWT.ROLE_CLAIM, role)
                 .withExpiresAt(new Date(System.currentTimeMillis() + _expirationTime))
                 .sign(_algorithm);

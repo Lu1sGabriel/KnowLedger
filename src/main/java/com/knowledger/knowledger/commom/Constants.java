@@ -16,6 +16,7 @@ public class Constants {
         public static final String ISSUER = "knowledger";
         public static final String ROLE_CLAIM = "role";
         public static final String EMAIL_CLAIM = "email";
+        public static final String USER_ID_CLAIM = "user_id";
     }
 
     public static class NoRequiredAuthorizedPath {
