@@ -6,8 +6,8 @@ const apiUrl = 'http://localhost:8080/api/posts/register';
 
 // Função para decodificar o token JWT e extrair o user_id
 function parseJwt(token) {
-    const base64Url = token.split('.')[1]; // Extrai a parte do payload
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Ajusta para Base64 padrão
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
         atob(base64)
             .split('')
@@ -15,18 +15,18 @@ function parseJwt(token) {
             .join('')
     );
 
-    return JSON.parse(jsonPayload); // Converte a string JSON para um objeto
+    return JSON.parse(jsonPayload);
 }
 
+// Função para inserir postagem
 async function insertPost() {
     const textPost = document.querySelector('#text-session').value;
     const title = document.querySelector('.input-duvida').value;
     const token = localStorage.getItem('authToken');
     const payload = parseJwt(token);
 
-
     const postData = {
-        title: title,
+        title,
         content: textPost,
         departmentId: selectedDepartmentId,
         postTypeId: selectedPostTypeId,
@@ -36,14 +36,38 @@ async function insertPost() {
 
     try {
         const response = await httpService.post(apiUrl, postData);
+        console.log("Postagem inserida com sucesso:", response);
 
+        // Chama a função para limpar o formulário após o sucesso
+        resetForm();
 
     } catch (error) {
         console.error("Erro ao inserir postagem:", error.message);
     }
 }
 
-// Função para carregar e exibir os botões de departamento
+// Função para limpar o formulário
+function resetForm() {
+    // Limpa os campos de texto
+    document.querySelector('#text-session').value = '';
+    document.querySelector('.input-duvida').value = '';
+
+    // Desmarca os botões de departamento e tipo de postagem
+    document.querySelectorAll('#department .department-button').forEach(btn => {
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+    });
+    document.querySelectorAll('#postType .post-type-button').forEach(btn => {
+        btn.style.backgroundColor = '';
+        btn.style.color = '';
+    });
+
+    // Reseta os IDs selecionados
+    selectedDepartmentId = null;
+    selectedPostTypeId = null;
+}
+
+// Funções de carregamento e seleção para os botões de departamento e tipo de postagem
 async function getDepartmentTags() {
     const apiUrl = 'http://localhost:8080/departments/getAll';
     try {
@@ -58,7 +82,6 @@ async function getDepartmentTags() {
             button.classList.add('department-button');
             dynamicButtonsContainer.appendChild(button);
 
-            // Adiciona o evento de clique para selecionar o departamento
             button.addEventListener('click', () => selectDepartment(button));
         });
     } catch (error) {
@@ -66,7 +89,6 @@ async function getDepartmentTags() {
     }
 }
 
-// Função para selecionar um botão de departamento e alterar o background-color
 function selectDepartment(button) {
     document.querySelectorAll('#department .department-button').forEach(btn => {
         btn.style.backgroundColor = '';
@@ -91,7 +113,6 @@ async function getPostTypeTags() {
             button.classList.add('post-type-button');
             dynamicButtonsContainer.appendChild(button);
 
-            // Adiciona o evento de clique para selecionar o tipo de postagem
             button.addEventListener('click', () => selectPostType(button));
         });
     } catch (error) {
