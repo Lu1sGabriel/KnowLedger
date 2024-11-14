@@ -9,7 +9,7 @@ async function loginUser() {
 
     try {
         const url = 'http://localhost:8080/users/login';
-        const response = await httpService.post(url, loginData);
+        const response = await httpService.post(url, loginData, false);
 
         localStorage.setItem('authToken', response.token);
         console.log('Token salvo no localStorage:', response.token);

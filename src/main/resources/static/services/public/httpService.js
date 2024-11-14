@@ -1,21 +1,22 @@
 const httpService = {
-    get: async (url) => {
-        return await httpService.request(url, 'GET');
+    get: async (url, includeAuth = true) => {
+        return await httpService.request(url, 'GET', undefined, includeAuth);
     },
-    post: async (url, data) => {
-        return await httpService.request(url, 'POST', data);
+    post: async (url, data, includeAuth = true) => {
+        return await httpService.request(url, 'POST', data, includeAuth);
     },
-    put: async (url, data) => {
-        return await httpService.request(url, 'PUT', data);
+    put: async (url, data, includeAuth = true) => {
+        return await httpService.request(url, 'PUT', data, includeAuth);
     },
-    delete: async (url, data) => {
-        return await httpService.request(url, 'DELETE', data);
+    delete: async (url, data, includeAuth = true) => {
+        return await httpService.request(url, 'DELETE', data, includeAuth);
     },
-    request: async (url, method, data) => {
-        const token = localStorage.getItem('authToken');
+    request: async (url, method, data, includeAuth = true) => {
         const headers = {
             'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            ...(includeAuth && localStorage.getItem('authToken')
+                ? { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+                : {})
         };
 
         const response = await fetch(url, {
