@@ -6,7 +6,7 @@ async function loginUser() {
     const password = document.getElementById("password").value;
 
     const loginData = { email, password };
-
+    console.log(loginData);
     try {
         const url = 'http://localhost:8080/users/login';
         const response = await httpService.post(url, loginData);
@@ -24,4 +24,7 @@ async function loginUser() {
     }
 }
 
-document.getElementById("loginButton").addEventListener("click", loginUser);
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+    loginUser();
+});

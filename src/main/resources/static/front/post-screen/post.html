@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preencha o Título</title>
+    <link rel="stylesheet" href="post.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+<header>
+    <div class="logo-knowledger">
+        <img src="../assets/public/knowledger-logo.png" alt="Logo Knowledger">
+    </div>
+
+    <div class="center-navbar">
+        <div class="house-icon">
+            <a hreqf=""><i class="fa-solid fa-house" style=""></i></a>
+        </div>
+
+        <div>
+            <phosphor-search size="24"></phosphor-search>
+            <input type="text" class="input-text" placeholder="   Type here to search...">
+        </div>
+    </div>
+
+    <div class="icons-right">
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="container-title">
+        <h1>Preencha o título</h1>
+        <input type="text" placeholder="Descreva sua dúvida/sugestão em uma frase curta" class="input-duvida">
+    </div>
+
+
+
+    <h4>Qual é o departamento?</h4>
+    <div class="">
+        <div id="department" class="dynamic-buttons">
+
+
+    </div>
+
+    <h4>Qual é o tipo de postagem?</h4>
+    <div class="">
+        <div id="postType" class="dynamic-buttons">
+
+
+        </div>
+
+        <div class="post-section">
+                <textarea
+                        placeholder="Descreva sua dúvida/sugestão de forma clara e detalhada para que nossa equipe possa te auxiliar de forma assertiva"
+                        id="text-session"></textarea>
+            <br>
+            <input id="post-button" type="button" value="Salvar">
+        </div>
+    </div>
+
+
+</div>
+
+<script type="module" src="post.js"></script>
+</body>
+
+</html>

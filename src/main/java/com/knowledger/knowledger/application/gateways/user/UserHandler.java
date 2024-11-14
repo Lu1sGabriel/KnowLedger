@@ -32,9 +32,10 @@ public class UserHandler implements IUserGateway {
     private final IRoleRepository _iRoleRepository;
     private final IUserAuthenticationService _iUserAuthenticationService;
 
-    public UserHandler(IUserFactory iUserFactory, IUserRepository iUserRepository, IUserChangePasswordService iUserChangePasswordService,
-                       IMapper<UserEntity, User> iMapper, IMapper<RoleEntity, Role> iMapperRole,
-                       IRoleRepository iRoleRepository, IUserAuthenticationService iUserAuthenticationService) {
+    public UserHandler(IUserFactory iUserFactory, IUserRepository iUserRepository,
+            IUserChangePasswordService iUserChangePasswordService,
+            IMapper<UserEntity, User> iMapper, IMapper<RoleEntity, Role> iMapperRole,
+            IRoleRepository iRoleRepository, IUserAuthenticationService iUserAuthenticationService) {
         _iUserFactory = iUserFactory;
         _iUserRepository = iUserRepository;
         _iUserChangePasswordService = iUserChangePasswordService;
@@ -47,16 +48,20 @@ public class UserHandler implements IUserGateway {
     @Override
     public User register(String name, String email, String password, String confirmedPassword) {
         var role = _iRoleRepository.findById(UserRole.USER)
-                .orElseThrow(() -> new BusinessException("Não foi possível completar o registro. Por favor, entre em contato com o setor de TI.", HttpStatus.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new BusinessException(
+                        "Não foi possível completar o registro. Por favor, entre em contato com o setor de TI.",
+                        HttpStatus.INTERNAL_SERVER_ERROR));
         var user = _iUserFactory.create(name, email, password, confirmedPassword, _iMapperRole.toDomain(role));
         _iUserRepository.save(_iMapper.toEntity(user));
         return user;
     }
 
     @Override
-    public User changePassword(UUID userId, String token, String oldPassword, String newPassword, String confirmedNewPassword) {
+    public User changePassword(UUID userId, String token, String oldPassword, String newPassword,
+            String confirmedNewPassword) {
         var userEntity = _iUserRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException("Usuário não encontrado. Verifique os dados e tente novamente.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(
+                        "Usuário não encontrado. Verifique os dados e tente novamente.", HttpStatus.NOT_FOUND));
         var user = _iMapper.toDomain(userEntity);
         _iUserChangePasswordService.changePassword(user, token, oldPassword, newPassword, confirmedNewPassword);
         return user;
@@ -65,17 +70,20 @@ public class UserHandler implements IUserGateway {
     @Override
     public User getById(UUID id) {
         return _iUserRepository.findById(id).map(_iMapper::toDomain)
-                .orElseThrow(() -> new BusinessException("Usuário não encontrado. Por favor, entre em contato com o setor de TI.", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(
+                        "Usuário não encontrado. Por favor, entre em contato com o setor de TI.",
+                        HttpStatus.NOT_FOUND));
     }
-
 
     @Override
     public Map<String, String> login(String email, String payloadPassword) {
 
         var user = _iUserRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException("Registro com o email informado não encontrado. ", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException("Registro com o email informado não encontrado. ",
+                        HttpStatus.NOT_FOUND));
 
-        var token = _iUserAuthenticationService.login(email, payloadPassword, user.getPassword(), user.getRole().getName());
+        var token = _iUserAuthenticationService.login(user.getId(), email, payloadPassword, user.getPassword(),
+                user.getRole().getName());
 
         Map<String, String> objectToken = new HashMap<>();
         objectToken.put("token", token);
