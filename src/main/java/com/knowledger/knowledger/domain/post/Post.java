@@ -1,18 +1,19 @@
 package com.knowledger.knowledger.domain.post;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.domain.comment.Comment;
 import com.knowledger.knowledger.domain.user.User;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 public class Post {
 
     private UUID id;
     private User user;
     private Long postTypeId;
+    private Long departmentId;
     private Long postStatusId;
     private List<Comment> comments;
     private String title;
@@ -30,11 +31,12 @@ public class Post {
         this.id = id;
     }
 
-    public Post(UUID userId, Long postTypeId, String title, String content) {
+    public Post(UUID userId, Long postTypeId, Long departmentId, String title, String content) {
         this();
         this.user = new User(userId);
         this.postTypeId = postTypeId;
-        // TODO:: Criar serviço de validaçaão de POST com IA
+        this.departmentId = departmentId;
+        // TODO:: Criar serviço de validação de POST com IA
         this.postStatusId = Constants.PostStatus.APPROVED;
         this.title = title;
         this.content = content;
@@ -57,6 +59,14 @@ public class Post {
 
     public void setPostTypeId(Long postTypeId) {
         this.postTypeId = postTypeId;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public Long getPostStatusId() {

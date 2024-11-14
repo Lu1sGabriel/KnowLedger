@@ -1,9 +1,9 @@
 package com.knowledger.knowledger.infra.controller.post;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.UUID;
 
 public class PostRegisterDTO {
 
@@ -12,6 +12,8 @@ public class PostRegisterDTO {
     @NotNull
     private Long postTypeId;
     @NotNull
+    private Long departmentId;
+    @NotNull
     private String title;
     @NotBlank
     private String content;
@@ -19,9 +21,10 @@ public class PostRegisterDTO {
     public PostRegisterDTO() {
     }
 
-    public PostRegisterDTO(UUID userId, Long postTypeId, String title, String content) {
+    public PostRegisterDTO(UUID userId, Long postTypeId, Long departmentId, String title, String content) {
         this.userId = userId;
         this.postTypeId = postTypeId;
+        this.departmentId = departmentId;
         this.title = title;
         this.content = content;
     }
@@ -40,6 +43,14 @@ public class PostRegisterDTO {
 
     public void setPostTypeId(Long postTypeId) {
         this.postTypeId = postTypeId;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getTitle() {

@@ -8,6 +8,7 @@ public class PostDetailDTO {
     private UUID id;
     private UserSummaryDTO user;
     private Long postTypeId;
+    private Long departmentId;
     private Long postStatusId;
     private List<CommentSummaryDTO> comments;
     private String title;
@@ -20,12 +21,13 @@ public class PostDetailDTO {
     public PostDetailDTO() {
     }
 
-    public PostDetailDTO(UUID id, UserSummaryDTO user, Long postTypeId, Long postStatusId,
-            List<CommentSummaryDTO> comments, String title, String content, LocalDateTime createdAt,
-            LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt) {
+    public PostDetailDTO(UUID id, UserSummaryDTO user, Long postTypeId, Long departmentId, Long postStatusId,
+                         List<CommentSummaryDTO> comments, String title, String content, LocalDateTime createdAt,
+                         LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt) {
         this.id = id;
         this.user = user;
         this.postTypeId = postTypeId;
+        this.departmentId = departmentId;
         this.postStatusId = postStatusId;
         this.comments = comments;
         this.title = title;
@@ -50,6 +52,14 @@ public class PostDetailDTO {
 
     public void setPostTypeId(Long postTypeId) {
         this.postTypeId = postTypeId;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public Long getPostStatusId() {
@@ -170,8 +180,8 @@ public class PostDetailDTO {
         }
 
         public CommentSummaryDTO(UUID id, UserSummaryDTO user, UUID postId, UUID commentId, Long commentStatusId,
-                String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-                LocalDateTime publishedAt, Boolean isSolution) {
+                                 String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
+                                 LocalDateTime publishedAt, Boolean isSolution) {
             this.id = id;
             this.user = user;
             this.postId = postId;
