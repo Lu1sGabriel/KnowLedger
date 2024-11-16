@@ -1,11 +1,11 @@
 package com.knowledger.knowledger.domain.post.factories;
 
-import java.util.UUID;
-
 import com.knowledger.knowledger.domain.post.Post;
+
+import java.util.UUID;
 
 public interface IPostFactory {
 
-    Post create(UUID userId, Long postTypeId, String title, String content);
+    Post create(UUID userId, Long postTypeId, Long departmentId, String title, String content);
 
 }

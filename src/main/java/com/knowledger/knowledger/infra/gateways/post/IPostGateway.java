@@ -9,7 +9,7 @@ import com.knowledger.knowledger.domain.post.Post;
 
 public interface IPostGateway {
 
-    Post register(UUID userId, String title, String content, Long postTypeId);
+    Post register(UUID userId, String title, String content, Long postTypeId, Long departmentId);
 
     Page<Post> getAll(Pageable pageable);
 

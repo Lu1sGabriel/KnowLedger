@@ -19,8 +19,8 @@ public class PostHandler implements IPostGateway {
     }
 
     @Override
-    public Post register(UUID userId, String title, String content, Long postTypeId) {
-        return _IPostService.registerPost(userId, title, content, postTypeId);
+    public Post register(UUID userId, String title, String content, Long postTypeId, Long departmentId) {
+        return _IPostService.registerPost(userId, title, content, postTypeId, departmentId);
     }
 
     @Override

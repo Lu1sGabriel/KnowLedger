@@ -18,7 +18,7 @@ public class PostImageSend {
 
     public void send(PostImageSendDTO dto) {
         try {
-            _iPostImageGateway.saveImage(dto.getPostId(), dto.getPath(), dto.getFile().getInputStream());
+            _iPostImageGateway.saveImage(dto.getPostId(), dto.getFile().getOriginalFilename(), dto.getFile().getInputStream());
         } catch (IOException exception) {
             throw new BusinessException("Erro ao ler o arquivo de imagem. Por favor, entre em contato com o suporte de TI. ", exception, HttpStatus.INTERNAL_SERVER_ERROR);
         }

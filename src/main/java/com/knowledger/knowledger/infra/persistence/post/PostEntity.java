@@ -1,16 +1,14 @@
 package com.knowledger.knowledger.infra.persistence.post;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import com.knowledger.knowledger.infra.persistence.comment.CommentEntity;
-
 import jakarta.persistence.*;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "post")
@@ -28,6 +26,9 @@ public class PostEntity {
 
     @Column(name = "post_type_id")
     private Long postTypeId;
+
+    @Column(name = "department_id")
+    private Long departmentId;
 
     @Column(name = "post_status_id")
     private Long postStatusId;
@@ -54,11 +55,12 @@ public class PostEntity {
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
-    public PostEntity(UUID userId, Long postTypeId, Long postStatusId, List<CommentEntity> comments, String title,
-            String content, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-            LocalDateTime publishedAt) {
+    public PostEntity(UUID userId, Long postTypeId, Long departmentId, Long postStatusId,
+                      List<CommentEntity> comments, String title, String content, LocalDateTime createdAt,
+                      LocalDateTime updatedAt, LocalDateTime deletedAt, LocalDateTime publishedAt) {
         this.userId = userId;
         this.postTypeId = postTypeId;
+        this.departmentId = departmentId;
         this.postStatusId = postStatusId;
         this.comments = comments;
         this.title = title;

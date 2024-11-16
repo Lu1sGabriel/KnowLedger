@@ -1,11 +1,10 @@
 package com.knowledger.knowledger.infra.mappers.post;
 
-import org.modelmapper.ModelMapper;
-
 import com.knowledger.knowledger.commom.mapper.MappingConfigurer;
 import com.knowledger.knowledger.domain.post.Post;
 import com.knowledger.knowledger.domain.user.User;
 import com.knowledger.knowledger.infra.persistence.post.PostProjection;
+import org.modelmapper.ModelMapper;
 
 public class PostProjectionToPostMappingConfigurer implements MappingConfigurer<PostProjection, Post> {
 
@@ -17,6 +16,7 @@ public class PostProjectionToPostMappingConfigurer implements MappingConfigurer<
             mapper.map(PostProjection::getContent, Post::setContent);
             mapper.map(PostProjection::getPostStatusId, Post::setPostStatusId);
             mapper.map(PostProjection::getPostTypeId, Post::setPostTypeId);
+            mapper.map(PostProjection::getDepartmentId, Post::setDepartmentId);
             mapper.map(PostProjection::getCreatedAt, Post::setCreatedAt);
             mapper.map(PostProjection::getUpdatedAt, Post::setUpdatedAt);
             mapper.map(PostProjection::getDeletedAt, Post::setDeletedAt);
@@ -35,4 +35,5 @@ public class PostProjectionToPostMappingConfigurer implements MappingConfigurer<
             return post;
         });
     }
+
 }

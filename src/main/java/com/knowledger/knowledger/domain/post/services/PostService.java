@@ -1,12 +1,5 @@
 package com.knowledger.knowledger.domain.post.services;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.commom.mapper.IMapper;
 import com.knowledger.knowledger.domain.comment.services.ICommentService;
@@ -15,6 +8,12 @@ import com.knowledger.knowledger.domain.post.factories.IPostFactory;
 import com.knowledger.knowledger.infra.persistence.post.IPostRepository;
 import com.knowledger.knowledger.infra.persistence.post.PostEntity;
 import com.knowledger.knowledger.infra.persistence.post.PostProjection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
 public class PostService implements IPostService {
@@ -42,10 +41,10 @@ public class PostService implements IPostService {
         this.commentService = commentService;
     }
 
-    public Post registerPost(UUID userId, String title, String content, Long postTypeId) {
+    public Post registerPost(UUID userId, String title, String content, Long postTypeId, Long departmentId) {
         validationService.validateUserExists(userId);
         validationService.validatePostTypeExists(postTypeId);
-        Post post = postFactory.create(userId, postTypeId, title, content);
+        Post post = postFactory.create(userId, postTypeId, departmentId, title, content);
         postRepository.save(postEntityMapper.toEntity(post));
         return post;
     }
@@ -70,4 +69,5 @@ public class PostService implements IPostService {
             return post;
         });
     }
+
 }

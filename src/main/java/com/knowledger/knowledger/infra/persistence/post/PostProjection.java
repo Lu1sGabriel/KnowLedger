@@ -14,6 +14,8 @@ public interface PostProjection {
 
     Long getPostTypeId();
 
+    Long getDepartmentId();
+
     Long getPostStatusId();
 
     LocalDateTime getCreatedAt();
