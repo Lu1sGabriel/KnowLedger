@@ -13,4 +13,6 @@ public interface ICommentService {
 
     Map<UUID, List<Comment>> fetchComments(Page<PostProjection> postProjections);
 
+    Map<UUID, List<Comment>> fetchComments(PostProjection postProjections);
+
 }

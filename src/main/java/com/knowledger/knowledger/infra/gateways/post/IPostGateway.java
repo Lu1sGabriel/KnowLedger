@@ -13,5 +13,7 @@ public interface IPostGateway {
 
     Page<Post> getAll(Pageable pageable);
 
+    Post getById(UUID id);
+
     Page<Post> getAllByUserId(UUID userId, Pageable pageable);
 }

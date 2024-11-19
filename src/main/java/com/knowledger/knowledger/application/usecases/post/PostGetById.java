@@ -1,0 +1,25 @@
+package com.knowledger.knowledger.application.usecases.post;
+
+import java.util.UUID;
+import org.springframework.stereotype.Component;
+
+import com.knowledger.knowledger.commom.mapper.IMapperDTO;
+import com.knowledger.knowledger.domain.post.Post;
+import com.knowledger.knowledger.infra.controller.post.PostDetailDTO;
+import com.knowledger.knowledger.infra.gateways.post.IPostGateway;
+
+@Component
+public class PostGetById {
+    private final IPostGateway _IPostGateway;
+    private final IMapperDTO<PostDetailDTO, Post> _MapperDTO;
+
+    public PostGetById(IPostGateway iPostGateway, IMapperDTO<PostDetailDTO, Post> iMapper) {
+        _IPostGateway = iPostGateway;
+        _MapperDTO = iMapper;
+    }
+
+    public PostDetailDTO apply(UUID id) {
+        var post = _IPostGateway.getById(id);
+        return _MapperDTO.toDto(post);
+    }
+}

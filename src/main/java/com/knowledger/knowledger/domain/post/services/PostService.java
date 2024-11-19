@@ -2,6 +2,7 @@ package com.knowledger.knowledger.domain.post.services;
 
 import com.knowledger.knowledger.commom.Constants;
 import com.knowledger.knowledger.commom.mapper.IMapper;
+import com.knowledger.knowledger.domain.comment.Comment;
 import com.knowledger.knowledger.domain.comment.services.ICommentService;
 import com.knowledger.knowledger.domain.post.Post;
 import com.knowledger.knowledger.domain.post.factories.IPostFactory;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -68,6 +71,18 @@ public class PostService implements IPostService {
             post.setComments(commentsMap.getOrDefault(post.getId(), new ArrayList<>()));
             return post;
         });
+    }
+
+    @Override
+    public Post getById(UUID id) {
+        validationService.validatePostExists(id);
+        var postProjection = postRepository.findById(id, Constants.PostStatus.APPROVED);
+
+        Post post = postProjectionMapper.toDomain(postProjection);
+        Map<UUID, List<Comment>> commentsMap = commentService.fetchComments(postProjection);
+        post.setComments(commentsMap.getOrDefault(post.getId(), new ArrayList<>()));
+
+        return post;
     }
 
 }
