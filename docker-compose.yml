@@ -15,23 +15,23 @@ services:
     networks:
       - app_network
 
-  app:
-    image: openjdk:17-jdk
-    container_name: spring_app
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/knowledger
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: "@Banco123"
-      SPRING_JPA_SHOW_SQL: "true"
-    depends_on:
-      - db
-    ports:
-      - "8080:8080"
-    networks:
-      - app_network
+  # app:
+  #   image: openjdk:17-jdk
+  #   container_name: spring_app
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/knowledger
+  #     SPRING_DATASOURCE_USERNAME: postgres
+  #     SPRING_DATASOURCE_PASSWORD: "@Banco123"
+  #     SPRING_JPA_SHOW_SQL: "true"
+  #   depends_on:
+  #     - db
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - app_network
 
 volumes:
   postgres_data:

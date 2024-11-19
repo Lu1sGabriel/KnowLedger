@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.knowledger.knowledger.application.usecases.post.PostGetAll;
 import com.knowledger.knowledger.application.usecases.post.PostGetAllByUserId;
+import com.knowledger.knowledger.application.usecases.post.PostGetById;
 import com.knowledger.knowledger.application.usecases.post.PostRegister;
 
 import jakarta.validation.Valid;
@@ -28,16 +29,19 @@ public class PostController {
     private final PostRegister _postRegister;
     private final PostGetAll _PostGetAll;
     private final PostGetAllByUserId _PostGetAllByUserId;
+    private final PostGetById _PostGetById;
 
-    public PostController(PostRegister postRegister, PostGetAll postGetAll, PostGetAllByUserId postGetAllByUserId) {
+    public PostController(PostRegister postRegister, PostGetAll postGetAll, PostGetAllByUserId postGetAllByUserId,
+            PostGetById postGetById) {
         _postRegister = postRegister;
         _PostGetAll = postGetAll;
         _PostGetAllByUserId = postGetAllByUserId;
+        _PostGetById = postGetById;
     }
 
     @PostMapping("/register")
     public ResponseEntity<PostDetailDTO> create(@Valid @RequestBody PostRegisterDTO dto,
-                                                UriComponentsBuilder uriBuilder) {
+            UriComponentsBuilder uriBuilder) {
         var postDetailDto = _postRegister.apply(dto);
         var uri = uriBuilder.path("/api/posts/{id}").buildAndExpand(postDetailDto.getId()).toUri();
         return ResponseEntity.created(uri).body(postDetailDto);
@@ -46,6 +50,12 @@ public class PostController {
     @GetMapping("")
     public ResponseEntity<Page<PostDetailDTO>> getAll(Pageable pageable) {
         var posts = _PostGetAll.apply(pageable);
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDetailDTO> getById(@PathVariable UUID id) {
+        var posts = _PostGetById.apply(id);
         return ResponseEntity.ok(posts);
     }
 

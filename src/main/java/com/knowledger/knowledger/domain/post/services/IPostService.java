@@ -13,4 +13,6 @@ public interface IPostService {
     Page<Post> getAllPosts(Pageable pageable);
 
     Page<Post> getPostsByUserId(UUID userId, Pageable pageable);
+
+    Post getById(UUID id);
 }

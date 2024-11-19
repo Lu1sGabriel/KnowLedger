@@ -33,4 +33,9 @@ public class PostHandler implements IPostGateway {
         return _IPostService.getPostsByUserId(userId, pageable);
     }
 
+    @Override
+    public Post getById(UUID id) {
+        return _IPostService.getById(id);
+    }
+
 }

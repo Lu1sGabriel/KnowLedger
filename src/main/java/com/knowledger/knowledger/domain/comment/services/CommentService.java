@@ -34,4 +34,14 @@ public class CommentService implements ICommentService {
                 .map(commentMapper::toDomain)
                 .collect(Collectors.groupingBy(comment -> comment.getPost().getId()));
     }
+
+    public Map<UUID, List<Comment>> fetchComments(PostProjection postProjection) {
+        UUID postId = postProjection.getPostId();
+
+        List<Comment> comments = commentRepository.findAllByPostIds(List.of(postId)).stream()
+                .map(commentMapper::toDomain)
+                .collect(Collectors.toList());
+
+        return Map.of(postId, comments);
+    }
 }
