@@ -22,10 +22,11 @@ public class UserAuthenticationService implements IUserAuthenticationService {
     }
 
     @Override
-    public String login(UUID userId, String email, String payloadPassword, String userPassword, String role) throws AuthenticationException {
+    public String login(UUID userId, String name, String email, String payloadPassword, String userPassword,
+            String role) throws AuthenticationException {
 
         if (_passwordEncoder.matches(payloadPassword, userPassword)) {
-            return _tokenService.generateToken(userId, email, role);
+            return _tokenService.generateToken(userId, email, name, role);
         }
 
         throw new BusinessException("Email ou senha incorreto!", HttpStatus.BAD_REQUEST);

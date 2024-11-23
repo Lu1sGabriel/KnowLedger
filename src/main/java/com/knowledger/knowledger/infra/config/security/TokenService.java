@@ -21,11 +21,12 @@ public class TokenService {
         _expirationTime = expirationTime;
     }
 
-    public String generateToken(UUID userId, String email, String role) {
+    public String generateToken(UUID userId, String email, String name, String role) {
         return JWT.create()
                 .withIssuer(Constants.JWT.ISSUER)
                 .withSubject(email)
                 .withClaim(Constants.JWT.EMAIL_CLAIM, email)
+                .withClaim(Constants.JWT.USER_NAME_CLAIM, name)
                 .withClaim(Constants.JWT.USER_ID_CLAIM, userId.toString())
                 .withClaim(Constants.JWT.ROLE_CLAIM, role)
                 .withExpiresAt(new Date(System.currentTimeMillis() + _expirationTime))
