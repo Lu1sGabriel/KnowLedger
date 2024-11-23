@@ -24,71 +24,74 @@ import java.util.UUID;
 @Service
 public class UserHandler implements IUserGateway {
 
-    private final IUserFactory _iUserFactory;
-    private final IUserRepository _iUserRepository;
-    private final IUserChangePasswordService _iUserChangePasswordService;
-    private final IMapper<UserEntity, User> _iMapper;
-    private final IMapper<RoleEntity, Role> _iMapperRole;
-    private final IRoleRepository _iRoleRepository;
-    private final IUserAuthenticationService _iUserAuthenticationService;
+        private final IUserFactory _iUserFactory;
+        private final IUserRepository _iUserRepository;
+        private final IUserChangePasswordService _iUserChangePasswordService;
+        private final IMapper<UserEntity, User> _iMapper;
+        private final IMapper<RoleEntity, Role> _iMapperRole;
+        private final IRoleRepository _iRoleRepository;
+        private final IUserAuthenticationService _iUserAuthenticationService;
 
-    public UserHandler(IUserFactory iUserFactory, IUserRepository iUserRepository,
-            IUserChangePasswordService iUserChangePasswordService,
-            IMapper<UserEntity, User> iMapper, IMapper<RoleEntity, Role> iMapperRole,
-            IRoleRepository iRoleRepository, IUserAuthenticationService iUserAuthenticationService) {
-        _iUserFactory = iUserFactory;
-        _iUserRepository = iUserRepository;
-        _iUserChangePasswordService = iUserChangePasswordService;
-        _iMapper = iMapper;
-        _iMapperRole = iMapperRole;
-        _iRoleRepository = iRoleRepository;
-        _iUserAuthenticationService = iUserAuthenticationService;
-    }
+        public UserHandler(IUserFactory iUserFactory, IUserRepository iUserRepository,
+                        IUserChangePasswordService iUserChangePasswordService,
+                        IMapper<UserEntity, User> iMapper, IMapper<RoleEntity, Role> iMapperRole,
+                        IRoleRepository iRoleRepository, IUserAuthenticationService iUserAuthenticationService) {
+                _iUserFactory = iUserFactory;
+                _iUserRepository = iUserRepository;
+                _iUserChangePasswordService = iUserChangePasswordService;
+                _iMapper = iMapper;
+                _iMapperRole = iMapperRole;
+                _iRoleRepository = iRoleRepository;
+                _iUserAuthenticationService = iUserAuthenticationService;
+        }
 
-    @Override
-    public User register(String name, String email, String password, String confirmedPassword) {
-        var role = _iRoleRepository.findById(UserRole.USER)
-                .orElseThrow(() -> new BusinessException(
-                        "Não foi possível completar o registro. Por favor, entre em contato com o setor de TI.",
-                        HttpStatus.INTERNAL_SERVER_ERROR));
-        var user = _iUserFactory.create(name, email, password, confirmedPassword, _iMapperRole.toDomain(role));
-        _iUserRepository.save(_iMapper.toEntity(user));
-        return user;
-    }
+        @Override
+        public User register(String name, String email, String password, String confirmedPassword) {
+                var role = _iRoleRepository.findById(UserRole.USER)
+                                .orElseThrow(() -> new BusinessException(
+                                                "Não foi possível completar o registro. Por favor, entre em contato com o setor de TI.",
+                                                HttpStatus.INTERNAL_SERVER_ERROR));
+                var user = _iUserFactory.create(name, email, password, confirmedPassword, _iMapperRole.toDomain(role));
+                _iUserRepository.save(_iMapper.toEntity(user));
+                return user;
+        }
 
-    @Override
-    public User changePassword(UUID userId, String token, String oldPassword, String newPassword,
-            String confirmedNewPassword) {
-        var userEntity = _iUserRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(
-                        "Usuário não encontrado. Verifique os dados e tente novamente.", HttpStatus.NOT_FOUND));
-        var user = _iMapper.toDomain(userEntity);
-        _iUserChangePasswordService.changePassword(user, token, oldPassword, newPassword, confirmedNewPassword);
-        return user;
-    }
+        @Override
+        public User changePassword(UUID userId, String token, String oldPassword, String newPassword,
+                        String confirmedNewPassword) {
+                var userEntity = _iUserRepository.findById(userId)
+                                .orElseThrow(() -> new BusinessException(
+                                                "Usuário não encontrado. Verifique os dados e tente novamente.",
+                                                HttpStatus.NOT_FOUND));
+                var user = _iMapper.toDomain(userEntity);
+                _iUserChangePasswordService.changePassword(user, token, oldPassword, newPassword, confirmedNewPassword);
+                return user;
+        }
 
-    @Override
-    public User getById(UUID id) {
-        return _iUserRepository.findById(id).map(_iMapper::toDomain)
-                .orElseThrow(() -> new BusinessException(
-                        "Usuário não encontrado. Por favor, entre em contato com o setor de TI.",
-                        HttpStatus.NOT_FOUND));
-    }
+        @Override
+        public User getById(UUID id) {
+                return _iUserRepository.findById(id).map(_iMapper::toDomain)
+                                .orElseThrow(() -> new BusinessException(
+                                                "Usuário não encontrado. Por favor, entre em contato com o setor de TI.",
+                                                HttpStatus.NOT_FOUND));
+        }
 
-    @Override
-    public Map<String, String> login(String email, String payloadPassword) {
+        @Override
+        public Map<String, String> login(String email, String payloadPassword) {
 
-        var user = _iUserRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException("Registro com o email informado não encontrado. ",
-                        HttpStatus.NOT_FOUND));
+                var user = _iUserRepository.findByEmail(email)
+                                .orElseThrow(() -> new BusinessException(
+                                                "Registro com o email informado não encontrado. ",
+                                                HttpStatus.NOT_FOUND));
 
-        var token = _iUserAuthenticationService.login(user.getId(), email, payloadPassword, user.getPassword(),
-                user.getRole().getName());
+                var token = _iUserAuthenticationService.login(user.getId(), user.getName(), email, payloadPassword,
+                                user.getPassword(),
+                                user.getRole().getName());
 
-        Map<String, String> objectToken = new HashMap<>();
-        objectToken.put("token", token);
+                Map<String, String> objectToken = new HashMap<>();
+                objectToken.put("token", token);
 
-        return objectToken;
-    }
+                return objectToken;
+        }
 
 }
